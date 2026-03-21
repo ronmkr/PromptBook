@@ -38,7 +38,13 @@ chmod +x promptops
 sudo ln -s $(pwd)/promptops /usr/local/bin/pop
 ```
 
-**Using the CLI:**
+**Interactive TUI (New!)**
+Simply run `pop` with no arguments to launch the Terminal User Interface!
+- Navigate with Arrow Keys `↑/↓`.
+- Press `/` to live-search through prompts.
+- Press `Enter` to use a prompt and automatically inject variables.
+
+**Using the CLI Commands:**
 - **Search & Discover:**
   - `pop list` - List all available prompts.
   - `pop search "docker"` - Fuzzy search for prompts related to Docker.

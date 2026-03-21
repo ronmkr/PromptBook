@@ -133,22 +133,35 @@ def use_prompt(name, provided_vars=None, prompts_dir=None):
                 sys.exit(1)
             
             variables = sorted(list(set(re.findall(r"\{\{(\w+)\}\}", prompt_content))))
-            
             final_vars = {}
             for var in variables:
                 if var in provided_vars:
                     final_vars[var] = provided_vars[var]
                 else:
-                    print(f"Variable '{{{{{var}}}}}' detected.", file=sys.stderr)
-                    print(f"Please enter value for '{var}' (press Ctrl+D to finish multi-line input):", file=sys.stderr)
+                    # Interactive mode UX
+                    print("\n" + "="*70, file=sys.stderr)
+                    print(" ✨ PromptOps Interactive Mode", file=sys.stderr)
+                    print("-" * 70, file=sys.stderr)
+                    print(f" The template requires a value for: {{{{{var}}}}}\n", file=sys.stderr)
+                    print(" INSTRUCTIONS:", file=sys.stderr)
+                    print(" 1. Paste your code or text below.", file=sys.stderr)
+                    print(" 2. Press Enter to go to a new line if needed.", file=sys.stderr)
+                    print(" 3. When you are completely finished, press Ctrl+D (Mac/Linux) or", file=sys.stderr)
+                    print("    Ctrl+Z then Enter (Windows) to submit.", file=sys.stderr)
+                    print("-" * 70, file=sys.stderr)
+                    print(f" [Paste your content for {{{{{var}}}}}] >\n", file=sys.stderr)
+
                     try:
                         val = sys.stdin.read().strip()
+                        if not val:
+                            print(f"\n Warning: No input provided for {var}.", file=sys.stderr)
                         final_vars[var] = val
-                        print("\n" + "="*40 + "\n", file=sys.stderr)
+                        print("\n" + "="*70 + "\n", file=sys.stderr)
                     except EOFError:
                         print("\nError: Input interrupted.", file=sys.stderr)
                         sys.exit(1)
 
+            # Substitute variables
             for var, val in final_vars.items():
                 prompt_content = prompt_content.replace(f"{{{{{var}}}}}", val)
             
@@ -159,6 +172,15 @@ def use_prompt(name, provided_vars=None, prompts_dir=None):
         sys.exit(1)
 
 def main():
+    if len(sys.argv) == 1:
+        try:
+            import promptops_tui
+            promptops_tui.main()
+            return
+        except ImportError as e:
+            print(f"Warning: Could not load TUI ({e}). Falling back to CLI mode.", file=sys.stderr)
+            sys.argv.append("-h")
+            
     parser = argparse.ArgumentParser(description="PromptOps CLI Helper")
     subparsers = parser.add_subparsers(dest="command")
 
