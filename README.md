@@ -136,14 +136,19 @@ PromptOps includes automated quality checks to ensure consistency:
 - **Metadata Validation**: Every PR is checked for valid TOML, versioning, and required fields.
 - **CLI Logic Tests**: Automated tests for fuzzy search, filtering, and variable injection.
 - **Catalog Auto-Sync**: The `CATALOG.md` is automatically verified to be in sync with templates.
+- **Golden Tests**: A local `LLM-as-a-judge` framework using the Gemini API to verify the logical quality of prompts against known inputs.
 
-Run tests locally:
+Run basic tests locally:
 ```bash
 make validate
 make test
 make catalog
-# Or run everything
-make all
+```
+
+Run Golden AI Tests (requires Google Gemini API Key):
+```bash
+export GEMINI_API_KEY="your-api-key"
+make evaluate
 ```
 
 ---

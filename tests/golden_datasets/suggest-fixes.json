@@ -1,0 +1,23 @@
+{
+  "prompt_name": "suggest-fixes",
+  "test_cases": [
+    {
+      "name": "SQL Injection Vulnerability",
+      "input": "function login(user) { db.execute('SELECT * FROM users WHERE name = ' + user); }",
+      "evaluator_criteria": [
+        "Must identify a SQL injection vulnerability.",
+        "Must suggest using parameterized queries or prepared statements.",
+        "Output must be formatted with Markdown headers."
+      ]
+    },
+    {
+      "name": "Off-by-one Error",
+      "input": "function printArray(arr) { for (let i = 0; i <= arr.length; i++) { console.log(arr[i]); } }",
+      "evaluator_criteria": [
+        "Must identify an off-by-one error in the loop condition (i <= arr.length).",
+        "Must suggest changing the condition to i < arr.length.",
+        "Must mention that the current code will result in an undefined or out-of-bounds access on the last iteration."
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # PromptOps Makefile
 
-.PHONY: help test validate catalog all clean
+.PHONY: help test validate catalog evaluate all clean
 
 help:
 	@echo "PromptOps Developer Tools"
@@ -8,6 +8,7 @@ help:
 	@echo "make validate  - Run metadata and structure validation on all prompts"
 	@echo "make test      - Run CLI helper logic tests"
 	@echo "make catalog   - Regenerate the CATALOG.md file"
+	@echo "make evaluate  - Run Golden Tests using LLM-as-a-judge (Requires GEMINI_API_KEY)"
 	@echo "make all       - Run validation, tests, and regenerate catalog"
 	@echo "make clean     - Remove temporary files and __pycache__"
 
@@ -22,6 +23,10 @@ test:
 catalog:
 	@echo "Generating CATALOG.md..."
 	@python3 scripts/generate_catalog.py
+
+evaluate:
+	@echo "Running Golden Tests..."
+	@python3 scripts/evaluate_prompts.py
 
 all: validate test catalog
 	@echo "✅ All checks passed and catalog updated."

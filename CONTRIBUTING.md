@@ -71,8 +71,15 @@ make test
 make catalog
 ```
 
-4. **Commit Your Changes**: Use clear, descriptive commit messages (e.g., `feat: add docker-compose-generator prompt`).
-5. **Submit a Pull Request**: Provide a clear description of what your new prompt does and why it's useful.
+### 4. Golden Tests (Optional but Recommended)
+If you are making significant changes to a prompt's logic, you can evaluate its quality using our "LLM-as-a-judge" Golden Test framework.
+1. Install testing dependencies: `pip install -r requirements.txt`
+2. Set your Google Gemini API key: `export GEMINI_API_KEY="your-api-key"`
+3. Run the evaluations: `make evaluate`
+This will test the prompts against predefined edge cases in `tests/golden_datasets/`.
+
+5. **Commit Your Changes**: Use clear, descriptive commit messages (e.g., `feat: add docker-compose-generator prompt`).
+6. **Submit a Pull Request**: Provide a clear description of what your new prompt does and why it's useful.
 
 ## ⚖️ License
 By contributing, you agree that your contributions will be licensed under the project's **MIT License**.
