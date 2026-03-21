@@ -29,7 +29,8 @@ class TestPromptOps(unittest.TestCase):
             f.write(f'description = "{description}"\n')
             f.write(f'version     = "1.0.0"\n')
             f.write(f'last_updated = "2026-03-21"\n')
-            f.write(f'tags         = {str(tags).replace("\'", "\"")}\n\n')
+            tags_str = str(tags).replace("'", '"')
+            f.write(f'tags         = {tags_str}\n\n')
             f.write(f'prompt      = """\n{prompt_content}\n"""\n')
 
     def test_get_prompts(self):
