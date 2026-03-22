@@ -229,5 +229,52 @@ class TestPromptOps(unittest.TestCase):
         result = promptops_core.hydrate_prompt(template, vars)
         self.assertEqual(result, "[]")
 
+    def test_search_prompts_description(self):
+        with patch('sys.stdout', new=io.StringIO()) as fake_out:
+            # Search for "Other" which is in gamma-helper description
+            promptops_core.search_prompts("Other", prompts_dir=self.test_dir)
+            output = fake_out.getvalue()
+            self.assertIn("gamma-helper", output)
+
+    def test_search_prompts_with_tag_filter(self):
+        with patch('sys.stdout', new=io.StringIO()) as fake_out:
+            # Search for "Description" but filter by tag "tag1"
+            promptops_core.search_prompts("Description", tag_filter="tag1", prompts_dir=self.test_dir)
+            output = fake_out.getvalue()
+            self.assertIn("alpha-prompt", output)
+            self.assertNotIn("beta-tool", output) # has tag2
+
+    def test_generate_completion(self):
+        with patch('sys.stdout', new=io.StringIO()) as fake_out:
+            promptops_core.generate_completion("zsh")
+            output = fake_out.getvalue()
+            self.assertIn("#compdef pop", output)
+            self.assertIn("zsh", output)
+
+    def test_resolve_file_injection_valid(self):
+        # Create a temp file
+        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+            f.write("FILE_CONTENT")
+            temp_path = f.name
+        
+        try:
+            val = f"@{temp_path}"
+            result = promptops_core.resolve_file_injection(val)
+            self.assertEqual(result, "FILE_CONTENT")
+        finally:
+            os.remove(temp_path)
+
+    def test_resolve_file_injection_no_prefix(self):
+        val = "JUST_STRING"
+        result = promptops_core.resolve_file_injection(val)
+        self.assertEqual(result, "JUST_STRING")
+
+    def test_resolve_file_injection_missing_file(self):
+        val = "@/non/existent/file"
+        with patch('sys.stderr', new=io.StringIO()) as fake_err:
+            result = promptops_core.resolve_file_injection(val)
+            self.assertEqual(result, "@/non/existent/file")
+            self.assertIn("not found", fake_err.getvalue())
+
 if __name__ == "__main__":
     unittest.main()

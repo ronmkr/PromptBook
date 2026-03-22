@@ -326,6 +326,20 @@ def print_help():
 {Colors.BOLD}{Colors.YELLOW}{"-" * 70}{Colors.RESET}
     """
     print(help_text, file=sys.stderr)
+def resolve_file_injection(val):
+    """Resolves file injection if the value starts with @."""
+    if val.startswith("@"):
+        filepath = val[1:]
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    return f.read().strip()
+            except Exception as e:
+                print(f"{Colors.YELLOW}Warning: Could not read file {filepath} ({e}). Using raw string.{Colors.RESET}", file=sys.stderr)
+        else:
+            print(f"{Colors.YELLOW}Warning: File {filepath} not found. Using raw string.{Colors.RESET}", file=sys.stderr)
+    return val
+
 def main():
     if len(sys.argv) == 1:
         print_help()
@@ -352,17 +366,7 @@ def main():
         for i in range(0, len(unknown), 2):
             if unknown[i].startswith("--") and i + 1 < len(unknown):
                 var_name = unknown[i][2:]
-                val = unknown[i+1]
-                if val.startswith("@"):
-                    filepath = val[1:]
-                    if os.path.exists(filepath):
-                        try:
-                            with open(filepath, "r", encoding="utf-8") as f:
-                                val = f.read().strip()
-                        except Exception as e:
-                            print(f"{Colors.YELLOW}Warning: Could not read file {filepath} ({e}). Using raw string.{Colors.RESET}", file=sys.stderr)
-                    else:
-                        print(f"{Colors.YELLOW}Warning: File {filepath} not found. Using raw string.{Colors.RESET}", file=sys.stderr)
+                val = resolve_file_injection(unknown[i+1])
                 provided_vars[var_name] = val
         use_prompt(args.name, provided_vars)
     else:
