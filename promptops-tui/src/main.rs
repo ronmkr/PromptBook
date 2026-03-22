@@ -1,11 +1,12 @@
-mod model;
-mod loader;
-mod ui;
-mod hydrate;
 mod clipboard;
 mod events;
+mod hydrate;
+mod loader;
+mod model;
+mod ui;
 mod utils;
 
+use crate::model::{AppState, Focus};
 use anyhow::Result;
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event},
@@ -14,7 +15,6 @@ use crossterm::{
 };
 use ratatui::{backend::CrosstermBackend, Terminal};
 use std::{io, path::Path, time::Duration};
-use crate::model::{AppState, Focus};
 
 fn main() -> Result<()> {
     // 1. Setup terminal
@@ -32,7 +32,11 @@ fn main() -> Result<()> {
 
     if !prompts_path.exists() {
         disable_raw_mode()?;
-        execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
+        execute!(
+            terminal.backend_mut(),
+            LeaveAlternateScreen,
+            DisableMouseCapture
+        )?;
         terminal.show_cursor()?;
         println!("Error: Could not find 'commands/prompts' directory.");
         return Ok(());
