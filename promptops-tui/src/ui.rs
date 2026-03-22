@@ -182,6 +182,23 @@ fn render_metadata(f: &mut Frame, p: &crate::model::Prompt, block: Block, area: 
         Span::styled("Updated: ", Style::default().fg(Color::DarkGray)),
         Span::raw(&p.last_updated),
     ]));
+
+    // Dynamically render any extra fields found in the TOML
+    for (key, value) in &p.metadata {
+        // Skip keys that are handled elsewhere (like prompt content)
+        if key == "prompt" || key == "name" { continue; }
+        
+        let val_str = match value {
+            toml::Value::String(s) => s.clone(),
+            _ => value.to_string(),
+        };
+        
+        text.push(Line::from(vec![
+            Span::styled(format!("{:<8} ", format!("{}:", key)), Style::default().fg(Color::DarkGray)),
+            Span::raw(val_str),
+        ]));
+    }
+
     text.push(Line::from(""));
     text.push(Line::from(Span::styled("Description:", Style::default().add_modifier(Modifier::BOLD))));
     text.push(Line::from(p.description.as_str()));

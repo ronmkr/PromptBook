@@ -6,12 +6,20 @@ use std::time::Instant;
 pub struct Prompt {
     #[serde(default)]
     pub name: String,
+    #[serde(default)]
     pub description: String,
+    #[serde(default)]
     pub args_description: String,
+    #[serde(default)]
     pub version: String,
+    #[serde(default)]
     pub last_updated: String,
+    #[serde(default)]
     pub tags: Vec<String>,
+    #[serde(default)]
     pub prompt: String,
+    #[serde(flatten)]
+    pub metadata: HashMap<String, toml::Value>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
