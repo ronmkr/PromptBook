@@ -3,7 +3,7 @@ name: Release - PromptOps TUI
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
 
 permissions:
   contents: write
