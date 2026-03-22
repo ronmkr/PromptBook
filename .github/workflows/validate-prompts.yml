@@ -35,6 +35,9 @@ jobs:
       - name: Validate Prompt Metadata & Structure
         run: make validate
 
+      - name: Run Code Linting & Formatting Checks
+        run: make lint
+
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -87,7 +90,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Validate System Integrity
-        run: make validate && make test
+        run: make validate && make test && make lint
 
       - name: Determine Next Version
         id: tag_version
