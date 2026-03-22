@@ -125,13 +125,13 @@ pub fn handle_modal_input(app: &mut AppState, event: KeyEvent) {
                         modal.error_message = Some("Input cannot be empty".to_string());
                         return;
                     }
-                    
+
                     let resolved_val = crate::utils::resolve_file_injection(&modal.input_buffer);
                     let var_name = modal.variables[modal.current_var_index].clone();
                     modal.values.insert(var_name, resolved_val);
                     modal.input_buffer.clear();
                     modal.error_message = None;
-                    
+
                     if modal.current_var_index + 1 < modal.variables.len() {
                         modal.current_var_index += 1;
                     } else {

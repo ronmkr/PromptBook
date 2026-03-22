@@ -18,7 +18,7 @@ pub fn render(f: &mut Frame, state: &mut AppState) {
         .split(f.size());
 
     render_header(f, state, outer_layout[0]);
-    
+
     let main_chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
@@ -70,7 +70,7 @@ fn render_header(f: &mut Frame, state: &AppState, area: Rect) {
             .borders(Borders::ALL)
             .title(title)
             .border_style(focus_style));
-    
+
     f.render_widget(header, area);
 }
 
@@ -170,14 +170,14 @@ fn render_prompts(f: &mut Frame, state: &AppState, area: Rect) {
             } else {
                 Style::default()
             };
-            
+
             let v_count = g.versions.len();
             let label = if v_count > 1 {
                 format!("• {} ({} versions)", g.name, v_count)
             } else {
                 format!("• {}", g.name)
             };
-            
+
             ListItem::new(label).style(style)
         })
         .collect();
@@ -220,7 +220,7 @@ fn render_details(f: &mut Frame, state: &AppState, area: Rect) {
 
 fn render_metadata(f: &mut Frame, p: &crate::model::Prompt, block: Block, area: Rect, state: &AppState) {
     let mut text = Vec::new();
-    
+
     let display_name = if let Some(v_id) = &p.version_id {
         format!("{}:{}", p.name, v_id)
     } else {
@@ -260,7 +260,7 @@ fn render_metadata(f: &mut Frame, p: &crate::model::Prompt, block: Block, area: 
         Span::styled("Input:   ", Style::default().fg(Color::DarkGray)),
         Span::styled(&p.args_description, Style::default().fg(Color::Cyan)),
     ]));
-    
+
     let tags_spans: Vec<Span> = p.tags.iter().map(|t| Span::styled(format!(" #{} ", t), Style::default().bg(Color::Rgb(50, 50, 50)).fg(Color::Gray))).collect();
     text.push(Line::from(""));
     text.push(Line::from(tags_spans));
@@ -274,7 +274,7 @@ fn render_metadata(f: &mut Frame, p: &crate::model::Prompt, block: Block, area: 
         Span::styled(" [Enter] ", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
         Span::raw("Hydrate & Copy"),
     ]));
-    
+
     let paragraph = Paragraph::new(text)
         .block(block)
         .wrap(Wrap { trim: true })
@@ -285,7 +285,7 @@ fn render_metadata(f: &mut Frame, p: &crate::model::Prompt, block: Block, area: 
 fn render_preview(f: &mut Frame, p: &crate::model::Prompt, block: Block, area: Rect, state: &AppState) {
     let mut spans = Vec::new();
     let content = &p.prompt;
-    
+
     let mut last_idx = 0;
     let re = regex::Regex::new(r"\{\{\s*(\w+)\s*\}\}").unwrap();
     for cap in re.find_iter(content) {
@@ -333,7 +333,7 @@ fn render_version_modal(f: &mut Frame, state: &AppState) {
     let list = List::new(items)
         .block(block)
         .highlight_style(Style::default().bg(Color::Rgb(50, 50, 50)));
-    
+
     f.render_widget(list, area);
 }
 
@@ -344,7 +344,7 @@ fn render_modal(f: &mut Frame, state: &AppState) {
 
         let var_name = &modal.variables[modal.current_var_index];
         let progress = format!("Step {} of {}", modal.current_var_index + 1, modal.variables.len());
-        
+
         let label = if var_name == "args" {
             &modal.args_description
         } else {
@@ -386,7 +386,7 @@ fn render_modal(f: &mut Frame, state: &AppState) {
                 Span::raw(line),
             ]));
         }
-        
+
         if modal.input_buffer.is_empty() || modal.input_buffer.ends_with('\n') {
             text.push(Line::from(vec![
                 Span::styled(" > ", Style::default().fg(Color::Yellow)),

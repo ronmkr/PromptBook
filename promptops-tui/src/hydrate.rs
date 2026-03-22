@@ -6,11 +6,11 @@ pub fn hydrate_prompt(template: &str, variables: &HashMap<String, String>) -> St
     // group 1: optional backslash
     // group 2: variable name
     let re = Regex::new(r"(\\)?\{\{\s*(\w+)\s*\}\}").unwrap();
-    
+
     re.replace_all(template, |caps: &regex::Captures| {
         let escaped = caps.get(1).is_some();
         let var_name = caps.get(2).unwrap().as_str();
-        
+
         if escaped {
             // If it was escaped with \, return the literal {{var}}
             format!("{{{{{}}}}}", var_name)
@@ -36,13 +36,13 @@ pub fn get_variables(template: &str) -> Vec<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_hydration_basic() {
         let template = "Hello {{ name }}, usage: \\{{literal}}";
         let mut vars = HashMap::new();
         vars.insert("name".to_string(), "Alice".to_string());
-        
+
         let result = hydrate_prompt(template, &vars);
         assert_eq!(result, "Hello Alice, usage: {{literal}}");
     }
@@ -52,7 +52,7 @@ mod tests {
         let template = "Hello {{ name }}, {{ missing }}";
         let mut vars = HashMap::new();
         vars.insert("name".to_string(), "Alice".to_string());
-        
+
         let result = hydrate_prompt(template, &vars);
         assert_eq!(result, "Hello Alice, {{ missing }}");
     }

@@ -120,10 +120,10 @@ impl AppState {
                 *counts.entry(tag).or_insert(0) += 1;
             }
         }
-        
+
         let mut categories: Vec<(String, usize)> = counts.into_iter().collect();
         categories.sort_by(|a, b| a.0.cmp(&b.0));
-        
+
         let mut app = Self {
             all_prompts: prompts,
             groups,
@@ -166,8 +166,8 @@ impl AppState {
             self.filter_groups = self.groups
                 .iter()
                 .filter(|g| {
-                    g.name.to_lowercase().contains(&query) || 
-                    g.versions.iter().any(|v| 
+                    g.name.to_lowercase().contains(&query) ||
+                    g.versions.iter().any(|v|
                         v.description.to_lowercase().contains(&query) ||
                         v.tags.iter().any(|t| t.to_lowercase().contains(&query))
                     )
@@ -184,7 +184,7 @@ impl AppState {
                 .cloned()
                 .collect();
         }
-        
+
         if self.selected_prompt_index >= self.filter_groups.len() {
             self.selected_prompt_index = 0;
         }

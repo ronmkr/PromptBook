@@ -29,7 +29,7 @@ fn main() -> Result<()> {
     if !prompts_path.exists() {
         prompts_path = Path::new("../commands/prompts").to_path_buf();
     }
-    
+
     if !prompts_path.exists() {
         disable_raw_mode()?;
         execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
@@ -78,7 +78,7 @@ fn run_app<B: ratatui::backend::Backend>(
                 }
             }
         }
-        
+
         app.check_status_timeout();
 
         if app.should_quit {

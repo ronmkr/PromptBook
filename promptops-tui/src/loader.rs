@@ -24,7 +24,7 @@ pub fn load_prompts<P: AsRef<Path>>(prompts_dir: P) -> Result<Vec<Prompt>> {
             (path.file_stem().unwrap().to_string_lossy().to_string(), None)
         } else {
             // Grouped file: commands/prompts/name/v1.toml
-            (parts[0].as_os_str().to_string_lossy().to_string(), 
+            (parts[0].as_os_str().to_string_lossy().to_string(),
              Some(path.file_stem().unwrap().to_string_lossy().to_string()))
         };
 
@@ -33,11 +33,11 @@ pub fn load_prompts<P: AsRef<Path>>(prompts_dir: P) -> Result<Vec<Prompt>> {
             Ok(p) => p,
             Err(_) => continue, // Skip invalid TOML
         };
-        
+
         prompt.name = name;
         prompt.version_id = version_id;
         prompts.push(prompt);
     }
-    
+
     Ok(prompts)
 }
