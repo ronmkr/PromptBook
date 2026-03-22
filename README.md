@@ -44,6 +44,20 @@
 
 ---
 
+## Prerequisites
+
+Before using the PromptOps library, ensure your environment meets the following requirements:
+
+- **Python 3.11+**: Required for the core CLI helper (`promptops`).
+- **Rust (Cargo)**: Required only if you want to use the high-performance **TUI Browser**.
+- **Linux Users**: To use the clipboard functionality, you must have `xclip` or `xsel` installed:
+  ```bash
+  sudo apt install xclip  # Debian/Ubuntu
+  sudo pacman -S xclip    # Arch
+  ```
+
+---
+
 ## Usage Instructions
 
 ### 1. TUI Browser (Recommended)

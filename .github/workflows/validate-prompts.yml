@@ -30,6 +30,15 @@ jobs:
       - name: Validate Prompt Metadata & Structure
         run: make validate
 
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Rust TUI
+        run: cd promptops-tui && cargo build --release
+
+      - name: Run Rust Unit Tests
+        run: cd promptops-tui && cargo test
+
       - name: Run CLI Helper Tests
         run: make test
 
