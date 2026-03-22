@@ -117,7 +117,11 @@ class PromptValidator:
 
 def main():
     prompt_dir = "commands/prompts"
-    prompt_files = glob.glob(os.path.join(prompt_dir, "*.toml"))
+    prompt_files = []
+    for root, _, files in os.walk(prompt_dir):
+        for f in files:
+            if f.endswith(".toml"):
+                prompt_files.append(os.path.join(root, f))
     
     if not prompt_files:
         print(f"No prompt files found in {prompt_dir}")

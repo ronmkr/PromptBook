@@ -1,6 +1,6 @@
 # PromptOps Makefile
 
-.PHONY: help test validate catalog evaluate all clean
+.PHONY: help test validate docs evaluate all clean sync-version tui
 
 help:
 	@echo "PromptOps Developer Tools"
@@ -46,5 +46,5 @@ clean:
 	@echo "Cleaning up..."
 	@find . -type d -name "__pycache__" -exec rm -rf {} +
 	@rm -rf scripts/__pycache__
+	@rm -rf scripts/promptops/__pycache__
 	@rm -f scripts/tmp_*
-	@rm -f add_tags.py add_versions.py create_prompts.py restructure.py

@@ -5,6 +5,9 @@ __pycache__/
 *.so
 .Python
 env/
+venv/
+.venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -20,9 +23,10 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.venv/
-venv/
-ENV/
+
+# Rust
+promptops-tui/target/
+Cargo.lock.bak
 
 # IDEs / Editors
 .vscode/
@@ -44,11 +48,7 @@ logs/
 tmp/
 temp/
 *.tmp
-
-# Rust
-promptops-tui/target/
-debug/
-release/
+scripts/tmp_*
 
 # Project Specific
 # (Add any specific ignore patterns here)

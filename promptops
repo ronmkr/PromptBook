@@ -60,9 +60,9 @@ if __name__ == "__main__":
 
     # Otherwise, fallback to the standard CLI helper logic
     try:
-        from promptops_core import main
+        from promptops.cli import main
     except ImportError:
-        real_path = os.path.realpath(__file__)
-        sys.path.append(os.path.join(os.path.dirname(real_path), "scripts"))
-        from promptops_core import main
+        # Fallback for when scripts/ isn't in path correctly
+        sys.path.append(os.path.join(base_dir, "scripts"))
+        from promptops.cli import main
     main()

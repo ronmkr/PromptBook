@@ -133,5 +133,18 @@ prompt           = "# Title\\nNo vars here."
         errors = validator.validate()
         self.assertIn("contains no variables", errors[0])
 
+    def test_nested_invalid_name(self):
+        # Create a subdirectory
+        sub_dir = os.path.join(self.test_dir, "nested-tool")
+        os.makedirs(sub_dir)
+        # Create a file with invalid name in it (e.g. spaces)
+        path = os.path.join(sub_dir, "Invalid Version.toml")
+        with open(path, "w") as f:
+            f.write("")
+        
+        validator = validate_prompts.PromptValidator(path)
+        errors = validator.validate()
+        self.assertIn("must be lowercase kebab-case", errors[0])
+
 if __name__ == "__main__":
     unittest.main()

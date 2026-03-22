@@ -1,36 +1,20 @@
 import os
-import glob
-import tomllib
 import datetime
 import re
 import json
+import sys
 
-PROMPTS_DIR = "commands/prompts"
+# Add current directory to path so we can import our package
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from promptops import core
+
 README_FILE = "README.md"
 GEMINI_FILE = "GEMINI.md"
 CATALOG_DIR = "docs/catalog"
 
 def get_prompts():
-    prompts = []
-    files = glob.glob(os.path.join(PROMPTS_DIR, "*.toml"))
-    for f in files:
-        name = os.path.basename(f).replace(".toml", "")
-        try:
-            with open(f, "rb") as file:
-                data = tomllib.load(file)
-                prompts.append({
-                    "name": name,
-                    "description": data.get("description", "No description provided"),
-                    "args_description": data.get("args_description", "Input Data"),
-                    "version": data.get("version", "N/A"),
-                    "last_updated": data.get("last_updated", "N/A"),
-                    "tags": data.get("tags", ["general"]),
-                    "prompt": data.get("prompt", "").strip()
-                })
-        except Exception as e:
-            print(f"Error reading {f}: {e}")
-            continue
-    return sorted(prompts, key=lambda x: x["name"])
+    """Wrapper around core.get_prompts to match the expected format for this script."""
+    return core.get_prompts()
 
 def generate_domain_notebook(tag_name, display_name, prompts):
     cells = []
@@ -46,7 +30,7 @@ def generate_domain_notebook(tag_name, display_name, prompts):
 
     for p in prompts:
         source_lines = [
-            f"### {p['name']}\n\n",
+            f"### {p['display_name']}\n\n",
             f"> **Description**: {p['description']}\n",
             f"> **Input Needed**: `{p['args_description']}`\n",
             f"> **Version**: `{p['version']}` | **Last Updated**: `{p['last_updated']}`\n",
@@ -109,17 +93,17 @@ def update_docs(prompts):
     for domain_name, config in domains.items():
         domain_prompts = [p for p in prompts if any(t in p['tags'] for t in config['tags'])]
         if domain_prompts:
-            # Deduplicate
+            # Deduplicate by display_name
             seen = set()
             unique_prompts = []
             for p in domain_prompts:
-                if p['name'] not in seen:
+                if p['display_name'] not in seen:
                     unique_prompts.append(p)
-                    seen.add(p['name'])
+                    seen.add(p['display_name'])
             
-            nb_filename = generate_domain_notebook(domain_name, domain_name, sorted(unique_prompts, key=lambda x: x['name']))
+            nb_filename = generate_domain_notebook(domain_name, domain_name, sorted(unique_prompts, key=lambda x: x['display_name']))
             config['filename'] = nb_filename
-            config['prompts'] = sorted(unique_prompts, key=lambda x: x['name'])
+            config['prompts'] = sorted(unique_prompts, key=lambda x: x['display_name'])
 
     # 2. Update GEMINI.md
     with open(GEMINI_FILE, "r", encoding="utf-8") as f:
@@ -130,7 +114,7 @@ def update_docs(prompts):
         if 'prompts' in config:
             gemini_list += f"### {domain_name}\n"
             for p in config['prompts']:
-                gemini_list += f"- `/prompts:{p['name']}`: {p['description'].rstrip('.')}\n"
+                gemini_list += f"- `/prompts:{p['display_name']}`: {p['description'].rstrip('.')}\n"
 
     gemini_pattern = r"## Available Prompts.*?(?=## How to Use Prompts)"
     gemini_content = re.sub(gemini_pattern, gemini_list, gemini_content, flags=re.DOTALL)
@@ -146,7 +130,7 @@ def update_docs(prompts):
         if 'prompts' in config:
             readme_list += f"### [{domain_name}]({CATALOG_DIR}/{config['filename']})\n"
             for p in config['prompts']:
-                readme_list += f"- `/prompts:{p['name']}` - {p['description'].rstrip('.')}\n"
+                readme_list += f"- `/prompts:{p['display_name']}` - {p['description'].rstrip('.')}\n"
             readme_list += "\n"
 
     readme_pattern = r"## Available Templates.*?(?=## Extending the Library)"

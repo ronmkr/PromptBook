@@ -38,12 +38,29 @@ mod tests {
     use super::*;
     
     #[test]
-    fn test_hydration() {
+    fn test_hydration_basic() {
         let template = "Hello {{ name }}, usage: \\{{literal}}";
         let mut vars = HashMap::new();
         vars.insert("name".to_string(), "Alice".to_string());
         
         let result = hydrate_prompt(template, &vars);
         assert_eq!(result, "Hello Alice, usage: {{literal}}");
+    }
+
+    #[test]
+    fn test_hydration_missing_vars() {
+        let template = "Hello {{ name }}, {{ missing }}";
+        let mut vars = HashMap::new();
+        vars.insert("name".to_string(), "Alice".to_string());
+        
+        let result = hydrate_prompt(template, &vars);
+        assert_eq!(result, "Hello Alice, {{ missing }}");
+    }
+
+    #[test]
+    fn test_get_variables_unique() {
+        let template = "{{a}} {{b}} {{a}}";
+        let vars = get_variables(template);
+        assert_eq!(vars, vec!["a", "b"]);
     }
 }

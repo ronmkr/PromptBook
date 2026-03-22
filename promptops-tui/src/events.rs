@@ -1,0 +1,136 @@
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use std::collections::HashMap;
+use crate::model::{AppState, Focus, InputModal, Prompt};
+use crate::{hydrate, clipboard};
+
+pub fn handle_navigation_input(app: &mut AppState, code: KeyCode) {
+    match code {
+        KeyCode::Char('q') => app.should_quit = true,
+        KeyCode::Down | KeyCode::Char('j') => app.next(),
+        KeyCode::Up | KeyCode::Char('k') => app.previous(),
+        KeyCode::Right | KeyCode::Tab | KeyCode::Char('l') => {
+            app.focus = Focus::Prompts;
+        }
+        KeyCode::Left | KeyCode::Char('h') => {
+            app.focus = Focus::Categories;
+        }
+        KeyCode::Char('/') => {
+            app.last_focus = app.focus.clone();
+            app.focus = Focus::Search;
+        }
+        KeyCode::Char('v') => {
+            app.show_preview = !app.show_preview;
+        }
+        KeyCode::Enter => {
+            if let Some(group) = app.filter_groups.get(app.selected_prompt_index) {
+                if group.versions.len() > 1 {
+                    app.focus = Focus::VersionSelection;
+                } else {
+                    start_hydration(app, group.versions[0].clone());
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
+pub fn handle_version_selection(app: &mut AppState, code: KeyCode) {
+    match code {
+        KeyCode::Esc => {
+            app.focus = Focus::Prompts;
+        }
+        KeyCode::Enter => {
+            let group = app.filter_groups[app.selected_prompt_index].clone();
+            let version = group.versions[group.selected_version_index].clone();
+            start_hydration(app, version);
+        }
+        KeyCode::Down | KeyCode::Char('j') => app.next(),
+        KeyCode::Up | KeyCode::Char('k') => app.previous(),
+        _ => {}
+    }
+}
+
+pub fn handle_search_input(app: &mut AppState, code: KeyCode) {
+    match code {
+        KeyCode::Esc => {
+            app.search_query.clear();
+            app.update_filter();
+            app.focus = app.last_focus.clone();
+        }
+        KeyCode::Enter => {
+            app.focus = Focus::Prompts;
+        }
+        KeyCode::Char(c) => {
+            app.search_query.push(c);
+            app.update_filter();
+        }
+        KeyCode::Backspace => {
+            app.search_query.pop();
+            app.update_filter();
+        }
+        _ => {}
+    }
+}
+
+pub fn handle_modal_input(app: &mut AppState, event: KeyEvent) {
+    if let Some(modal) = &mut app.input_modal {
+        match event.code {
+            KeyCode::Esc => {
+                app.input_modal = None;
+                app.focus = Focus::Prompts;
+            }
+            KeyCode::Enter => {
+                if event.modifiers.contains(KeyModifiers::ALT) || event.modifiers.contains(KeyModifiers::CONTROL) {
+                    modal.input_buffer.push('\n');
+                } else {
+                    let resolved_val = crate::utils::resolve_file_injection(&modal.input_buffer);
+                    let var_name = modal.variables[modal.current_var_index].clone();
+                    modal.values.insert(var_name, resolved_val);
+                    modal.input_buffer.clear();
+                    
+                    if modal.current_var_index + 1 < modal.variables.len() {
+                        modal.current_var_index += 1;
+                    } else {
+                        if let Some(prompt) = app.all_prompts.iter().find(|p| {
+                            p.name == modal.prompt_name && p.version_id == modal.version_id
+                        }) {
+                            let hydrated = hydrate::hydrate_prompt(&prompt.prompt, &modal.values);
+                            let _ = clipboard::copy_to_clipboard(&hydrated);
+                            app.set_status(format!("Success: '{}' copied!", prompt.name), 4);
+                        }
+                        app.input_modal = None;
+                        app.focus = Focus::Prompts;
+                    }
+                }
+            }
+            KeyCode::Char(c) => {
+                modal.input_buffer.push(c);
+            }
+            KeyCode::Backspace => {
+                modal.input_buffer.pop();
+            }
+            _ => {}
+        }
+    }
+}
+
+fn start_hydration(app: &mut AppState, prompt: Prompt) {
+    let vars = hydrate::get_variables(&prompt.prompt);
+    if vars.is_empty() {
+        let content = prompt.prompt.clone();
+        let _ = clipboard::copy_to_clipboard(&content);
+        app.set_status(format!("Success: '{}' copied!", prompt.name), 3);
+        app.focus = Focus::Prompts;
+    } else {
+        app.input_modal = Some(InputModal {
+            prompt_name: prompt.name.clone(),
+            version_id: prompt.version_id.clone(),
+            variables: vars,
+            current_var_index: 0,
+            values: HashMap::new(),
+            input_buffer: String::new(),
+            args_description: prompt.args_description.clone(),
+        });
+        app.focus = Focus::InputModal;
+    }
+}

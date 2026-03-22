@@ -29,17 +29,18 @@ def sync_versions(new_version):
     prompts_dir = "commands/prompts"
     if os.path.exists(prompts_dir):
         count = 0
-        for f_name in os.listdir(prompts_dir):
-            if f_name.endswith(".toml"):
-                path = os.path.join(prompts_dir, f_name)
-                with open(path, "r") as file:
-                    content = file.read()
-                # Only replace the top-level version field
-                new_content = re.sub(r'^version\s*=\s*".*?"', f'version = "{new_version}"', content, count=1, flags=re.MULTILINE)
-                if new_content != content:
-                    with open(path, "w") as file:
-                        file.write(new_content)
-                    count += 1
+        for root, _, fs in os.walk(prompts_dir):
+            for f_name in fs:
+                if f_name.endswith(".toml"):
+                    path = os.path.join(root, f_name)
+                    with open(path, "r") as file:
+                        content = file.read()
+                    # Only replace the top-level version field
+                    new_content = re.sub(r'^version\s*=\s*".*?"', f'version = "{new_version}"', content, count=1, flags=re.MULTILINE)
+                    if new_content != content:
+                        with open(path, "w") as file:
+                            file.write(new_content)
+                        count += 1
         print(f"Updated {count} prompt templates in {prompts_dir}")
 
 if __name__ == "__main__":
