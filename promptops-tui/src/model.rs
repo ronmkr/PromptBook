@@ -43,9 +43,15 @@ pub enum Focus {
     ConfirmationModal,
 }
 
+#[derive(Debug, Clone)]
+pub enum Action {
+    CopyPrompt(String),
+}
+
 pub struct ConfirmationModal {
+    pub title: String,
     pub message: String,
-    pub payload: String, // Text to copy if confirmed
+    pub action: Action,
 }
 
 pub struct InputModal {

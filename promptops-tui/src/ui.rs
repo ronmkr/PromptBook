@@ -98,23 +98,23 @@ fn render_confirmation_modal(f: &mut Frame, state: &AppState) {
 
         let block = Block::default()
             .borders(Borders::ALL)
-            .title(" Security Confirmation ")
+            .title(modal.title.as_str())
             .border_style(Style::default().fg(Color::Red))
             .padding(Padding::uniform(1));
 
         let text = vec![
             Line::from(vec![
-                Span::styled("⚠️  WARNING", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)),
+                Span::styled("⚠️  ACTION REQUIRED", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)),
             ]),
             Line::from(""),
             Line::from(modal.message.as_str()),
             Line::from(""),
             Line::from(vec![
                 Span::styled(" [y] ", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
-                Span::raw("Yes, copy to clipboard"),
+                Span::raw("Confirm"),
                 Span::raw("  "),
                 Span::styled(" [n] ", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)),
-                Span::raw("No, cancel"),
+                Span::raw("Cancel"),
             ]),
         ];
 
