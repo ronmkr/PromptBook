@@ -2,24 +2,45 @@
 import sys
 import os
 import subprocess
+import shutil
 
 # Add scripts to path so we can import core
 base_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(base_dir, "scripts"))
 
 def launch_tui():
-    """Tries to launch the Rust TUI if it exists."""
+    """Tries to launch the Rust TUI if it exists, or offers to build it."""
     tui_path = os.path.join(base_dir, "promptops-tui", "target", "release", "promptops-tui")
+
     if os.path.exists(tui_path):
         try:
             # Use os.execv to replace current process with TUI
             os.execv(tui_path, [tui_path])
         except Exception:
             pass # Fallback to CLI helper if exec fails
+
+    # TUI not found. If interactive and cargo exists, offer to build.
+    if sys.stdin.isatty() and shutil.which("cargo"):
+        print("\n\033[1;33mPromptOps Explorer (TUI) binary not found.\033[0m")
+        try:
+            choice = input("Would you like to build the high-performance Rust TUI? (y/N): ").lower()
+            if choice == 'y':
+                print("\n\033[1;36mBuilding TUI (release mode)... This may take a minute.\033[0m")
+                tui_dir = os.path.join(base_dir, "promptops-tui")
+                result = subprocess.run(["cargo", "build", "--release"], cwd=tui_dir)
+                if result.returncode == 0:
+                    print("\033[1;32mBuild successful! Launching...\033[0m\n")
+                    os.execv(tui_path, [tui_path])
+                else:
+                    print("\n\033[1;31mBuild failed. Falling back to CLI helper.\033[0m\n")
+        except (KeyboardInterrupt, EOFError):
+            print("\n")
+            pass
+
     return False
 
 if __name__ == "__main__":
-    # If no arguments, try to launch the interactive TUI
+    # If no arguments and interactive, try to launch or build the TUI
     if len(sys.argv) == 1 and sys.stdin.isatty():
         launch_tui()
 
@@ -31,4 +52,3 @@ if __name__ == "__main__":
         sys.path.append(os.path.join(os.path.dirname(real_path), "scripts"))
         from promptops_core import main
     main()
-
