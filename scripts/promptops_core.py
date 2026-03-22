@@ -260,32 +260,41 @@ def use_prompt(name, provided_vars=None, prompts_dir=None, return_only=False):
             piped_data = None
             if not sys.stdin.isatty():
                 piped_data = sys.stdin.read().strip()
-            for var in variables:
-                if var in provided_vars:
-                    final_vars[var] = provided_vars[var]
-                elif piped_data is not None:
-                    # Use piped data for the first missing variable
-                    final_vars[var] = piped_data
-                    piped_data = None # Only use it once
-                else:
-                    label = args_desc if var == "args" else var.replace("_", " ").title()
-                    print("\n" + f"{Colors.BOLD}{Colors.YELLOW}" + "╭" + "─"*68 + "╮" + f"{Colors.RESET}", file=sys.stderr)
-                    print(f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.CYAN}PromptOps Interactive: {Colors.BOLD}{name}{Colors.RESET}", file=sys.stderr)
-                    print(f"{Colors.BOLD}{Colors.YELLOW}├" + "─"*68 + "┤" + f"{Colors.RESET}", file=sys.stderr)
-                    print(f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.BOLD}Required:{Colors.RESET} {Colors.GREEN}{label}{Colors.RESET}", file=sys.stderr)
-                    print(f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.BOLD}Finish:{Colors.RESET}   Press {Colors.BOLD}Ctrl+D{Colors.RESET} (Mac/Linux) or {Colors.BOLD}Ctrl+Z+Enter{Colors.RESET} (Win)", file=sys.stderr)
-                    print(f"{Colors.BOLD}{Colors.YELLOW}╰" + "─"*68 + "╯" + f"{Colors.RESET}", file=sys.stderr)
-                    print(f" {Colors.BOLD}[Paste {label} below]{Colors.RESET}\n", file=sys.stderr)
-                    try:
-                        val = sys.stdin.read().strip()
-                        if not val:
-                            print(f"\n {Colors.YELLOW}Warning: No input provided for {label}.{Colors.RESET}", file=sys.stderr)
-                        final_vars[var] = val
-                        print("\n" + f"{Colors.BOLD}{Colors.YELLOW}" + "─"*70 + f"{Colors.RESET}" + "\n", file=sys.stderr)
-                    except EOFError:
-                        print(f"\n{Colors.YELLOW}Error: Input interrupted.{Colors.RESET}", file=sys.stderr)
-                        sys.exit(1)
+
+            try:
+                for var in variables:
+                    if var in provided_vars:
+                        final_vars[var] = provided_vars[var]
+                    elif piped_data is not None:
+                        # Use piped data for the first missing variable
+                        final_vars[var] = piped_data
+                        piped_data = None # Only use it once
+                    else:
+                        label = args_desc if var == "args" else var.replace("_", " ").title()
+
+                        print("\n" + f"{Colors.BOLD}{Colors.YELLOW}" + "╭" + "─"*68 + "╮" + f"{Colors.RESET}", file=sys.stderr)
+                        print(f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.CYAN}PromptOps Interactive: {Colors.BOLD}{name}{Colors.RESET}", file=sys.stderr)
+                        print(f"{Colors.BOLD}{Colors.YELLOW}├" + "─"*68 + "┤" + f"{Colors.RESET}", file=sys.stderr)
+                        print(f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.BOLD}Required:{Colors.RESET} {Colors.GREEN}{label}{Colors.RESET}", file=sys.stderr)
+                        print(f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.BOLD}Finish:{Colors.RESET}   Press {Colors.BOLD}Ctrl+D{Colors.RESET} (Mac/Linux) or {Colors.BOLD}Ctrl+Z+Enter{Colors.RESET} (Win)", file=sys.stderr)
+                        print(f"{Colors.BOLD}{Colors.YELLOW}╰" + "─"*68 + "╯" + f"{Colors.RESET}", file=sys.stderr)
+                        print(f" {Colors.BOLD}[Paste {label} below]{Colors.RESET}\n", file=sys.stderr)
+
+                        try:
+                            val = sys.stdin.read().strip()
+                            if not val:
+                                print(f"\n {Colors.YELLOW}Warning: No input provided for {label}.{Colors.RESET}", file=sys.stderr)
+                            final_vars[var] = val
+                            print("\n" + f"{Colors.BOLD}{Colors.YELLOW}" + "─"*70 + f"{Colors.RESET}" + "\n", file=sys.stderr)
+                        except EOFError:
+                            print(f"\n{Colors.YELLOW}Error: Input interrupted.{Colors.RESET}", file=sys.stderr)
+                            sys.exit(1)
+            except KeyboardInterrupt:
+                print(f"\n\n{Colors.YELLOW}Operation cancelled by user.{Colors.RESET}", file=sys.stderr)
+                sys.exit(0)
+
             # Substitute variables
+
             prompt_content = hydrate_prompt(prompt_content, final_vars)
 
             if copy_to_clipboard(prompt_content):
