@@ -65,13 +65,14 @@ jobs:
           fi
 
   generate-catalog-on-push:
-    name: Auto-Generate Catalogs on Main
+    name: Auto-Generate Catalogs & Tag Release
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Set up Python
@@ -88,18 +89,39 @@ jobs:
       - name: Validate System Integrity
         run: make validate && make test
 
+      - name: Determine Next Version
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+
+      - name: Sync Project Versions
+        run: |
+          if [ "${{ steps.tag_version.outputs.new_tag }}" != "" ]; then
+            python3 scripts/sync_all_versions.py ${{ steps.tag_version.outputs.new_version }}
+          fi
+
       - name: Generate Updated Catalogs
         run: make docs
 
-      - name: Commit and Push Catalog Changes
+      - name: Commit and Push Changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add docs/catalog/ README.md GEMINI.md
+          git add .
           if git diff --cached --quiet; then
-            echo "✅ No changes to documentation"
+            echo "✅ No changes to documentation or versions"
           else
-            git commit -m "docs: auto-generate domain prompt catalogs [skip ci]"
+            git commit -m "chore: auto-generate catalogs and sync version to ${{ steps.tag_version.outputs.new_version }} [skip ci]"
             git push
-            echo "🚀 Pushed updated catalogs to main"
+            echo "🚀 Pushed updated catalogs and versions to main"
           fi
+
+      - name: Create Git Tag
+        if: steps.tag_version.outputs.new_tag != ''
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.tag_version.outputs.new_version }}
+          tag_prefix: ""
