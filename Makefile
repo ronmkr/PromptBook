@@ -1,10 +1,11 @@
 # PromptOps Makefile
 
-.PHONY: help test validate docs evaluate all clean sync-version tui lint fmt
+.PHONY: help test validate docs evaluate all clean sync-version tui lint fmt setup
 
 help:
 	@echo "PromptOps Developer Tools"
 	@echo "-------------------------"
+	@echo "make setup     - Install dependencies and pre-commit hooks"
 	@echo "make validate  - Run metadata and structure validation on all prompts"
 	@echo "make test      - Run logic and validation unit tests"
 	@echo "make lint      - Run linting checks (Python & Rust)"
@@ -14,6 +15,12 @@ help:
 	@echo "make all       - Run validation, tests, linting, and sync documentation"
 	@echo "make tui       - Build and run the Rust-based TUI browser"
 	@echo "make clean     - Remove temporary files and __pycache__"
+
+setup:
+	@echo "Installing Python dependencies..."
+	@python3 -m pip install -r requirements.txt
+	@echo "Installing pre-commit hooks..."
+	@pre-commit install
 
 validate:
 	@echo "Validating prompt metadata..."
