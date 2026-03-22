@@ -52,6 +52,7 @@ def _process_prompt_file(path, name, version_id, groups):
                 "version": data.get("version", "N/A"),
                 "last_updated": data.get("last_updated", "N/A"),
                 "tags": data.get("tags", []),
+                "sensitive": data.get("sensitive", False),
                 "args_description": data.get("args_description", "Input Data"),
                 "prompt": data.get("prompt", ""),
                 "path": path
@@ -164,7 +165,7 @@ def hydrate_prompt(template, variables_map):
     pattern = r'(\\)?\{\{\s*(\w+)\s*\}\}'
     return re.sub(pattern, substitute, template)
 
-def use_prompt(name, provided_vars=None, prompts_dir=None, return_only=False, version_hint=None):
+def use_prompt(name, provided_vars=None, prompts_dir=None, return_only=False, version_hint=None, no_copy=False, auto_confirm=False):
     if provided_vars is None: provided_vars = {}
     all_prompts = get_prompts(prompts_dir)
     versions = [p for p in all_prompts if p["name"] == name]
@@ -198,6 +199,8 @@ def use_prompt(name, provided_vars=None, prompts_dir=None, return_only=False, ve
     with open(selected["path"], "rb") as f:
         data = tomllib.load(f)
         prompt_content = data.get("prompt", "")
+        is_sensitive = selected.get("sensitive", False)
+        
         if not prompt_content:
             print(f"Error: Prompt '{name}' has no content.", file=sys.stderr)
             sys.exit(1)
@@ -220,13 +223,38 @@ def use_prompt(name, provided_vars=None, prompts_dir=None, return_only=False, ve
                 else:
                     label = data.get("args_description", "Input Data") if var == "args" else var.replace("_", " ").title()
                     print_interactive_header(display_name, label)
-                    final_vars[var] = sys.stdin.read().strip()
+                    # Use input() for a better interactive experience instead of sys.stdin.read()
+                    lines = []
+                    while True:
+                        try:
+                            line = input()
+                            lines.append(line)
+                        except (EOFError, KeyboardInterrupt):
+                            break
+                    final_vars[var] = "\n".join(lines).strip()
                     print("\n" + f"{Colors.BOLD}{Colors.YELLOW}" + "─"*70 + f"{Colors.RESET}" + "\n", file=sys.stderr)
         except KeyboardInterrupt:
             print(f"\n\n{Colors.YELLOW}Operation cancelled by user.{Colors.RESET}", file=sys.stderr)
             sys.exit(0)
 
         prompt_content = hydrate_prompt(prompt_content, final_vars)
-        if copy_to_clipboard(prompt_content):
-            print(f" {Colors.GREEN}[Done] Prompt copied to clipboard!{Colors.RESET}", file=sys.stderr)
+        
+        do_copy = not no_copy
+        if do_copy and is_sensitive and not auto_confirm:
+            print(f"\n{Colors.YELLOW}{Colors.BOLD}⚠️  SECURITY WARNING:{Colors.RESET}")
+            print(f"{Colors.YELLOW}This prompt is marked as SENSITIVE and will be copied to your clipboard.{Colors.RESET}")
+            print(f"{Colors.YELLOW}Proceed with caution if it contains secrets or proprietary data.{Colors.RESET}")
+            try:
+                confirm = input(f"\nCopy to clipboard? (y/N): ").lower()
+                if confirm != 'y':
+                    do_copy = False
+                    print(f" {Colors.YELLOW}[Skip] Clipboard copy cancelled.{Colors.RESET}", file=sys.stderr)
+            except (KeyboardInterrupt, EOFError):
+                do_copy = False
+                print(f"\n {Colors.YELLOW}[Skip] Clipboard copy cancelled.{Colors.RESET}", file=sys.stderr)
+
+        if do_copy:
+            if copy_to_clipboard(prompt_content):
+                print(f" {Colors.GREEN}[Done] Prompt copied to clipboard!{Colors.RESET}", file=sys.stderr)
+        
         print(prompt_content)
