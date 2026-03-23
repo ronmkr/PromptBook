@@ -8,10 +8,10 @@ from unittest.mock import patch
 
 # Import the core logic directly
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from promptops import core, utils, cli  # noqa: E402
+from promptbook import core, utils, cli  # noqa: E402
 
 
-class TestPromptOps(unittest.TestCase):
+class TestPromptbook(unittest.TestCase):
     def setUp(self):
         # Create a temporary directory for prompts
         self.test_dir = tempfile.mkdtemp()

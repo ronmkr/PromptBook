@@ -1,6 +1,6 @@
 # Prompt Library Fix Log
 
-Track of systematic cleanup, consolidation, and metadata standardization of the PromptOps library.
+Track of systematic cleanup, consolidation, and metadata standardization of the Promptbook library.
 
 ## Standards Applied
 - **Description**: Under 150 characters, complete (no `...`), and clear.

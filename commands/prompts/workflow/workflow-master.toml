@@ -25,6 +25,114 @@ Use consistent templates to prevent context loss during multi-agent coordination
 - **Escalation Reports**: Used when tasks exceed retry limits.
 - **Phase Gate Handoffs**: Transitions between development lifecycle phases.
 
+### Handoff Templates
+
+#### 1. Standard Handoff Template
+Use for any agent-to-agent work transfer.
+
+```markdown
+# NEXUS Handoff Document
+
+## Metadata
+| Field | Value |
+|-------|-------|
+| **From** | [Agent Name] ([Division]) |
+| **To** | [Agent Name] ([Division]) |
+| **Phase** | Phase [N] — [Phase Name] |
+| **Task Reference** | [Task ID] |
+| **Priority** | [Critical / High / Medium / Low] |
+| **Timestamp** | [YYYY-MM-DDTHH:MM:SSZ] |
+
+## Context
+**Project**: [Project name]
+**Current State**: [What has been completed so far — be specific]
+**Relevant Files**:
+- [file/path/1] — [what it contains]
+**Dependencies**: [What this work depends on being complete]
+**Constraints**: [Technical, timeline, or resource constraints]
+
+## Deliverable Request
+**What is needed**: [Specific, measurable deliverable description]
+**Acceptance criteria**:
+- [ ] [Criterion 1]
+- [ ] [Criterion 2]
+
+## Quality Expectations
+**Must pass**: [Specific quality criteria]
+**Evidence required**: [What proof of completion looks like]
+```
+
+#### 2. QA Feedback Loop — PASS
+Use when Evidence Collector or other QA agent approves a task.
+
+```markdown
+# NEXUS QA Verdict: PASS ✅
+
+## Task
+| Field | Value |
+|-------|-------|
+| **Task ID** | [ID] |
+| **Developer Agent** | [Agent Name] |
+| **QA Agent** | [Agent Name] |
+
+## Evidence
+**Functional Verification**:
+- [x] [Acceptance criterion 1] — verified
+- [x] [Acceptance criterion 2] — verified
+
+## Next Action
+→ Agents Orchestrator: Mark task complete, advance to next task in backlog
+```
+
+#### 3. QA Feedback Loop — FAIL
+Use when Evidence Collector or other QA agent rejects a task.
+
+```markdown
+# NEXUS QA Verdict: FAIL ❌
+
+## Task
+| Field | Value |
+|-------|-------|
+| **Task ID** | [ID] |
+| **Developer Agent** | [Agent Name] |
+| **QA Agent** | [Agent Name] |
+| **Attempt** | [N] of 3 |
+
+## Issues Found
+### Issue 1: [Category]
+**Description**: [Exact description of the problem]
+**Expected**: [What should happen]
+**Actual**: [What actually happens]
+**Fix instruction**: [Specific, actionable instruction to resolve]
+
+## Retry Instructions
+1. Fix ONLY the issues listed above
+2. Re-submit for QA when all issues are addressed
+```
+
+#### 4. Escalation Report
+Use when a task exceeds 3 retry attempts.
+
+```markdown
+# NEXUS Escalation Report 🚨
+
+## Task
+| Field | Value |
+|-------|-------|
+| **Task ID** | [ID] |
+| **Developer Agent** | [Agent Name] |
+| **QA Agent** | [Agent Name] |
+| **Attempts Exhausted** | 3/3 |
+
+## Root Cause Analysis
+**Why the task keeps failing**: [Analysis of the underlying problem]
+
+## Recommended Resolution
+- [ ] **Reassign** to different developer agent
+- [ ] **Decompose** into smaller sub-tasks
+- [ ] **Revise approach**
+```
+
 ## 🏢 Scenario Runbooks
 Specialized execution plans for different project environments.
 - **Enterprise Development**: Focused on quality gates, compliance, and integration.

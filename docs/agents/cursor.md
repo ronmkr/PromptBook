@@ -1,9 +1,9 @@
-# Using PromptOps with Cursor
+# Using Promptbook with Cursor
 
 Cursor supports custom rules and prompt templates.
 
 ## Custom Rules (.cursorrules)
-You can copy the content of any PromptOps template into your project's `.cursorrules` file.
+You can copy the content of any Promptbook template into your project's `.cursorrules` file.
 Find relevant rules in: `commands/prompts/rules/`
 
 ## Template Injection

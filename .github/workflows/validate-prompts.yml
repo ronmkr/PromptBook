@@ -1,4 +1,4 @@
-name: CI - PromptOps Workflow
+name: CI - Promptbook Workflow
 
 on:
   push:
@@ -48,13 +48,13 @@ jobs:
       - name: Cache Cargo Dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: "promptops-tui -> target"
+          workspaces: "Promptbook-tui -> target"
 
       - name: Build Rust TUI (Debug)
-        run: cd promptops-tui && cargo build
+        run: cd Promptbook-tui && cargo build
 
       - name: Run Rust Unit Tests
-        run: cd promptops-tui && cargo test
+        run: cd Promptbook-tui && cargo test
 
       - name: Run CLI Helper Tests
         run: make test

@@ -1,11 +1,11 @@
-# Using PromptOps with Gemini CLI
+# Using Promptbook with Gemini CLI
 
-PromptOps is natively integrated with Gemini CLI as an extension.
+Promptbook is natively integrated with Gemini CLI as an extension.
 
 ## Installation
-If you have the PromptOps repository, you can link it:
+If you have the Promptbook repository, you can link it:
 ```bash
-gemini extension install /path/to/PromptOps
+gemini extension install /path/to/Promptbook
 ```
 
 ## Basic Usage

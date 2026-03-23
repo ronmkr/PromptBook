@@ -1,9 +1,9 @@
-# PromptOps Makefile
+# Promptbook Makefile
 
 .PHONY: help test validate docs evaluate all clean sync-version tui lint fmt setup
 
 help:
-	@echo "PromptOps Developer Tools"
+	@echo "Promptbook Developer Tools"
 	@echo "-------------------------"
 	@echo "make setup     - Install dependencies and pre-commit hooks"
 	@echo "make validate  - Run metadata and structure validation on all prompts"
@@ -30,19 +30,19 @@ lint:
 	@echo "Running Python linting (ruff)..."
 	@ruff check .
 	@echo "Running Rust linting (clippy)..."
-	@cd promptops-tui && cargo clippy -- -D warnings
+	@cd Promptbook-tui && cargo clippy -- -D warnings
 	@echo "Checking Rust formatting..."
-	@cd promptops-tui && cargo fmt -- --check
+	@cd Promptbook-tui && cargo fmt -- --check
 
 fmt:
 	@echo "Formatting Python code (ruff)..."
 	@ruff format .
 	@echo "Formatting Rust code (cargo fmt)..."
-	@cd promptops-tui && cargo fmt
+	@cd Promptbook-tui && cargo fmt
 
 test:
 	@echo "Running CLI helper tests..."
-	@python3 scripts/test_promptops.py
+	@python3 scripts/test_promptbook.py
 	@echo "Running validation unit tests..."
 	@python3 scripts/test_validation.py
 
@@ -63,11 +63,11 @@ all: validate test lint docs
 
 tui:
 	@echo "Building and running Rust TUI..."
-	@cd promptops-tui && cargo run --release
+	@cd Promptbook-tui && cargo run --release
 
 clean:
 	@echo "Cleaning up..."
 	@find . -type d -name "__pycache__" -exec rm -rf {} +
 	@rm -rf scripts/__pycache__
-	@rm -rf scripts/promptops/__pycache__
+	@rm -rf scripts/Promptbook/__pycache__
 	@rm -f scripts/tmp_*

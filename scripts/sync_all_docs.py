@@ -6,7 +6,7 @@ import sys
 
 # Add current directory to path so we can import our package
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from promptops import core  # noqa: E402
+from promptbook import core  # noqa: E402
 
 README_FILE = "README.md"
 GEMINI_FILE = "GEMINI.md"
@@ -25,13 +25,12 @@ def generate_domain_notebook(tag_name, display_name, prompts):
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                f"# 📖 PromptOps - {display_name} Catalog\n\n",
+                f"# 📖 promptbook - {display_name} Catalog\n\n",
                 f"Generated on: {datetime.date.today().isoformat()}\n\n",
                 f"This notebook contains the reference for all **{display_name}** templates.",
             ],
         }
     )
-
     for p in prompts:
         source_lines = [
             f"### {p['display_name']}\n\n",
@@ -45,7 +44,6 @@ def generate_domain_notebook(tag_name, display_name, prompts):
             "````\n",
         ]
         cells.append({"cell_type": "markdown", "metadata": {}, "source": source_lines})
-
     notebook = {
         "cells": cells,
         "metadata": {
@@ -59,14 +57,12 @@ def generate_domain_notebook(tag_name, display_name, prompts):
         "nbformat": 4,
         "nbformat_minor": 5,
     }
-
     os.makedirs(CATALOG_DIR, exist_ok=True)
     # Sanitize filename: replace spaces, slashes, and ampersands
     filename = tag_name.lower().replace(" ", "-").replace("&", "and").replace("/", "-")
     filename = re.sub(r"-+", "-", filename)  # Remove double dashes
     filename += ".ipynb"
     filepath = os.path.join(CATALOG_DIR, filename)
-
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(notebook, f, indent=1)
         f.write("\n")
@@ -91,7 +87,6 @@ def update_docs(prompts):
             "links": [],
         },
     }
-
     # 1. Generate Domain Notebooks
     for domain_name, config in domains.items():
         domain_prompts = [
@@ -105,7 +100,6 @@ def update_docs(prompts):
                 if p["display_name"] not in seen:
                     unique_prompts.append(p)
                     seen.add(p["display_name"])
-
             nb_filename = generate_domain_notebook(
                 domain_name,
                 domain_name,
@@ -113,29 +107,24 @@ def update_docs(prompts):
             )
             config["filename"] = nb_filename
             config["prompts"] = sorted(unique_prompts, key=lambda x: x["display_name"])
-
     # 2. Update GEMINI.md
     with open(GEMINI_FILE, "r", encoding="utf-8") as f:
         gemini_content = f.read()
-
     gemini_list = "## Available Prompts\n"
     for domain_name, config in domains.items():
         if "prompts" in config:
             gemini_list += f"### {domain_name}\n"
             for p in config["prompts"]:
                 gemini_list += f"- `/prompts:{p['display_name']}`: {p['description'].rstrip('.')}\n"
-
     gemini_pattern = r"## Available Prompts.*?(?=## How to Use Prompts)"
     gemini_content = re.sub(
         gemini_pattern, gemini_list, gemini_content, flags=re.DOTALL
     )
     with open(GEMINI_FILE, "w", encoding="utf-8") as f:
         f.write(gemini_content)
-
     # 3. Update README.md
     with open(README_FILE, "r", encoding="utf-8") as f:
         readme_content = f.read()
-
     readme_list = "## Available Templates\n\nTemplates are categorized by domain. Click a category to view its full reference notebook.\n\n"
     for domain_name, config in domains.items():
         if "prompts" in config:
@@ -143,7 +132,6 @@ def update_docs(prompts):
             for p in config["prompts"]:
                 readme_list += f"- `/prompts:{p['display_name']}` - {p['description'].rstrip('.')}\n"
             readme_list += "\n"
-
     readme_pattern = r"## Available Templates.*?(?=## 🤝 Contributing)"
     readme_content = re.sub(
         readme_pattern, readme_list, readme_content, flags=re.DOTALL

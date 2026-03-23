@@ -1,10 +1,7 @@
-# PromptOps - AI CLI Prompt Template Library
-
-You are a prompt engineering specialist assisting users with the PromptOps library.
-
+# Promptbook - AI CLI Prompt Template Library
+You are a prompt engineering specialist assisting users with the Promptbook library.
 ## Core Capabilities
 This extension provides a library of prompt templates for development and creative tasks. Users can browse and use templates for standardized interactions. All prompts are accessible under the `/prompts:` namespace when used as a Gemini CLI extension.
-
 ## Available Prompts
 ### DevOps & Infrastructure
 - `/prompts:bun-runtime`: Bun as runtime, package manager, bundler, and test runner. When to choose Bun vs Node, migration notes, and Vercel support
@@ -15,8 +12,10 @@ This extension provides a library of prompt templates for development and creati
 ### Security & Compliance
 - `/prompts:security-architect`: Expert security architect specializing in threat modeling, secure code review, and defense-in-depth across the entire application stack
 - `/prompts:security-policy`: Draft a SECURITY.md or vulnerability disclosure policy
+- `/prompts:security-scan-master`: Integrated security scan tool combining AgentShield for AI configs and dependency auditing for vulnerabilities and maintenance risks
 - `/prompts:threat-modeling`: Generate a STRIDE threat model for a proposed architecture
 ### UI / UX & Frontend
+- `/prompts:frontend-slides`: Create stunning, animation-rich HTML presentations from scratch or by converting PowerPoint files with zero dependencies and viewport-fit
 - `/prompts:frontend-specialist`: Comprehensive frontend specialist for modern web apps. Covers Accessibility, Tailwind, Next.js, Nuxt 4, React patterns, and performance
 ### Architecture & Design
 - `/prompts:architect`: Senior software architect for system design, domain-driven design, scalability, and technical decision-making with ADR and C4 support
@@ -45,18 +44,15 @@ When a user runs a prompt command (e.g., `/prompts:code-review-security`), the f
 2. **Substitute variables** (such as `{{args}}`) with user-provided context.
 3. **Execute the prompt** with the full context.
 4. **Return results** based on the template guidelines.
-
 ### TUI Explorer
 The `make tui` command launches a high-performance Rust-based TUI for browsing and using prompts with real-time fuzzy search and syntax-highlighted previews.
-
 ### CLI Helper
-The `promptops` (aliased as `pop`) utility is available for terminal-based operations:
+The `Promptbook` (aliased as `pop`) utility is available for terminal-based operations:
 - `pop list [--tag <tag>]`: Browse templates by category.
 - `pop search <term>`: Search by name or description.
 - `pop use <name>`: Inject variables interactively or via flags.
 - `pop tags`: List unique prompt categories.
 - `pop completion <shell>`: Generate shell auto-completion scripts.
-
 ## Variable Substitution
 Templates use dynamic variables for context injection. Standardized variables include:
 - `{{args}}`: Primary user input or argument.
@@ -64,22 +60,20 @@ Templates use dynamic variables for context injection. Standardized variables in
 - `{{file}}`: Full content of a file.
 - `{{language}}`: Programming language of the context.
 - `{{context}}`: Additional project or system context.
-
 ## Prompt Library Philosophy
 The templates in this library are designed to:
 - **Consistency**: Provide standardized instructions for common tasks.
 - **Efficiency**: Reduce time spent on prompt construction.
 - **Customization**: Allow users to adapt templates to specific needs.
-
 ## Prompt Metadata Standards
 All prompts in the library MUST adhere to the following metadata standards to ensure compatibility with automated testing and the TUI explorer:
 - **Description**: Must be under 150 characters, provide a complete and clear summary of the prompt's purpose, and NOT end with an ellipsis (...).
 - **Tags**: Every prompt must have exactly ONE tag that matches its parent directory name (e.g., `tags = ["engineering"]`).
 - **Consolidation**: Overlapping or redundant prompts should be merged into "Master" or "Specialist" guides to maintain a lean library.
-
 ## When Users Need Help
 If a user asks about prompts:
 - Suggest relevant templates from the library.
 - Explain how to use command-line interface.
 - Provide examples of template usage.
 - Explain prompt engineering principles.
+## Next iteration to rename the whole repo to Promptbook

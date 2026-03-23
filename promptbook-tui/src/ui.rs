@@ -56,7 +56,7 @@ fn render_header(f: &mut Frame, state: &AppState, area: Rect) {
     };
 
     let title = if state.search_query.is_empty() && state.focus != Focus::Search {
-        " PromptOps Explorer "
+        " Promptbook Explorer "
     } else {
         " Search Prompts "
     };

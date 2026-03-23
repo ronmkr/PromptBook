@@ -1,6 +1,6 @@
-# PromptOps: The Universal Prompt Library for AI Agents
+# Promptbook: The Universal Prompt Library for AI Agents
 
-PromptOps is a curated collection of 180+ standardized, high-quality prompt templates designed for developers, architects, and AI engineers. It provides a unified interface to discover and use prompts across any AI agent.
+Promptbook is a curated collection of 180+ standardized, high-quality prompt templates designed for developers, architects, and AI engineers. It provides a unified interface to discover and use prompts across any AI agent.
 
 ## 🚀 Key Features
 
@@ -12,10 +12,10 @@ PromptOps is a curated collection of 180+ standardized, high-quality prompt temp
 ## 🛠 Installation
 
 ```bash
-git clone https://github.com/your-repo/PromptOps.git
-cd PromptOps
+git clone https://github.com/your-repo/Promptbook.git
+cd Promptbook
 pip install -r requirements.txt
-alias pop="$(pwd)/promptops"
+alias pop="$(pwd)/promptbook"
 ```
 
 ## 📖 Usage
@@ -60,9 +60,11 @@ Templates are categorized by domain. Click a category to view its full reference
 ### [Security & Compliance](docs/catalog/security-and-compliance.ipynb)
 - `/prompts:security-architect` - Expert security architect specializing in threat modeling, secure code review, and defense-in-depth across the entire application stack
 - `/prompts:security-policy` - Draft a SECURITY.md or vulnerability disclosure policy
+- `/prompts:security-scan-master` - Integrated security scan tool combining AgentShield for AI configs and dependency auditing for vulnerabilities and maintenance risks
 - `/prompts:threat-modeling` - Generate a STRIDE threat model for a proposed architecture
 
 ### [UI / UX & Frontend](docs/catalog/ui-ux-and-frontend.ipynb)
+- `/prompts:frontend-slides` - Create stunning, animation-rich HTML presentations from scratch or by converting PowerPoint files with zero dependencies and viewport-fit
 - `/prompts:frontend-specialist` - Comprehensive frontend specialist for modern web apps. Covers Accessibility, Tailwind, Next.js, Nuxt 4, React patterns, and performance
 
 ### [Architecture & Design](docs/catalog/architecture-and-design.ipynb)
@@ -95,6 +97,6 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for det
 
 ## 📜 Acknowledgements
 
-PromptOps is inspired by and incorporates patterns from these excellent community resources:
+Promptbook is inspired by and incorporates patterns from these excellent community resources:
 - [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents)
 - [harish-garg/gemini-cli-prompt-library](https://github.com/harish-garg/gemini-cli-prompt-library)

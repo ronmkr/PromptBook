@@ -23,7 +23,7 @@ def generate_completion(shell):
     # Note: Using 'pop' as the command name in completions.
     if shell == "zsh":
         print(
-            """#compdef pop promptops
+            """#compdef pop Promptbook
 _pop() {
     local -a commands
     commands=(
@@ -90,7 +90,7 @@ _pop "$@"
     esac
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
 }
-complete -F _pop_completion pop promptops
+complete -F _pop_completion pop Promptbook
 """
         )
     elif shell == "fish":
@@ -114,7 +114,9 @@ def main():
         print_help()
         sys.argv.append("-h")
 
-    parser = argparse.ArgumentParser(description="PromptOps CLI Helper", add_help=False)
+    parser = argparse.ArgumentParser(
+        description="Promptbook CLI Helper", add_help=False
+    )
     parser.add_argument("-h", "--help", action="store_true")
 
     if len(sys.argv) > 1 and (sys.argv[1] in ("-h", "--help")):

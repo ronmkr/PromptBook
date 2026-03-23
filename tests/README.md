@@ -1,6 +1,6 @@
-# Testing PromptOps
+# Testing Promptbook
 
-This directory contains test suites and golden datasets for validating the PromptOps library.
+This directory contains test suites and golden datasets for validating the Promptbook library.
 
 ## Contents
 

@@ -1,10 +1,10 @@
-# PromptOps Scripts & Core Logic
+# Promptbook Scripts & Core Logic
 
-This directory contains the Python core and CLI logic for the PromptOps extension, along with maintenance scripts for the prompt library.
+This directory contains the Python core and CLI logic for the Promptbook extension, along with maintenance scripts for the prompt library.
 
 ## Directory Structure
 
-- `promptops/`: Python package containing core library logic.
+- `Promptbook/`: Python package containing core library logic.
   - `cli.py`: Command-line interface logic.
   - `core.py`: Library functions (discovery, parsing, injection).
   - `ui.py`: CLI formatting and terminal colors.
@@ -12,7 +12,7 @@ This directory contains the Python core and CLI logic for the PromptOps extensio
 - `evaluate_prompts.py`: Script to run automated evals for prompt quality.
 - `sync_all_docs.py`: Syncs catalog notebooks with current prompt files.
 - `validate_prompts.py`: Schema validation for TOML prompt files.
-- `test_promptops.py`: Functional tests for the CLI helper.
+- `test_Promptbook.py`: Functional tests for the CLI helper.
 
 ## Requirements
 
