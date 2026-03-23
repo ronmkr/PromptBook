@@ -1,4 +1,4 @@
-# Using Promptbook with GitHub Copilot / Codex
+# Using promptbook with GitHub Copilot / Codex
 
 Copilot uses inline and chat-based interactions.
 
@@ -6,4 +6,4 @@ Copilot uses inline and chat-based interactions.
 Find a relevant prompt in the [Catalog](../catalog/FULL_CATALOG.md) and paste it as a comment for Copilot to follow.
 
 ## Chat
-Copy-paste Promptbook templates from the TUI (`pop`) directly into the Copilot Chat window.
+Copy-paste promptbook templates from the TUI (`pop`) directly into the Copilot Chat window.

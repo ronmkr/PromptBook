@@ -26,7 +26,7 @@ wheels/
 
 # Rust
 target/
-Promptbook-tui/target/
+promptbook-tui/target/
 Cargo.lock.bak
 **/*.rs.bk
 

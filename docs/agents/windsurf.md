@@ -1,9 +1,9 @@
-# Using Promptbook with Windsurf
+# Using promptbook with Windsurf
 
 Windsurf (by Codeium) supports highly contextual agentic flows.
 
 ## Context Injection
-Use Promptbook templates to set the initial "mental model" for Windsurf.
+Use promptbook templates to set the initial "mental model" for Windsurf.
 Browse the `architecture/` and `workflow/` categories for high-level guidance.
 
 ## TUI Explorer

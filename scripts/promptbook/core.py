@@ -321,7 +321,7 @@ def use_prompt(
             print(f"\n{Colors.BOLD}Multiple versions found for '{name}':{Colors.RESET}")
             for i, v in enumerate(versions):
                 print(
-                    f"  {i+1}) {Colors.GREEN}{(v['version_id'] or 'default'):<10}{Colors.RESET} | {v['description']}"
+                    f"  {i + 1}) {Colors.GREEN}{(v['version_id'] or 'default'):<10}{Colors.RESET} | {v['description']}"
                 )
             try:
                 choice = input(f"\nSelect version (1-{len(versions)}): ")

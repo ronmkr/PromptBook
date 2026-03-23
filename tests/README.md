@@ -1,6 +1,6 @@
-# Testing Promptbook
+# Testing promptbook
 
-This directory contains test suites and golden datasets for validating the Promptbook library.
+This directory contains test suites and golden datasets for validating the promptbook library.
 
 ## Contents
 

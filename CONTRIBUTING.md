@@ -1,6 +1,6 @@
-# Contributing to Promptbook
+# Contributing to promptbook
 
-Thank you for your interest in contributing to Promptbook. We welcome contributions, from new prompt templates to improvements in existing ones.
+Thank you for your interest in contributing to promptbook. We welcome contributions, from new prompt templates to improvements in existing ones.
 
 ---
 
@@ -76,7 +76,7 @@ To maintain consistency, all prompts must follow these rules:
 
 ## Prompt Variables
 
-Promptbook supports a set of variables that are substituted when the prompt is executed:
+promptbook supports a set of variables that are substituted when the prompt is executed:
 
 - `{{args}}` (Primary): The user's input/argument provided when calling the prompt.
 - `{{code}}`: Specifically for passing code snippets to be analyzed.
@@ -90,7 +90,7 @@ Promptbook supports a set of variables that are substituted when the prompt is e
 
 ## Development Workflow
 
-1.  **Fork the Repository**: Create your own copy of Promptbook.
+1.  **Fork the Repository**: Create your own copy of promptbook.
 2.  **Create a Feature Branch**: `git checkout -b feature/your-feature-name`.
 3.  **Setup Your Environment**: Install dependencies and pre-commit hooks to automate validation:
 

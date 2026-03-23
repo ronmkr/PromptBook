@@ -1,4 +1,4 @@
-# Using Promptbook with Aider
+# Using promptbook with Aider
 
 Aider uses a CONTEXT -> COMMAND -> EDIT loop.
 

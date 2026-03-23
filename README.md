@@ -1,6 +1,6 @@
-# Promptbook: The Universal Prompt Library for AI Agents
+# promptbook: The Universal Prompt Library for AI Agents
 
-Promptbook is a curated collection of 180+ standardized, high-quality prompt templates designed for developers, architects, and AI engineers. It provides a unified interface to discover and use prompts across any AI agent.
+promptbook is a curated collection of 180+ standardized, high-quality prompt templates designed for developers, architects, and AI engineers. It provides a unified interface to discover and use prompts across any AI agent.
 
 ## 🚀 Key Features
 
@@ -12,8 +12,8 @@ Promptbook is a curated collection of 180+ standardized, high-quality prompt tem
 ## 🛠 Installation
 
 ```bash
-git clone https://github.com/your-repo/Promptbook.git
-cd Promptbook
+git clone https://github.com/your-repo/promptbook.git
+cd promptbook
 pip install -r requirements.txt
 alias pop="$(pwd)/promptbook"
 ```
@@ -60,6 +60,7 @@ Templates are categorized by domain. Click a category to view its full reference
 ### [Security & Compliance](docs/catalog/security-and-compliance.ipynb)
 - `/prompts:security-architect` - Expert security architect specializing in threat modeling, secure code review, and defense-in-depth across the entire application stack
 - `/prompts:security-policy` - Draft a SECURITY.md or vulnerability disclosure policy
+- `/prompts:security-scan` - Scan your AI agent configuration for security vulnerabilities, misconfigurations, and injection risks using AgentShield
 - `/prompts:security-scan-master` - Integrated security scan tool combining AgentShield for AI configs and dependency auditing for vulnerabilities and maintenance risks
 - `/prompts:threat-modeling` - Generate a STRIDE threat model for a proposed architecture
 
@@ -97,6 +98,6 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for det
 
 ## 📜 Acknowledgements
 
-Promptbook is inspired by and incorporates patterns from these excellent community resources:
+promptbook is inspired by and incorporates patterns from these excellent community resources:
 - [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents)
 - [harish-garg/gemini-cli-prompt-library](https://github.com/harish-garg/gemini-cli-prompt-library)

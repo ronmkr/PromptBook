@@ -6,7 +6,7 @@ def print_help():
     header_line = "+" + "-" * 68 + "+"
     help_text = f"""
 {Colors.BOLD}{Colors.YELLOW}{header_line}
-| [ Promptbook: Your AI Command Center ]                              |
+| [ promptbook: Your AI Command Center ]                              |
 {header_line}{Colors.RESET}
 {Colors.BOLD}TL;DR:{Colors.RESET}
   Find and use the best AI prompts directly from your terminal.
@@ -58,7 +58,7 @@ def print_interactive_header(display_name, label):
         file=sys.stderr,
     )
     print(
-        f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.CYAN}Promptbook Interactive: {Colors.BOLD}{display_name}{Colors.RESET}",
+        f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.CYAN}promptbook Interactive: {Colors.BOLD}{display_name}{Colors.RESET}",
         file=sys.stderr,
     )
     print(

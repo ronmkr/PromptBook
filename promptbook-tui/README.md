@@ -1,6 +1,6 @@
-# Promptbook TUI
+# promptbook TUI
 
-A high-performance, Rust-based Terminal User Interface (TUI) for browsing and using prompts from the Promptbook library.
+A high-performance, Rust-based Terminal User Interface (TUI) for browsing and using prompts from the promptbook library.
 
 ## Features
 
@@ -15,19 +15,19 @@ The TUI is built using Cargo. If you have Rust installed, the `pop` command will
 
 To build manually:
 ```bash
-cd Promptbook-tui
+cd promptbook-tui
 cargo build --release
 ```
 
-The binary will be located at `target/release/Promptbook-tui`.
+The binary will be located at `target/release/promptbook-tui`.
 
 ## Usage
 
 Run the TUI directly:
 ```bash
-./target/release/Promptbook-tui
+./target/release/promptbook-tui
 ```
 Or use the `pop` helper from the root:
 ```bash
-./Promptbook
+./promptbook
 ```

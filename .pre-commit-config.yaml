@@ -26,14 +26,14 @@ repos:
 
       - id: rust-fmt
         name: Rust Format
-        entry: bash -c "cd Promptbook-tui && cargo fmt -- --check"
+        entry: bash -c "cd promptbook-tui && cargo fmt -- --check"
         language: system
         files: \.rs$
         pass_filenames: false
 
       - id: rust-clippy
         name: Rust Clippy
-        entry: bash -c "cd Promptbook-tui && cargo clippy -- -D warnings"
+        entry: bash -c "cd promptbook-tui && cargo clippy -- -D warnings"
         language: system
         files: \.rs$
         pass_filenames: false

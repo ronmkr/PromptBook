@@ -1,6 +1,6 @@
 # Commands & Prompt Definitions
 
-This directory contains the prompt templates and command definitions used by the Promptbook extension.
+This directory contains the prompt templates and command definitions used by the promptbook extension.
 
 ## Directory Structure
 

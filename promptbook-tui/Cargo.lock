@@ -3,22 +3,6 @@
 version = 4
 
 [[package]]
-name = "Promptbook-tui"
-version = "0.0.3"
-dependencies = [
- "anyhow",
- "arboard",
- "crossterm",
- "glob",
- "ratatui",
- "regex",
- "serde",
- "tempfile",
- "toml",
- "walkdir",
-]
-
-[[package]]
 name = "adler2"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -613,6 +597,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8fd00f0bb2e90d81d1044c2b32617f68fcb9fa3bb7640c23e9c748e53fb30934"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "promptbook-tui"
+version = "0.0.3"
+dependencies = [
+ "anyhow",
+ "arboard",
+ "crossterm",
+ "glob",
+ "ratatui",
+ "regex",
+ "serde",
+ "tempfile",
+ "toml",
+ "walkdir",
 ]
 
 [[package]]

@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from promptbook import core, utils, cli  # noqa: E402
 
 
-class TestPromptbook(unittest.TestCase):
+class Testpromptbook(unittest.TestCase):
     def setUp(self):
         # Create a temporary directory for prompts
         self.test_dir = tempfile.mkdtemp()

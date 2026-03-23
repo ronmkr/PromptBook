@@ -1,11 +1,11 @@
-# Using Promptbook with Gemini CLI
+# Using promptbook with Gemini CLI
 
-Promptbook is natively integrated with Gemini CLI as an extension.
+promptbook is natively integrated with Gemini CLI as an extension.
 
 ## Installation
-If you have the Promptbook repository, you can link it:
+If you have the promptbook repository, you can link it:
 ```bash
-gemini extension install /path/to/Promptbook
+gemini extension install /path/to/promptbook
 ```
 
 ## Basic Usage
