@@ -1,6 +1,6 @@
 # promptbook Makefile
 
-.PHONY: help test validate docs evaluate all clean sync-version tui lint fmt setup
+.PHONY: help test validate docs evaluate all clean sync-version tui lint fmt setup rust-build rust-test release
 
 help:
 	@echo "promptbook Developer Tools"
@@ -47,6 +47,18 @@ test:
 	@python3 tests/test_features_extended.py
 	@echo "Running validation unit tests..."
 	@python3 scripts/test_validation.py
+
+rust-build:
+	@echo "Building Rust TUI (Debug)..."
+	@cd promptbook-tui && cargo build
+
+rust-test:
+	@echo "Running Rust unit tests..."
+	@cd promptbook-tui && cargo test
+
+release:
+	@echo "Building Rust TUI (Release)..."
+	@cd promptbook-tui && cargo build --release
 
 docs:
 	@echo "Syncing all documentation..."

@@ -54,10 +54,10 @@ jobs:
           workspaces: "promptbook-tui -> target"
 
       - name: Build Rust TUI (Debug)
-        run: cd promptbook-tui && cargo build
+        run: make rust-build
 
       - name: Run Rust Unit Tests
-        run: cd promptbook-tui && cargo test
+        run: make rust-test
 
       - name: Run CLI Helper Tests
         run: make test
