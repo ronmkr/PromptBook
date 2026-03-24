@@ -5,6 +5,16 @@
 [![Validated Prompts](https://github.com/ronmkr/promptbook/actions/workflows/validate-prompts.yml/badge.svg)](https://github.com/ronmkr/promptbook/actions/workflows/validate-prompts.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## 🚀 Quick Install
+
+Get up and running in seconds with our universal installer:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ronmkr/Promptbook/main/scripts/install.sh | bash
+```
+
+*This clonse the library to `~/.promptbook` and sets up the `pop` alias in `~/.local/bin`.*
+
 ## 🔍 What is this?
 
 **promptbook** is a curated collection of standardized, high-quality prompt templates designed specifically for **developers, architects, and data engineers**. It provides a unified interface to discover and use prompts across any AI agent or CLI tool (Gemini, Claude Code, Aider, etc.).

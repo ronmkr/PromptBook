@@ -13,11 +13,11 @@
 - [x] **Create CLAUDE.md**: Created in the root to provide a first-class experience for Claude Code users.
 
 ## Distribution and Discoverability
-- [ ] **Implement Zero-Friction Install:**
-    - `brew install promptbook` for macOS users.
-    - `cargo install promptbook` for Rust/Linux users.
-    - `pip install promptbook` for Python users.
-    - `curl -fsSL get.promptbook.sh | sh` as a universal installer.
+- [x] **Implement Zero-Friction Install:**
+    - [ ] `brew install promptbook` for macOS users.
+    - [ ] `cargo install promptbook` for Rust/Linux users.
+    - [ ] `pip install promptbook` for Python users.
+    - [x] `curl -fsSL https://raw.githubusercontent.com/ronmkr/Promptbook/main/scripts/install.sh | bash` as a universal installer.
 - [ ] **Publish to Package Registries:**
     - Publish the Python CLI to PyPI as `promptbook`.
     - Publish the Rust TUI to `crates.io`.

@@ -34,13 +34,22 @@ Templates support the following placeholders for dynamic input injection:
 > **Tip**: Multiple variables can be combined in a single template. For example, a refactoring prompt might use both `{{code}}` (the snippet) and `{{language}}` (to tailor the response style).
 ---
 ## CLI Reference (`pop`)
-The `promptops` binary is aliased as `pop`. Install it globally with:
+The `promptbook` binary is aliased as `pop`.
+
+### Quick Install
 ```bash
-git clone https: //github.com/ronmkr/Promptbook.git
-cd Promptbook
-chmod +x promptops
-sudo ln -s $(pwd)/promptops /usr/local/bin/pop
+curl -fsSL https://raw.githubusercontent.com/ronmkr/Promptbook/main/scripts/install.sh | bash
 ```
+
+### Manual Installation
+If you prefer to install manually:
+```bash
+git clone https://github.com/ronmkr/Promptbook.git
+cd Promptbook
+chmod +x promptbook
+sudo ln -s $(pwd)/promptbook /usr/local/bin/pop
+```
+
 ### Commands
 | Command | Description |
 |---|---|
@@ -665,7 +674,7 @@ Follow these principles when helping users:
 ## Troubleshooting
 | Symptom | Likely Cause | Resolution |
 |---|---|---|
-| `pop: command not found` | Binary not on `$PATH` | Run `sudo ln -s $(pwd)/promptops /usr/local/bin/pop` |
+| `pop: command not found` | Binary not on `$PATH` | Run `sudo ln -s $(pwd)/promptbook /usr/local/bin/pop` |
 | Clipboard not working on Linux | Missing clipboard utility | Install `xclip` or `xsel`: `sudo apt install xclip` |
 | `make tui` fails | Rust/Cargo not installed | Install Rust via `curl https://sh.rustup.rs -sSf \| sh` |
 | Validation error on new template | Malformed TOML or missing field | Run `make validate` and review the error output |
@@ -679,7 +688,7 @@ Promptbook/
 │   └── prompts/          # All .toml template files (55+)
 ├── docs/
 │   └── catalog/          # Domain-organized Jupyter notebooks
-├── promptops-tui/        # Rust TUI source
+├── promptbook-tui/        # Rust TUI source
 ├── scripts/              # Validation and documentation sync scripts
 ├── templates/
 │   └── template.toml     # Starter template for new contributions

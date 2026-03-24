@@ -13,6 +13,7 @@ This directory contains the Python core and CLI logic for the promptbook extensi
 - `sync_all_docs.py`: Syncs catalog notebooks with current prompt files.
 - `validate_prompts.py`: Schema validation for TOML prompt files.
 - `test_promptbook.py`: Functional tests for the CLI helper.
+- `install.sh`: Universal one-line installer for the library and CLI.
 
 ## Requirements
 
