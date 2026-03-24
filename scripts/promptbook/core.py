@@ -4,7 +4,8 @@ import re
 import difflib
 import tomllib
 import subprocess
-from .utils import PROMPTS_DIR, Colors, copy_to_clipboard
+import shlex
+from .utils import PROMPTS_DIR, Colors, copy_to_clipboard, AuditLogger
 from .ui import format_prompt_list, format_tag_list, print_interactive_header
 
 
@@ -203,59 +204,102 @@ def search_prompts(term, tag_filter=None, prompts_dir=None):
 
 
 def hydrate_prompt(template, variables_map):
-    # 0. Conditional Blocks: <if key="value">...</if>
     def handle_conditionals(text):
-        # Match <if key="value">content</if> (non-greedy content)
-        # Using DOTALL to match across multiple lines
-        pattern = r"<if\s+(\w+)\s*=\s*\"([^\"]+)\"\s*>(.*?)</if>"
-
+        cond_pattern = r"<if\s+(\w+)\s*=\s*\"([^\"]+)\"\s*>(.*?)</if>"
         def cond_substitute(match):
-            key = match.group(1)
-            expected_val = match.group(2)
-            content = match.group(3)
-
+            key, expected_val, content = match.group(1), match.group(2), match.group(3)
             actual_val = variables_map.get(key, "").strip().lower()
-            if actual_val == expected_val.strip().lower():
-                return content
-            return ""
-
-        return re.sub(pattern, cond_substitute, text, flags=re.DOTALL)
+            return content if actual_val == expected_val.strip().lower() else ""
+        return re.sub(cond_pattern, cond_substitute, text, flags=re.DOTALL)
 
     template = handle_conditionals(template)
 
-    def substitute(match):
-        escape_char = match.group(1)
-        full_content = match.group(2).strip()
+    # 1. Find all shell blocks {{$( ... )}} using balanced braces to handle nesting
+    def find_shell_ranges(text):
+        ranges = []
+        stack = 0
+        start = -1
+        i = 0
+        while i < len(text):
+            if text[i:i + 2] == "{{":
+                # Check if escaped
+                if i > 0 and text[i - 1] == "\\":
+                    i += 2
+                    continue
+                # Check if it's a shell block or we're already inside one
+                if text[i:i + 4] == "{{$(":
+                    if stack == 0:
+                        start = i
+                    stack += 1
+                    i += 4
+                    continue
+                if stack > 0:
+                    stack += 1
+                i += 2
+            elif text[i:i + 2] == "}}":
+                if stack > 0:
+                    stack -= 1
+                    if stack == 0:
+                        ranges.append((start, i + 2))
+                i += 2
+            else:
+                i += 1
+        return ranges
 
+    shell_ranges = find_shell_ranges(template)
+    
+    # 2. Tokenize shell blocks to protect them during standard variable resolution
+    tokenized_template = ""
+    last_pos = 0
+    token_map = {}
+    for i, (s, e) in enumerate(shell_ranges):
+        token = f"__PB_SHELL_{i}__"
+        token_map[token] = template[s + 2:e - 2]  # Content inside {{ }}
+        tokenized_template += template[last_pos:s] + token
+        last_pos = e
+    tokenized_template += template[last_pos:]
+
+    # 3. Resolve standard variables and env vars in the protected template
+    # Regex for standard blocks: no {{ or }} inside
+    std_pattern = r"(\\)?\{\{\s*([^{}]+?)\s*\}\}"
+
+    def resolve_std_block(m):
+        escape_char, content = m.group(1), m.group(2).strip()
         if escape_char == "\\":
-            return f"{{{{{full_content}}}}}"
+            return f"{{{{{content}}}}}"
+        
+        if content.startswith("env."):
+            return os.environ.get(content[4:].strip(), f"[Env var {content[4:].strip()} not found]")
+        
+        return variables_map.get(content, m.group(0))
 
-        # 1. Shell Execution: {{$(command)}}
-        if full_content.startswith("$(") and full_content.endswith(")"):
-            cmd = full_content[2:-1].strip()
-            try:
-                # Use shell=True for complex commands/pipes, but handle with care
-                result = subprocess.check_output(
-                    cmd, shell=True, stderr=subprocess.STDOUT, text=True
-                )
-                return result.strip()
-            except subprocess.CalledProcessError as e:
-                return f"[Error executing command: {cmd}] -> {e.output.strip()}"
-            except Exception as e:
-                return f"[Error: {str(e)}]"
+    # Single pass for standard variables to respect escaping rules
+    hydrated_text = re.sub(std_pattern, resolve_std_block, tokenized_template)
 
-        # 2. Environment Variables: {{env.VAR}}
-        if full_content.startswith("env."):
-            env_var = full_content[4:].strip()
-            return os.environ.get(env_var, f"[Env var {env_var} not found]")
-
-        # 3. Standard Variables: {{var}}
-        return variables_map.get(full_content, match.group(0))
-
-    # Pattern updated to allow $(...) and env. prefixes
-    # (\\)?\{\{\s*(.+?)\s*\}\}
-    pattern = r"(\\)?\{\{\s*(.+?)\s*\}\}"
-    return re.sub(pattern, substitute, template)
+    # 4. Resolve shell blocks and replace tokens
+    for token, shell_content in token_map.items():
+        # shell_content is e.g. "$(echo {{args}})"
+        inner_cmd = shell_content[2:-1].strip()
+        
+        # Resolve any {{var}} inside the shell command WITH quoting for security
+        def quote_fn(mm):
+            v_name = mm.group(1).strip()
+            if v_name.startswith("env."):
+                val = os.environ.get(v_name[4:].strip(), "")
+            else:
+                val = variables_map.get(v_name, "")
+            return shlex.quote(val)
+        
+        safe_cmd = re.sub(r"\{\{\s*(.*?)\s*\}\}", quote_fn, inner_cmd)
+        
+        try:
+            res = subprocess.check_output(safe_cmd, shell=True, stderr=subprocess.STDOUT, text=True).strip()
+        except Exception as e:
+            res = f"[Error: {str(e)}]"
+        
+        hydrated_text = hydrated_text.replace(token, res)
+    
+    return hydrated_text
 
 
 def _collect_variables(display_name, variables, data, provided_vars):
@@ -264,12 +308,38 @@ def _collect_variables(display_name, variables, data, provided_vars):
     piped_data = sys.stdin.read().strip() if not sys.stdin.isatty() else None
 
     try:
-        # Filter out dynamic variables (shell exec or env vars)
-        user_vars = [
-            v for v in variables if not (v.startswith("$(") or v.startswith("env."))
-        ]
+        # Recursively find all standard user variables
+        user_vars = set()
+        
+        def find_vars(text):
+            # Use greedy to find outer blocks, then look inside
+            found = re.findall(r"\{\{\s*(.*?)\s*\}\}", text)
+            for v in found:
+                v = v.strip()
+                if v.startswith("$(") and v.endswith(")"):
+                    find_vars(v[2:-1])
+                elif v.startswith("env."):
+                    pass
+                else:
+                    # If it has {{ }}, it's still a shell block we missed? No.
+                    if "{{" not in v:
+                        user_vars.add(v)
+                    else:
+                        find_vars(v)
+        
+        for v in variables:
+            v = v.strip()
+            if v.startswith("$(") and v.endswith(")"):
+                find_vars(v[2:-1])
+            elif v.startswith("env."):
+                pass
+            else:
+                if "{{" not in v:
+                    user_vars.add(v)
+                else:
+                    find_vars(v)
 
-        for var in user_vars:
+        for var in sorted(list(user_vars)):
             if var in provided_vars:
                 final_vars[var] = provided_vars[var]
             elif piped_data is not None:
@@ -343,6 +413,7 @@ def use_prompt(
     version_hint=None,
     no_copy=False,
     auto_confirm=False,
+    mask=False,
 ):
     if provided_vars is None:
         provided_vars = {}
@@ -392,14 +463,54 @@ def use_prompt(
         display_name = (
             f"{name}:{selected['version_id']}" if selected["version_id"] else name
         )
-        variables = sorted(
-            list(set(re.findall(r"\{\{\s*(.*?)\s*\}\}", prompt_content)))
-        )
+        
+        # Recursive variable discovery
+        variables_set = set()
+        def discover_vars(text):
+            # Find innermost blocks first (no {{ or }} inside)
+            innermost = re.findall(r"\{\{\s*([^{}]+?)\s*\}\}", text)
+            for v in innermost:
+                v = v.strip()
+                variables_set.add(v)
+            
+            # Now replace innermost blocks with placeholders and recurse to find outer blocks
+            if innermost:
+                # Simple placeholder replacement to avoid infinite recursion
+                remaining_text = re.sub(r"\{\{\s*[^{}]+?\s*\}\}", "VAR", text)
+                if remaining_text != text:
+                    # Also need to capture the outer block itself if it was a shell block
+                    # Let's use a greedy regex for outer blocks now that we know we have them
+                    outer_blocks = re.findall(r"\{\{\s*(.+)\s*\}\}", text)
+                    for ob in outer_blocks:
+                        variables_set.add(ob.strip())
+                        # If outer block is shell, recurse on its content
+                        if ob.strip().startswith("$(") and ob.strip().endswith(")"):
+                            discover_vars(ob.strip()[2:-1])
+                    
+                    discover_vars(remaining_text)
+        
+        discover_vars(prompt_content)
+        variables = sorted(list(variables_set))
 
         if return_only:
             return prompt_content, variables
 
         final_vars = _collect_variables(display_name, variables, data, provided_vars)
+        
+        # PII Masking (GDPR/Compliance)
+        if mask:
+            try:
+                import scrubadub
+                for var_name, var_val in final_vars.items():
+                    if isinstance(var_val, str):
+                        final_vars[var_name] = scrubadub.clean(var_val)
+            except ImportError:
+                print(f"{Colors.YELLOW}Warning: 'scrubadub' not installed. Masking skipped.{Colors.RESET}", file=sys.stderr)
+
+        # Log sensitive prompt execution
+        if is_sensitive:
+            AuditLogger.log(name, selected.get("version_id"), final_vars)
+            
         prompt_content = hydrate_prompt(prompt_content, final_vars)
 
         do_copy = not no_copy

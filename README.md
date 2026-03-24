@@ -13,7 +13,7 @@ Get up and running in seconds with our universal installer:
 curl -fsSL https://raw.githubusercontent.com/ronmkr/Promptbook/main/scripts/install.sh | bash
 ```
 
-*This clonse the library to `~/.promptbook` and sets up the `pop` alias in `~/.local/bin`.*
+*This clones the library to `~/.promptbook` and sets up the `pop` alias in `~/.local/bin`.*
 
 ## 🔍 What is this?
 
@@ -34,7 +34,7 @@ Unlike loose collections of snippets, Promptbook treats prompts as **first-class
 ### The TUI Explorer
 Lightning-fast fuzzy search and interactive variable hydration directly in your terminal.
 
-![Promptbook TUI Demo](https://raw.githubusercontent.com/ronmkr/promptbook/main/docs/assets/tui-demo.gif)
+![Promptbook TUI Demo](https://raw.githubusercontent.com/ronmkr/Promptbook/main/docs/assets/tui-demo.gif)
 *(Run `make tui` to launch)*
 
 ### Usage Examples
@@ -59,7 +59,7 @@ cat server.log | pop use debug-error
 
 ## 🚀 Key Features
 
-- **Massive Catalog:** 180+ unique prompts across Engineering, Security, AI, DevOps, and specialized developer domains.
+- **Massive Catalog:** 150+ unique prompts across Engineering, Security, AI, DevOps, and specialized developer domains.
 - **Dynamic Context:** Support for dynamic shell execution `{{$(cmd)}}` and environment variables `{{env.VAR}}`.
 - **Conditional Extraction:** Surgical prompt pruning using `<if language="...">` blocks to minimize context bloat.
 - **TUI Browser:** A high-performance Rust-based TUI for browsing and previewing templates.
@@ -67,11 +67,23 @@ cat server.log | pop use debug-error
 
 ## 🛠 Installation
 
+### Automated Install (Recommended)
 ```bash
-git clone https://github.com/ronmkr/promptbook.git
-cd promptbook
+curl -fsSL https://raw.githubusercontent.com/ronmkr/Promptbook/main/scripts/install.sh | bash
+```
+
+### Manual Installation
+```bash
+git clone https://github.com/ronmkr/Promptbook.git
+cd Promptbook
+# Set up dependencies (venv recommended)
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+# Make executable and symlink
 chmod +x promptbook
-sudo ln -s $(pwd)/promptbook /usr/local/bin/pop
+mkdir -p ~/.local/bin
+ln -s $(pwd)/promptbook ~/.local/bin/pop
 ```
 
 ## 📂 Documentation
@@ -245,8 +257,6 @@ Templates are categorized by domain. Click a category to view its full reference
 - `/prompts:rules-distill` - Scan skills to extract cross-cutting principles and distill them into rules — append, revise, or create new rule files
 - `/prompts:specialized-cultural-intelligence-strategist` - CQ specialist detecting invisible exclusion and ensuring software resonates authentically across diverse global and intersectional identities
 - `/prompts:specialized-developer-advocate` - Expert developer advocate specializing in community building, technical content creation, and optimizing developer experience (DX)
-- `/prompts:specialized-french-consulting-market` - Guide to the French IT consulting market, covering ESN margin models, freelance platforms, portage salarial, and rate positioning
-- `/prompts:specialized-korean-business-navigator` - Guide to Korean business culture for professionals, covering the pumi decision process, nunchi, etiquette, and hierarchy navigation
 - `/prompts:strategic-compact` - Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction
 - `/prompts:team-builder` - Interactive agent picker for composing and dispatching parallel teams
 - `/prompts:unified-workflow-strategy` - Complete operational playbook for multi-agent orchestration and autonomous pipeline deployment

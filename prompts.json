@@ -1340,26 +1340,6 @@
     "args_description": "Expert developer advocate specializing in community building, technical content creation, and optimizing developer experience (DX)."
   },
   {
-    "name": "specialized-french-consulting-market",
-    "description": "Guide to the French IT consulting market, covering ESN margin models, freelance platforms, portage salarial, and rate positioning.",
-    "version": "1.0.0",
-    "last_updated": "2026-03-22",
-    "tags": [
-      "management"
-    ],
-    "args_description": "Guide to the French IT consulting market, covering ESN margin models, freelance platforms, portage salarial, and rate positioning."
-  },
-  {
-    "name": "specialized-korean-business-navigator",
-    "description": "Guide to Korean business culture for professionals, covering the pumi decision process, nunchi, etiquette, and hierarchy navigation.",
-    "version": "1.0.0",
-    "last_updated": "2026-03-22",
-    "tags": [
-      "management"
-    ],
-    "args_description": "Guide to Korean business culture for professionals, covering the pumi decision process, nunchi, etiquette, and hierarchy navigation."
-  },
-  {
     "name": "specialized-model-qa",
     "description": "Independent model QA expert who audits ML and statistical models end-to-end - from documentation review and data reconstruction to replication, ca.",
     "version": "1.0.0",
