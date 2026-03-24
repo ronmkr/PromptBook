@@ -46,8 +46,14 @@ If you prefer to install manually:
 ```bash
 git clone https://github.com/ronmkr/Promptbook.git
 cd Promptbook
+# Set up dependencies (venv recommended)
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+# Make executable and symlink
 chmod +x promptbook
-sudo ln -s $(pwd)/promptbook /usr/local/bin/pop
+mkdir -p ~/.local/bin
+ln -s $(pwd)/promptbook ~/.local/bin/pop
 ```
 
 ### Commands
@@ -58,13 +64,16 @@ sudo ln -s $(pwd)/promptbook /usr/local/bin/pop
 | `pop search <term>` | Full-text search across names and descriptions |
 | `pop use <tool>` | Interactively run a template, prompting for variable values |
 | `pop use <tool> --args @file.py` | Inject file content directly into `{{args}}` |
+| `pop use <tool> --mask` | Mask PII in variables (GDPR compliance) |
 | `cat file.py \| pop use <tool>` | Use piped stdin as template input |
 | `pop use <tool> --no-copy` | Run without copying output to clipboard |
 | `pop use <tool> -y` | Skip confirmation on sensitive templates |
+| `pop keys set <provider> <key>` | Securely store an API key in the vault |
+| `pop keys list` | List providers with stored keys |
+| `pop keys delete <provider>` | Remove a key from the vault |
 | `pop tags` | List all unique category tags |
-| `pop completion zsh` | Output Zsh shell completion script |
-| `pop completion bash` | Output Bash shell completion script |
-| `pop completion fish` | Output Fish shell completion script |
+| `pop completion <shell>` | Output shell completion script (zsh/bash/fish) |
+| `make evaluate` | Run Golden Tests using LLM-as-a-judge |
 ### Shell Auto-Completion Setup
 ```bash
 # Zsh

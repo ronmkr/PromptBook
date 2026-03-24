@@ -60,10 +60,41 @@ cat server.log | pop use debug-error
 ## 🚀 Key Features
 
 - **Massive Catalog:** 150+ unique prompts across Engineering, Security, AI, DevOps, and specialized developer domains.
+- **Secure Vault:** Encrypted storage for API keys using OS-level keyring and AES encryption.
+- **Audit Logging:** Compliance-ready tracking of all sensitive prompt executions.
+- **PII Masking:** Automatic anonymization of emails, phones, and sensitive data (GDPR ready).
 - **Dynamic Context:** Support for dynamic shell execution `{{$(cmd)}}` and environment variables `{{env.VAR}}`.
+- **Evaluation Framework:** LLM-as-a-judge golden testing for any OpenAI-compatible provider.
 - **Conditional Extraction:** Surgical prompt pruning using `<if language="...">` blocks to minimize context bloat.
 - **TUI Browser:** A high-performance Rust-based TUI for browsing and previewing templates.
 - **Native Integrations:** First-class support for Gemini CLI, Claude Code, and Aider.
+
+## 🛠 Advanced Features
+
+### 🔒 Secure API Key Vault
+Promptbook includes a built-in secure vault to manage your API keys without exposing them in environment variables or history.
+```bash
+# Store a key securely
+pop keys set openai sk-...
+# List stored providers
+pop keys list
+```
+
+### 🎭 PII Masking (GDPR)
+Protect sensitive data by masking PII before it's sent to the LLM using the `--mask` flag.
+```bash
+pop use security-reviewer --args @server_logs.txt --mask
+```
+
+### 📜 Audit Logging
+All executions of prompts marked as `sensitive` are automatically logged to `~/.promptbook/audit.log` for security auditing and compliance.
+
+### 📊 Golden Test Evaluations
+Run automated evaluations using LLM-as-a-judge to ensure prompt quality. Supports OpenAI, Gemini, and local providers (Ollama/Llama.cpp).
+```bash
+# Run the evaluation suite
+make evaluate
+```
 
 ## 🛠 Installation
 

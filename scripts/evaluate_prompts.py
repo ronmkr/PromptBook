@@ -3,7 +3,10 @@ import os
 import sys
 import json
 import glob
-import tomllib
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
 from typing import List
 from pydantic import BaseModel
 from openai import OpenAI

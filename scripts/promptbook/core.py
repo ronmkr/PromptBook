@@ -2,7 +2,10 @@ import os
 import sys
 import re
 import difflib
-import tomllib
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
 import subprocess
 import shlex
 from .utils import PROMPTS_DIR, Colors, copy_to_clipboard, AuditLogger
