@@ -7,6 +7,7 @@ from .core import (
     use_prompt,
     get_prompts,
     init_wizard,
+    create_wizard,
 )
 from .ui import print_help
 from .utils import resolve_file_injection, Vault, Colors
@@ -137,6 +138,9 @@ def main():
     subparsers.add_parser(
         "init", help="Unified setup wizard (check deps, build TUI, completions)"
     )
+    subparsers.add_parser(
+        "create", help="Interactive wizard to author a new prompt template"
+    )
 
     search_p = subparsers.add_parser(
         "search", help="Search for prompts by name or description"
@@ -217,6 +221,8 @@ def main():
             list_tags()
         elif args.command == "init":
             init_wizard()
+        elif args.command == "create":
+            create_wizard()
         elif args.command == "search":
             search_prompts(args.term, args.tag)
         elif args.command == "completion":
