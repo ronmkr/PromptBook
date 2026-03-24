@@ -18,6 +18,12 @@ from .ui import format_prompt_list, format_tag_list, print_interactive_header
 import shutil
 import platform
 
+if platform.system() != "Windows":
+    import termios
+    import tty
+else:
+    import msvcrt
+
 
 def create_wizard():
     """Interactive wizard to create a new prompt template."""
@@ -607,6 +613,21 @@ def hydrate_prompt(template, variables_map):
     return hydrated_text
 
 
+def _get_char():
+    """Reads a single character from stdin in raw mode."""
+    if platform.system() != "Windows":
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+    else:
+        return msvcrt.getch().decode("utf-8", "ignore")
+
+
 def _collect_variables(display_name, variables, data, provided_vars):
     """Interactively or via flags collects values for template variables."""
     final_vars = {}
@@ -614,7 +635,7 @@ def _collect_variables(display_name, variables, data, provided_vars):
 
     try:
         # Recursively find all standard user variables
-        user_vars = set()
+        user_vars_set = set()
 
         def find_vars(text):
             # Use greedy to find outer blocks, then look inside
@@ -626,9 +647,8 @@ def _collect_variables(display_name, variables, data, provided_vars):
                 elif v.startswith("env."):
                     pass
                 else:
-                    # If it has {{ }}, it's still a shell block we missed? No.
                     if "{{" not in v:
-                        user_vars.add(v)
+                        user_vars_set.add(v)
                     else:
                         find_vars(v)
 
@@ -640,16 +660,22 @@ def _collect_variables(display_name, variables, data, provided_vars):
                 pass
             else:
                 if "{{" not in v:
-                    user_vars.add(v)
+                    user_vars_set.add(v)
                 else:
                     find_vars(v)
 
-        for var in sorted(list(user_vars)):
+        user_vars = sorted(list(user_vars_set))
+        i = 0
+        while i < len(user_vars):
+            var = user_vars[i]
+
             if var in provided_vars:
                 final_vars[var] = provided_vars[var]
+                i += 1
             elif piped_data is not None:
                 final_vars[var] = piped_data
                 piped_data = None
+                i += 1
             else:
                 label = (
                     data.get("args_description", "Input Data")
@@ -657,15 +683,66 @@ def _collect_variables(display_name, variables, data, provided_vars):
                     else var.replace("_", " ").title()
                 )
                 print_interactive_header(display_name, label)
-                # Use input() for a better interactive experience instead of sys.stdin.read()
+
+                # Multi-line input handler with Ctrl+G (finish) and Ctrl+B (back)
                 lines = []
+                current_line = ""
+
+                sys.stderr.write(
+                    f" {Colors.BOLD}[Input mode: Type normally. Ctrl+G: Finish, Ctrl+B: Back, Ctrl+C: Cancel]{Colors.RESET}\n"
+                )
+                sys.stderr.write(f" {Colors.YELLOW}> {Colors.RESET}")
+                sys.stderr.flush()
+
+                should_go_back = False
                 while True:
-                    try:
-                        line = input()
-                        lines.append(line)
-                    except (EOFError, KeyboardInterrupt):
+                    ch = _get_char()
+
+                    if ch == "\x03":  # Ctrl+C
+                        raise KeyboardInterrupt
+                    elif ch in ("\x07", "\x04"):  # Ctrl+G or Ctrl+D
+                        lines.append(current_line)
                         break
+                    elif ch == "\x02":  # Ctrl+B
+                        should_go_back = True
+                        break
+                    elif ch in ("\r", "\n"):
+                        sys.stderr.write("\n")
+                        sys.stderr.write(f" {Colors.YELLOW}> {Colors.RESET}")
+                        sys.stderr.flush()
+                        lines.append(current_line)
+                        current_line = ""
+                    elif ch in ("\x7f", "\x08"):  # Backspace
+                        if len(current_line) > 0:
+                            current_line = current_line[:-1]
+                            sys.stderr.write("\b \b")
+                            sys.stderr.flush()
+                    else:
+                        current_line += ch
+                        sys.stderr.write(ch)
+                        sys.stderr.flush()
+
+                if should_go_back:
+                    if i > 0:
+                        i -= 1
+                        # Clear current var if moving back
+                        if user_vars[i] in final_vars:
+                            del final_vars[user_vars[i]]
+                        print(
+                            f"\n{Colors.CYAN} [Back] Returning to previous variable...{Colors.RESET}",
+                            file=sys.stderr,
+                        )
+                        continue
+                    else:
+                        print(
+                            f"\n{Colors.YELLOW} [Info] Already at first variable.{Colors.RESET}",
+                            file=sys.stderr,
+                        )
+                        continue
+
                 final_vars[var] = "\n".join(lines).strip()
+                i += 1
+
                 print(
                     "\n"
                     + f"{Colors.BOLD}{Colors.YELLOW}"

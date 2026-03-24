@@ -42,7 +42,7 @@
     - [ ] Review and consolidate prompts in the `workflow/` directory.
 - [x] **Dynamic Context Execution**: Extended Python/Rust parser to evaluate `{{$(cmd)}}` and `{{env.VAR}}` right before hydration.
 - [x] **Responsive TUI Focus Feedback**: Implemented visual dimming for unfocused panes and highlighted selected items for better UX.
-- [ ] **Model Context Protocol (MCP) Integration**: Wrap library in a lightweight MCP server.
+- [x] **Responsive Layout for Small Terminals**: Implemented dynamic 3/2/1-pane switching and responsive footer based on terminal width (Issue #20).
 - [ ] **Expand the Pre-Commit Configuration**: Include strict TOML linting (taplo).
 - [x] **Breaking Downstream Workflows (The Pathing Issue)**: Implemented `redirects.json` strategy to handle directory reorganization without breaking old paths.
 
