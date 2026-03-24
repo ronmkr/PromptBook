@@ -43,6 +43,8 @@ fmt:
 test:
 	@echo "Running CLI helper tests..."
 	@python3 scripts/test_promptbook.py
+	@echo "Running extended feature tests..."
+	@python3 tests/test_features_extended.py
 	@echo "Running validation unit tests..."
 	@python3 scripts/test_validation.py
 

@@ -72,7 +72,7 @@ def print_interactive_header(display_name, label):
         file=sys.stderr,
     )
     print(
-        f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.BOLD}Finish:{Colors.RESET}   Press {Colors.BOLD}Ctrl+D{Colors.RESET} (Mac/Linux) or {Colors.BOLD}Ctrl+Z+Enter{Colors.RESET} (Win)",
+        f"{Colors.BOLD}{Colors.YELLOW}│{Colors.RESET} {Colors.BOLD}Controls:{Colors.RESET} {Colors.CYAN}Ctrl+G/D{Colors.RESET} (Finish) | {Colors.CYAN}Ctrl+B{Colors.RESET} (Back) | {Colors.CYAN}Ctrl+C{Colors.RESET} (Cancel)",
         file=sys.stderr,
     )
     print(

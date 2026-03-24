@@ -50,7 +50,7 @@ pub fn render(f: &mut Frame, state: &mut AppState) {
         render_details(f, state, main_chunks[2]);
     } else if width >= 80 {
         // --- 2-Pane Layout (Medium Screens) ---
-        // Context-aware: Show Categories+Prompts if focused on Categories, 
+        // Context-aware: Show Categories+Prompts if focused on Categories,
         // otherwise show Prompts+Details.
         if state.focus == Focus::Categories {
             let main_chunks = Layout::default()
@@ -74,7 +74,9 @@ pub fn render(f: &mut Frame, state: &mut AppState) {
         let area = outer_layout[1];
         match state.focus {
             Focus::Categories => render_categories(f, state, area),
-            Focus::Prompts | Focus::VersionSelection | Focus::Search => render_prompts(f, state, area),
+            Focus::Prompts | Focus::VersionSelection | Focus::Search => {
+                render_prompts(f, state, area)
+            }
             _ => render_details(f, state, area),
         }
     }
