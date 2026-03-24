@@ -230,7 +230,7 @@ def update_docs(prompts):
                     gemini_list += f"| `/prompts:{p['display_name']}` | {p['description'].rstrip('.')} |\n"
                 gemini_list += "\n"
 
-        gemini_pattern = r"## Template Catalog.*?(?=---.*?## Sensitive Templates)"
+        gemini_pattern = r"## Template Catalog.*?\n(?=---.*?## Sensitive Templates)"
         gemini_content = re.sub(
             gemini_pattern, gemini_list, gemini_content, flags=re.DOTALL
         )
@@ -253,7 +253,7 @@ def update_docs(prompts):
                 readme_list += "\n"
 
         # Update both categories and contributing link
-        readme_pattern = r"## Available Templates.*?(?=## 🧪 Development & Quality|## 🤝 Contributing)"
+        readme_pattern = r"## Available Templates.*?\n(?=## 🧪 Development & Quality|## 🤝 Contributing)"
         readme_content = re.sub(
             readme_pattern, readme_list, readme_content, flags=re.DOTALL
         )
@@ -276,7 +276,7 @@ def update_docs(prompts):
                     )
                 claude_list += "\n"
 
-        claude_pattern = r"## Template Catalog.*?(?=---)"
+        claude_pattern = r"## Template Catalog.*?\n(?=---)"
         claude_content = re.sub(
             claude_pattern, claude_list, claude_content, flags=re.DOTALL
         )
