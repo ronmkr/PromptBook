@@ -50,6 +50,15 @@ docs:
 	@echo "Syncing all documentation..."
 	@python3 scripts/sync_all_docs.py
 
+check-sync: docs
+	@if [ -n "$$(git status --porcelain docs/catalog/ README.md GEMINI.md CLAUDE.md prompts.json)" ]; then \
+		echo "Error: Documentation catalogs, README, or registry are out of sync!"; \
+		echo "Please run 'make docs' locally and commit the changes."; \
+		git diff docs/catalog/ README.md GEMINI.md CLAUDE.md prompts.json; \
+		exit 1; \
+	fi
+	@echo "✅ All documentation is in sync."
+
 sync-version:
 	@if [ -z "$(VERSION)" ]; then \
 		echo "Error: VERSION is not set. Usage: make sync-version VERSION=0.0.x"; \
@@ -58,7 +67,7 @@ sync-version:
 	@echo "Syncing all versions to $(VERSION)..."
 	@python3 scripts/sync_all_versions.py $(VERSION)
 
-all: validate test lint docs
+all: validate test lint docs check-sync
 	@echo "✅ All checks passed and documentation synchronized."
 
 tui:

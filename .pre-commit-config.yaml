@@ -43,3 +43,10 @@ repos:
         language: system
         files: \.rs$
         pass_filenames: false
+
+      - id: sync-docs
+        name: Sync Documentation
+        entry: make check-sync
+        language: system
+        files: ^commands/prompts/.*\.toml$
+        pass_filenames: false
