@@ -1,6 +1,8 @@
 import os
 import sys
 import re
+import datetime
+import json
 import difflib
 
 try:
@@ -15,6 +17,146 @@ from .ui import format_prompt_list, format_tag_list, print_interactive_header
 
 import shutil
 import platform
+
+
+def create_wizard():
+    """Interactive wizard to create a new prompt template."""
+    print(f"\n{Colors.BOLD}{Colors.CYAN}✨ New Prompt Template Wizard{Colors.RESET}")
+    print("-------------------------------------------------------\n")
+
+    # 1. Name
+    name = ""
+    while not name:
+        name = (
+            input(f"{Colors.BOLD}1. Prompt Name{Colors.RESET} (e.g., my-new-tool): ")
+            .strip()
+            .lower()
+        )
+        name = re.sub(r"[^a-z0-9-]", "-", name)
+        if not name:
+            print(f"{Colors.YELLOW}Name is required.{Colors.RESET}")
+
+    # 2. Category
+    prompts_dir = PROMPTS_DIR
+    categories = sorted(
+        [
+            d
+            for d in os.listdir(prompts_dir)
+            if os.path.isdir(os.path.join(prompts_dir, d))
+        ]
+    )
+
+    print(f"\n{Colors.BOLD}2. Select Category:{Colors.RESET}")
+    for i, cat in enumerate(categories):
+        print(f"  {i+1}) {cat}")
+    print(f"  {len(categories)+1}) [Create New Category]")
+
+    cat_choice = 0
+    category = ""
+    while cat_choice < 1 or cat_choice > len(categories) + 1:
+        try:
+            choice = input(f"\nChoice (1-{len(categories)+1}): ")
+            cat_choice = int(choice)
+        except ValueError:
+            continue
+
+    if cat_choice == len(categories) + 1:
+        category = input("New category name: ").strip().lower()
+        category = re.sub(r"[^a-z0-9-]", "-", category)
+    else:
+        category = categories[cat_choice - 1]
+
+    # 3. Metadata
+    print(f"\n{Colors.BOLD}3. Metadata{Colors.RESET}")
+    description = input("   Description: ").strip()
+    if not description.endswith("."):
+        description += "."
+
+    args_desc = (
+        input("   Arguments Description (e.g., 'Source Code', 'JSON Data'): ").strip()
+        or "Input Data"
+    )
+
+    # 4. Tags
+    print(
+        f"\n{Colors.BOLD}4. Tags{Colors.RESET} (comma-separated, e.g., engineering, security):"
+    )
+    tags_input = input("   Tags: ").strip()
+    tags = [t.strip().lower() for t in tags_input.split(",") if t.strip()]
+    if category not in tags:
+        tags.append(category)
+    tags = sorted(list(set(tags)))
+
+    # 5. Prompt Content
+    print(f"\n{Colors.BOLD}5. Prompt Instructions{Colors.RESET}")
+    print("   Enter your prompt below. Use {{args}} for primary input.")
+    print("   Press Ctrl+D (Mac/Linux) or Ctrl+Z+Enter (Win) when finished.")
+    print(f"{Colors.YELLOW}   " + "─" * 40 + f"{Colors.RESET}")
+
+    lines = []
+    while True:
+        try:
+            line = input()
+            lines.append(line)
+        except (EOFError, KeyboardInterrupt):
+            break
+    prompt_content = "\n".join(lines).strip()
+
+    if not prompt_content:
+        print(
+            f"\n{Colors.RED}Error: Prompt content cannot be empty. Aborting.{Colors.RESET}"
+        )
+        return
+
+    # 6. Generate File
+    dest_dir = os.path.join(prompts_dir, category)
+    os.makedirs(dest_dir, exist_ok=True)
+
+    filepath = os.path.join(dest_dir, f"{name}.toml")
+    if os.path.exists(filepath):
+        confirm = input(
+            f"\n{Colors.YELLOW}Warning: {filepath} already exists. Overwrite? (y/N): {Colors.RESET}"
+        ).lower()
+        if confirm != "y":
+            print("Aborted.")
+            return
+
+    timestamp = datetime.date.today().isoformat()
+
+    # Construct TOML
+    toml_content = f"""description      = "{description}"
+args_description = "{args_desc}"
+version          = "1.0.0"
+last_updated     = "{timestamp}"
+tags             = {json.dumps(tags)}
+
+prompt           = \"\"\"
+# {name.replace("-", " ").title()}
+{prompt_content}
+\"\"\"
+"""
+
+    try:
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(toml_content)
+        print(f"\n{Colors.GREEN}✓ Created {filepath}{Colors.RESET}")
+        # 7. Sync documentation
+        print(f"{Colors.CYAN}Syncing documentation...{Colors.RESET}")
+        # Import sync here to avoid circular dependencies if any
+        import subprocess
+
+        subprocess.run(
+            [sys.executable, os.path.join(BASE_DIR, "scripts", "sync_all_docs.py")],
+            check=True,
+        )
+        print(f"{Colors.GREEN}✓ Documentation synchronized.{Colors.RESET}")
+
+    except Exception as e:
+        print(f"{Colors.RED}Error saving file: {e}{Colors.RESET}")
+
+    print(
+        f"\n{Colors.BOLD}Done!{Colors.RESET} You can now use your new tool with: {Colors.CYAN}pop use {name}{Colors.RESET}\n"
+    )
 
 
 def init_wizard():
