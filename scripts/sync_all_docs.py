@@ -85,8 +85,7 @@ def generate_domain_markdown(tag_name, display_name, prompts):
 
     with open(filepath, "w", encoding="utf-8") as f:
         f.writelines(content)
-        if content and not content[-1].endswith("\n"):
-            f.write("\n")
+        f.write("\n")
 
     return filename
 
@@ -120,8 +119,7 @@ def generate_full_catalog(prompts):
     os.makedirs(os.path.dirname(FULL_CATALOG_FILE), exist_ok=True)
     with open(FULL_CATALOG_FILE, "w", encoding="utf-8") as f:
         f.writelines(content)
-        if content and not content[-1].endswith("\n"):
-            f.write("\n")
+        f.write("\n")
 
 
 def generate_catalog_index(domains):
@@ -144,8 +142,7 @@ def generate_catalog_index(domains):
     filepath = os.path.join(CATALOG_DIR, "README.md")
     with open(filepath, "w", encoding="utf-8") as f:
         f.writelines(content)
-        if content and not content[-1].endswith("\n"):
-            f.write("\n")
+        f.write("\n")
 
 
 def update_docs(prompts):
@@ -235,7 +232,7 @@ def update_docs(prompts):
             gemini_pattern, gemini_list, gemini_content, flags=re.DOTALL
         )
         with open(GEMINI_FILE, "w", encoding="utf-8") as f:
-            f.write(gemini_content.rstrip() + "\n")
+            f.write(gemini_content.strip() + "\n")
 
     # 5. Update README.md
     if os.path.exists(README_FILE):
@@ -259,7 +256,7 @@ def update_docs(prompts):
         )
 
         with open(README_FILE, "w", encoding="utf-8") as f:
-            f.write(readme_content.rstrip() + "\n")
+            f.write(readme_content.strip() + "\n")
 
     # 6. Update CLAUDE.md
     if os.path.exists(CLAUDE_FILE):
@@ -281,7 +278,7 @@ def update_docs(prompts):
             claude_pattern, claude_list, claude_content, flags=re.DOTALL
         )
         with open(CLAUDE_FILE, "w", encoding="utf-8") as f:
-            f.write(claude_content.rstrip() + "\n")
+            f.write(claude_content.strip() + "\n")
 
 
 if __name__ == "__main__":
