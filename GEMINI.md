@@ -279,8 +279,6 @@ Templates are organized by domain. When a user asks for help with a task, map it
 | `/prompts:rules-distill` | Scan skills to extract cross-cutting principles and distill them into rules — append, revise, or create new rule files |
 | `/prompts:specialized-cultural-intelligence-strategist` | CQ specialist detecting invisible exclusion and ensuring software resonates authentically across diverse global and intersectional identities |
 | `/prompts:specialized-developer-advocate` | Expert developer advocate specializing in community building, technical content creation, and optimizing developer experience (DX) |
-| `/prompts:specialized-french-consulting-market` | Guide to the French IT consulting market, covering ESN margin models, freelance platforms, portage salarial, and rate positioning |
-| `/prompts:specialized-korean-business-navigator` | Guide to Korean business culture for professionals, covering the pumi decision process, nunchi, etiquette, and hierarchy navigation |
 | `/prompts:strategic-compact` | Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction |
 | `/prompts:team-builder` | Interactive agent picker for composing and dispatching parallel teams |
 | `/prompts:unified-workflow-strategy` | Complete operational playbook for multi-agent orchestration and autonomous pipeline deployment |

@@ -245,8 +245,6 @@ Templates are organized by domain. When a user asks for help with a task, map it
 - `rules-distill`: Scan skills to extract cross-cutting principles and distill them into rules — append, revise, or create new rule files
 - `specialized-cultural-intelligence-strategist`: CQ specialist detecting invisible exclusion and ensuring software resonates authentically across diverse global and intersectional identities
 - `specialized-developer-advocate`: Expert developer advocate specializing in community building, technical content creation, and optimizing developer experience (DX)
-- `specialized-french-consulting-market`: Guide to the French IT consulting market, covering ESN margin models, freelance platforms, portage salarial, and rate positioning
-- `specialized-korean-business-navigator`: Guide to Korean business culture for professionals, covering the pumi decision process, nunchi, etiquette, and hierarchy navigation
 - `strategic-compact`: Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction
 - `team-builder`: Interactive agent picker for composing and dispatching parallel teams
 - `unified-workflow-strategy`: Complete operational playbook for multi-agent orchestration and autonomous pipeline deployment

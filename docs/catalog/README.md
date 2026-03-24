@@ -14,7 +14,7 @@ Explore our curated collection of prompts organized by domain.
 | **Testing & QA** | 14 templates | [View Catalog](testing-and-qa.md) |
 | **Language Specialists** | 43 templates | [View Catalog](language-specialists.md) |
 | **Shell & Scripting** | 6 templates | [View Catalog](shell-and-scripting.md) |
-| **Engineering Management & Workflow** | 24 templates | [View Catalog](engineering-management-and-workflow.md) |
+| **Engineering Management & Workflow** | 22 templates | [View Catalog](engineering-management-and-workflow.md) |
 | **Documentation & Learning** | 10 templates | [View Catalog](documentation-and-learning.md) |
 
 
