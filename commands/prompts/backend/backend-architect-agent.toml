@@ -129,61 +129,56 @@ CREATE INDEX idx_products_name_search ON products USING gin(to_tsvector('english
 ```
 
 ### API Design Specification
+
+<if language="nodejs">
+#### Node.js / Express Architecture
 ```javascript
 // Express.js API Architecture with proper error handling
-
 const express = require('express');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const { authenticate, authorize } = require('./middleware/auth');
-
-const app = express();
-
-// Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-    },
-  },
-}));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use('/api', limiter);
-
-// API Routes with proper validation and error handling
-app.get('/api/users/:id',
-  authenticate,
-  async (req, res, next) => {
-    try {
-      const user = await userService.findById(req.params.id);
-      if (!user) {
-        return res.status(404).json({
-          error: 'User not found',
-          code: 'USER_NOT_FOUND'
-        });
-      }
-
-      res.json({
-        data: user,
-        meta: { timestamp: new Date().toISOString() }
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+...
 ```
+</if>
+
+<if language="go">
+#### Go / Gin Architecture
+```go
+// Gin API Architecture with middleware
+package main
+
+import (
+    "github.com/gin-gonic/gin"
+    "github.com/gin-contrib/cors"
+)
+
+func main() {
+    r := gin.Default()
+    r.Use(cors.Default())
+
+    r.GET("/api/users/:id", func(c *gin.Context) {
+        id := c.Param("id")
+        // ... logic
+    })
+    r.Run()
+}
+```
+</if>
+
+<if language="python">
+#### Python / FastAPI Architecture
+```python
+# FastAPI Architecture with dependency injection
+from fastapi import FastAPI, Depends, HTTPException
+from typing import List
+
+app = FastAPI()
+
+@app.get("/api/users/{user_id}")
+async def get_user(user_id: str):
+    # ... logic
+    return {"id": user_id, "name": "Test User"}
+```
+</if>
 
 ## 💭 Your Communication Style
 

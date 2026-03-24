@@ -10,7 +10,6 @@ pub fn load_prompts<P: AsRef<Path>>(prompts_dir: P) -> Result<Vec<Prompt>> {
 
     for entry in WalkDir::new(prompts_dir)
         .min_depth(1)
-        .max_depth(2)
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| e.path().extension().is_some_and(|ext| ext == "toml"))
@@ -18,19 +17,22 @@ pub fn load_prompts<P: AsRef<Path>>(prompts_dir: P) -> Result<Vec<Prompt>> {
         let path = entry.path();
         let rel_path = path.strip_prefix(prompts_dir).unwrap();
         let parts: Vec<_> = rel_path.components().collect();
+        let file_stem = path.file_stem().unwrap().to_string_lossy().to_string();
 
-        let (name, version_id) = if parts.len() == 1 {
-            // Flat file: commands/prompts/name.toml
-            (
-                path.file_stem().unwrap().to_string_lossy().to_string(),
-                None,
-            )
-        } else {
-            // Grouped file: commands/prompts/name/v1.toml
-            (
-                parts[0].as_os_str().to_string_lossy().to_string(),
-                Some(path.file_stem().unwrap().to_string_lossy().to_string()),
-            )
+        let (name, version_id) = match parts.len() {
+            1 => (file_stem, None), // commands/prompts/name.toml
+            2 => {
+                // commands/prompts/category/name.toml
+                (file_stem, None)
+            }
+            _ => {
+                // commands/prompts/category/name/version.toml
+                let name = parts[parts.len() - 2]
+                    .as_os_str()
+                    .to_string_lossy()
+                    .to_string();
+                (name, Some(file_stem))
+            }
         };
 
         let content = fs::read_to_string(path)?;

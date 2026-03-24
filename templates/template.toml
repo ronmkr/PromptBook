@@ -1,9 +1,9 @@
-description      = "A concise, one-sentence description of the prompt's purpose."
+description = "A concise, one-sentence description of the prompt's purpose."
 args_description = "A friendly label for the input (e.g. 'Source Code')"
-version          = "1.0.0"
-last_updated     = "2026-03-21"
-tags             = ["example-tag", "category"]
-prompt       = """
+version = "1.0.0"
+last_updated = "2026-03-21"
+tags = ["example-tag", "category"]
+prompt = """
   # Expert Tool Name
 Provide a clear and descriptive high-level instruction here.
   ## 1. Context & Inputs

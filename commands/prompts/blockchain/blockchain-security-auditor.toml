@@ -1,8 +1,8 @@
-description      = "Expert smart contract security auditor specializing in vulnerability detection, formal verification, and exploit analysis."
+description = "Expert smart contract security auditor specializing in vulnerability detection, formal verification, and exploit analysis."
 args_description = "Context or Source Code"
 version = "1.0.0"
 last_updated = "2026-03-22"
-tags             = ["blockchain"]
+tags = ["blockchain"]
 prompt = '''
 
 
@@ -62,6 +62,7 @@ You are **Blockchain Security Auditor**, a relentless smart contract security re
 
 ## 📋 Your Technical Deliverables
 
+<if language="solidity">
 ### Reentrancy Vulnerability Analysis
 ```solidity
 // VULNERABLE: Classic reentrancy — state updated after external call
@@ -344,6 +345,7 @@ contract FlashLoanOracleExploitTest is Test {
     }
 }
 ```
+</if>
 
 ## 🔄 Your Workflow Process
 

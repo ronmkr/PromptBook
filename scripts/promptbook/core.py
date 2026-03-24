@@ -3,6 +3,7 @@ import sys
 import re
 import difflib
 import tomllib
+import subprocess
 from .utils import PROMPTS_DIR, Colors, copy_to_clipboard
 from .ui import format_prompt_list, format_tag_list, print_interactive_header
 
@@ -202,14 +203,58 @@ def search_prompts(term, tag_filter=None, prompts_dir=None):
 
 
 def hydrate_prompt(template, variables_map):
+    # 0. Conditional Blocks: <if key="value">...</if>
+    def handle_conditionals(text):
+        # Match <if key="value">content</if> (non-greedy content)
+        # Using DOTALL to match across multiple lines
+        pattern = r"<if\s+(\w+)\s*=\s*\"([^\"]+)\"\s*>(.*?)</if>"
+
+        def cond_substitute(match):
+            key = match.group(1)
+            expected_val = match.group(2)
+            content = match.group(3)
+
+            actual_val = variables_map.get(key, "").strip().lower()
+            if actual_val == expected_val.strip().lower():
+                return content
+            return ""
+
+        return re.sub(pattern, cond_substitute, text, flags=re.DOTALL)
+
+    template = handle_conditionals(template)
+
     def substitute(match):
         escape_char = match.group(1)
-        var_name = match.group(2)
-        if escape_char == "\\":
-            return f"{{{{{var_name}}}}}"
-        return variables_map.get(var_name, match.group(0))
+        full_content = match.group(2).strip()
 
-    pattern = r"(\\)?\{\{\s*(\w+)\s*\}\}"
+        if escape_char == "\\":
+            return f"{{{{{full_content}}}}}"
+
+        # 1. Shell Execution: {{$(command)}}
+        if full_content.startswith("$(") and full_content.endswith(")"):
+            cmd = full_content[2:-1].strip()
+            try:
+                # Use shell=True for complex commands/pipes, but handle with care
+                result = subprocess.check_output(
+                    cmd, shell=True, stderr=subprocess.STDOUT, text=True
+                )
+                return result.strip()
+            except subprocess.CalledProcessError as e:
+                return f"[Error executing command: {cmd}] -> {e.output.strip()}"
+            except Exception as e:
+                return f"[Error: {str(e)}]"
+
+        # 2. Environment Variables: {{env.VAR}}
+        if full_content.startswith("env."):
+            env_var = full_content[4:].strip()
+            return os.environ.get(env_var, f"[Env var {env_var} not found]")
+
+        # 3. Standard Variables: {{var}}
+        return variables_map.get(full_content, match.group(0))
+
+    # Pattern updated to allow $(...) and env. prefixes
+    # (\\)?\{\{\s*(.+?)\s*\}\}
+    pattern = r"(\\)?\{\{\s*(.+?)\s*\}\}"
     return re.sub(pattern, substitute, template)
 
 
@@ -219,7 +264,12 @@ def _collect_variables(display_name, variables, data, provided_vars):
     piped_data = sys.stdin.read().strip() if not sys.stdin.isatty() else None
 
     try:
-        for var in variables:
+        # Filter out dynamic variables (shell exec or env vars)
+        user_vars = [
+            v for v in variables if not (v.startswith("$(") or v.startswith("env."))
+        ]
+
+        for var in user_vars:
             if var in provided_vars:
                 final_vars[var] = provided_vars[var]
             elif piped_data is not None:
@@ -343,7 +393,7 @@ def use_prompt(
             f"{name}:{selected['version_id']}" if selected["version_id"] else name
         )
         variables = sorted(
-            list(set(re.findall(r"\{\{\s*(\w+)\s*\}\}", prompt_content)))
+            list(set(re.findall(r"\{\{\s*(.*?)\s*\}\}", prompt_content)))
         )
 
         if return_only:

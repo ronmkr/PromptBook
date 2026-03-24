@@ -48,38 +48,35 @@ pop search "security audit"
 
 ## Available Templates
 
-Templates are categorized by domain. Click a category to view its full reference notebook.
+Templates are categorized by domain. Click a category to view its full reference catalog.
 
-### [DevOps & Infrastructure](docs/catalog/devops-and-infrastructure.ipynb)
+### [DevOps & Infrastructure](docs/catalog/devops-and-infrastructure.md)
 - `/prompts:bun-runtime` - Bun as runtime, package manager, bundler, and test runner. When to choose Bun vs Node, migration notes, and Vercel support
 - `/prompts:cloud-infrastructure-specialist` - Expert in cloud infrastructure (AWS/GCP/Azure) using Terraform and IAM. Focuses on security, least-privilege policies, and modular IaC
 - `/prompts:container-orchestration-specialist` - Expert in containerization and orchestration using Docker and Kubernetes. Handles Dockerfiles, Compose, and Kubernetes manifests
 - `/prompts:devops-specialist` - Expert DevOps/SRE specialist for CI/CD, IaC, SLOs, observability, and lifecycle management of long-lived agent workloads
 - `/prompts:incident-response-specialist` - Expert incident commander for production management. Coordinates response, severity frameworks, blameless post-mortems, and on-call culture
 
-### [Security & Compliance](docs/catalog/security-and-compliance.ipynb)
+### [Security & Compliance](docs/catalog/security-and-compliance.md)
 - `/prompts:security-architect` - Expert security architect specializing in threat modeling, secure code review, and defense-in-depth across the entire application stack
 - `/prompts:security-policy` - Draft a SECURITY.md or vulnerability disclosure policy
-- `/prompts:security-scan` - Scan your AI agent configuration for security vulnerabilities, misconfigurations, and injection risks using AgentShield
-- `/prompts:security-scan-master` - Integrated security scan tool combining AgentShield for AI configs and dependency auditing for vulnerabilities and maintenance risks
 - `/prompts:threat-modeling` - Generate a STRIDE threat model for a proposed architecture
 
-### [UI / UX & Frontend](docs/catalog/ui-ux-and-frontend.ipynb)
-- `/prompts:frontend-slides` - Create stunning, animation-rich HTML presentations from scratch or by converting PowerPoint files with zero dependencies and viewport-fit
+### [UI / UX & Frontend](docs/catalog/ui-ux-and-frontend.md)
 - `/prompts:frontend-specialist` - Comprehensive frontend specialist for modern web apps. Covers Accessibility, Tailwind, Next.js, Nuxt 4, React patterns, and performance
 
-### [Architecture & Design](docs/catalog/architecture-and-design.ipynb)
+### [Architecture & Design](docs/catalog/architecture-and-design.md)
 - `/prompts:architect` - Senior software architect for system design, domain-driven design, scalability, and technical decision-making with ADR and C4 support
 - `/prompts:architecture-decision-records` - Capture architectural decisions as structured ADR documents. Tracks context, alternatives, consequences, and decision status
 - `/prompts:autonomous-optimization-architect` - System governor for autonomous API shadow-testing and optimization with financial and security guardrails
 - `/prompts:design-patterns` - Comprehensive guide for selecting and implementing software design patterns. Includes code examples, trade-offs, and testing considerations
 
-### [Shell & Scripting](docs/catalog/shell-and-scripting.ipynb)
+### [Shell & Scripting](docs/catalog/shell-and-scripting.md)
 - `/prompts:bash-script-generator` - Write robust, POSIX-compliant bash scripts
 - `/prompts:cli-command-explainer` - Deeply explain obscure terminal commands/flags
 - `/prompts:terminal-integration-specialist` - Terminal emulation, text rendering optimization, and SwiftTerm integration for modern Swift applications
 
-### [Documentation & Learning](docs/catalog/documentation-and-learning.ipynb)
+### [Documentation & Learning](docs/catalog/documentation-and-learning.md)
 - `/prompts:article-writing` - Expert long-form writer specialized in blog posts, tutorials, and newsletters with a focus on distinct, human-sounding voices and structured copy
 - `/prompts:crosspost` - Multi-platform content distribution across X, LinkedIn, Threads, and Bluesky. Adapts content per platform using content-engine patterns. Never pos
 - `/prompts:doc-updater` - Documentation and codemap specialist. Use PROACTIVELY for updating codemaps and documentation. Runs /update-codemaps and /update-docs, generates d

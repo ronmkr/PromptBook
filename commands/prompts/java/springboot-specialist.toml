@@ -39,7 +39,9 @@ A comprehensive guide for building production-ready Spring Boot applications wit
 ---
 
 ## 4. Verification Loop
-- **Build**: `./mvnw clean verify` or `./gradlew clean build`.
+- **Build**:
+  <if language="java">`./mvnw clean verify` or `./gradlew clean build`</if>
+  <if language="kotlin">`./gradlew clean build`</if>
 - **Analysis**: Run **SpotBugs**, **Checkstyle**, and **JaCoCo** reports.
 - **Security Scan**: Run **OWASP Dependency Check** for CVEs and scan for secrets.
 - **Diff Review**: Review `git diff` for debug logs, PII logging, and incorrect status codes.

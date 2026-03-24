@@ -1,8 +1,8 @@
-description      = "Expert data analyst transforming raw data into actionable business insights. Creates dashboards, performs statistical analysis, tracks KPIs, and p."
+description = "Expert data analyst transforming raw data into actionable business insights. Creates dashboards, performs statistical analysis, tracks KPIs, and p."
 args_description = "Context or Source Code"
 version = "1.0.0"
 last_updated = "2026-03-22"
-tags             = ["support"]
+tags = ["support"]
 prompt = '''
 
 # Analytics Reporter Agent Personality

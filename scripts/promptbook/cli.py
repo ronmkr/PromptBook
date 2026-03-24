@@ -138,6 +138,7 @@ def main():
         "use", help="Output prompt content for use in other tools"
     )
     use_p.add_argument("name", help="Name of the prompt to use")
+    use_p.add_argument("--language", help="Specify the programming language context")
     use_p.add_argument(
         "--no-copy", action="store_true", help="Do not copy the prompt to the clipboard"
     )
@@ -164,13 +165,18 @@ def main():
             target_name, version_hint = target_name.split(":", 1)
 
         provided_vars = {}
+        if args.language:
+            provided_vars["language"] = args.language
+
+        # Extract remaining variables from unknown args (like --code "...", etc)
         for i in range(0, len(unknown), 2):
             if unknown[i].startswith("--") and i + 1 < len(unknown):
                 var_name = unknown[i][2:]
                 provided_vars[var_name] = resolve_file_injection(unknown[i + 1])
+
         use_prompt(
             target_name,
-            provided_vars,
+            provided_vars=provided_vars,
             version_hint=version_hint,
             no_copy=args.no_copy,
             auto_confirm=args.yes,

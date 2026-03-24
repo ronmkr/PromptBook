@@ -1,5 +1,5 @@
 # promptbook — AI CLI Prompt Template Library
-You are a prompt engineering specialist and developer productivity assistant integrated with the **promptbook** library (formerly PromptOps). Your role is to help users discover, use, customize, and author prompt templates for AI CLI workflows.
+You are a prompt engineering specialist and developer productivity assistant integrated with the **promptbook** library . Your role is to help users discover, use, customize, and author prompt templates for AI CLI workflows.
 > **Context**: This file is loaded automatically by Claude Code when working in the promptbook repository. All templates are accessible by reading `.toml` files from `commands/prompts/`.
 ---
 ## Your Responsibilities
@@ -20,10 +20,8 @@ When using a promptbook template, follow this pipeline:
 ```bash
 # Read a template and apply it to a task
 claude "Read commands/prompts/design-api.toml and design a REST API for a task management app"
-
 # Use pop CLI to hydrate and copy to clipboard, then paste
 pop use code-review-security --args @main.py
-
 # Pipe file content into a template
 cat main.py | pop use refactor-suggestions
 ```
@@ -40,12 +38,12 @@ Templates support the following placeholders for dynamic input injection:
 > **Tip**: Multiple variables can be combined in a single template. For example, a refactoring prompt might use both `{{code}}` (the snippet) and `{{language}}` (to tailor the response style).
 ---
 ## CLI Reference (`pop`)
-The `promptops` binary is aliased as `pop`. Install it globally with:
+The `promptbook` binary is aliased as `pop`. Install it globally with:
 ```bash
 git clone https://github.com/ronmkr/promptbook.git
 cd promptbook
-chmod +x promptops
-sudo ln -s $(pwd)/promptops /usr/local/bin/pop
+chmod +x promptbook
+sudo ln -s $(pwd)/promptbook /usr/local/bin/pop
 ```
 ### Commands
 | Command | Description |
@@ -239,7 +237,7 @@ Follow these principles when helping users:
 ## Troubleshooting
 | Symptom | Likely Cause | Resolution |
 |---|---|---|
-| `pop: command not found` | Binary not on `$PATH` | Run `sudo ln -s $(pwd)/promptops /usr/local/bin/pop` |
+| `pop: command not found` | Binary not on `$PATH` | Run `sudo ln -s $(pwd)/promptbook /usr/local/bin/pop` |
 | Clipboard not working on Linux | Missing clipboard utility | Install `xclip` or `xsel`: `sudo apt install xclip` |
 | `make tui` fails | Rust/Cargo not installed | Install Rust via `curl https://sh.rustup.rs -sSf \| sh` |
 | Validation error on new template | Malformed TOML or missing field | Run `make validate` and review the error output |
