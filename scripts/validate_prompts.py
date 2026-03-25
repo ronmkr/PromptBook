@@ -51,7 +51,6 @@ class PromptValidator:
             "args_description",
             "version",
             "last_updated",
-            "prompt",
             "tags",
         ]
         for field in required:
@@ -64,6 +63,12 @@ class PromptValidator:
                         self.errors.append("Field 'tags' must be a list of strings")
                 elif not isinstance(val, str) or not val.strip():
                     self.errors.append(f"Field '{field}' must be a non-empty string")
+
+        # Check for at least one prompt field
+        if not any(f in self.data for f in ["prompt", "system_prompt", "user_prompt"]):
+            self.errors.append(
+                "Must provide at least one of: 'prompt', 'system_prompt', or 'user_prompt'"
+            )
 
     def _check_version(self):
         version = self.data.get("version")
@@ -118,23 +123,26 @@ class PromptValidator:
                 )
 
     def _check_prompt_content(self):
-        prompt = self.data.get("prompt")
-        if isinstance(prompt, str):
-            if not re.search(r"^\s*#", prompt, re.MULTILINE):
-                self.errors.append(
-                    "Prompt content must contain at least one Markdown header (e.g., # Title)"
-                )
+        # Gather all prompt content
+        contents = [
+            self.data.get(f, "")
+            for f in ["prompt", "system_prompt", "user_prompt"]
+            if isinstance(self.data.get(f), str)
+        ]
+        full_content = "\n".join(contents)
 
-            # Find all variables like {{var}}
-            vars_found = re.findall(r"\{\{(\w+)\}\}", prompt)
-            if not vars_found:
-                self.errors.append(
-                    "Prompt contains no variables. Did you forget '{{args}}'?"
-                )
-            elif "args" not in vars_found:
-                # We don't strictly require 'args' if they use 'code' etc,
-                # but let's warn if it looks like they missed the primary one.
-                pass
+        if not any(re.search(r"^\s*#", c, re.MULTILINE) for c in contents):
+            self.errors.append(
+                "Prompt content must contain at least one Markdown header (e.g., # Title)"
+            )
+
+        # Find all variables like {{var}} or {{$(cmd)}} or {{env.VAR}}
+        # Updated regex to match more complex variable patterns
+        vars_found = re.findall(r"\{\{\s*(.+?)\s*\}\}", full_content)
+        if not vars_found:
+            self.errors.append(
+                "Prompt contains no variables. Did you forget '{{args}}'?"
+            )
 
 
 def main():

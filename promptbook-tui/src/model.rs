@@ -23,6 +23,10 @@ pub struct Prompt {
     pub sensitive: bool,
     #[serde(default)]
     pub prompt: String,
+    #[serde(default)]
+    pub system_prompt: String,
+    #[serde(default)]
+    pub user_prompt: String,
     #[serde(flatten)]
     pub metadata: HashMap<String, toml::Value>,
 }

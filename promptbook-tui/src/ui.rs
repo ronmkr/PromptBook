@@ -608,7 +608,6 @@ fn render_preview(
 ) {
     let is_modal = is_modal_open(state);
     let is_focused = state.focus == Focus::Details && !is_modal;
-    let content = &p.prompt;
 
     let normal_style = if is_modal {
         Style::default().fg(Color::Rgb(60, 60, 60))
@@ -626,30 +625,126 @@ fn render_preview(
     } else {
         Style::default().fg(Color::Rgb(120, 60, 120))
     };
+    let section_header_style = if is_focused {
+        Style::default()
+            .fg(Color::Yellow)
+            .add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().fg(Color::Rgb(150, 150, 50))
+    };
 
     let re = regex::Regex::new(r"\{\{\s*(.+?)\s*\}\}").unwrap();
     let mut lines = Vec::new();
 
-    for line_content in content.lines() {
-        let mut spans = Vec::new();
-        let mut last_idx = 0;
-        for cap in re.find_iter(line_content) {
-            if cap.start() > last_idx {
-                spans.push(Span::styled(
-                    &line_content[last_idx..cap.start()],
-                    normal_style,
-                ));
+    if !p.system_prompt.is_empty() || !p.user_prompt.is_empty() {
+        if !p.system_prompt.is_empty() {
+            lines.push(Line::from(vec![Span::styled(
+                "--- SYSTEM ---",
+                section_header_style,
+            )]));
+            for line_content in p.system_prompt.lines() {
+                let mut spans = Vec::new();
+                let mut last_idx = 0;
+                for cap in re.find_iter(line_content) {
+                    if cap.start() > last_idx {
+                        spans.push(Span::styled(
+                            &line_content[last_idx..cap.start()],
+                            normal_style,
+                        ));
+                    }
+                    spans.push(Span::styled(
+                        &line_content[cap.start()..cap.end()],
+                        var_style,
+                    ));
+                    last_idx = cap.end();
+                }
+                if last_idx < line_content.len() {
+                    spans.push(Span::styled(&line_content[last_idx..], normal_style));
+                }
+                lines.push(Line::from(spans));
             }
-            spans.push(Span::styled(
-                &line_content[cap.start()..cap.end()],
-                var_style,
-            ));
-            last_idx = cap.end();
+            lines.push(Line::from(""));
         }
-        if last_idx < line_content.len() {
-            spans.push(Span::styled(&line_content[last_idx..], normal_style));
+
+        if !p.user_prompt.is_empty() {
+            lines.push(Line::from(vec![Span::styled(
+                "--- USER ---",
+                section_header_style,
+            )]));
+            for line_content in p.user_prompt.lines() {
+                let mut spans = Vec::new();
+                let mut last_idx = 0;
+                for cap in re.find_iter(line_content) {
+                    if cap.start() > last_idx {
+                        spans.push(Span::styled(
+                            &line_content[last_idx..cap.start()],
+                            normal_style,
+                        ));
+                    }
+                    spans.push(Span::styled(
+                        &line_content[cap.start()..cap.end()],
+                        var_style,
+                    ));
+                    last_idx = cap.end();
+                }
+                if last_idx < line_content.len() {
+                    spans.push(Span::styled(&line_content[last_idx..], normal_style));
+                }
+                lines.push(Line::from(spans));
+            }
+            lines.push(Line::from(""));
         }
-        lines.push(Line::from(spans));
+
+        if !p.prompt.is_empty() {
+            lines.push(Line::from(vec![Span::styled(
+                "--- LEGACY PROMPT ---",
+                section_header_style,
+            )]));
+            for line_content in p.prompt.lines() {
+                let mut spans = Vec::new();
+                let mut last_idx = 0;
+                for cap in re.find_iter(line_content) {
+                    if cap.start() > last_idx {
+                        spans.push(Span::styled(
+                            &line_content[last_idx..cap.start()],
+                            normal_style,
+                        ));
+                    }
+                    spans.push(Span::styled(
+                        &line_content[cap.start()..cap.end()],
+                        var_style,
+                    ));
+                    last_idx = cap.end();
+                }
+                if last_idx < line_content.len() {
+                    spans.push(Span::styled(&line_content[last_idx..], normal_style));
+                }
+                lines.push(Line::from(spans));
+            }
+            lines.push(Line::from(""));
+        }
+    } else {
+        for line_content in p.prompt.lines() {
+            let mut spans = Vec::new();
+            let mut last_idx = 0;
+            for cap in re.find_iter(line_content) {
+                if cap.start() > last_idx {
+                    spans.push(Span::styled(
+                        &line_content[last_idx..cap.start()],
+                        normal_style,
+                    ));
+                }
+                spans.push(Span::styled(
+                    &line_content[cap.start()..cap.end()],
+                    var_style,
+                ));
+                last_idx = cap.end();
+            }
+            if last_idx < line_content.len() {
+                spans.push(Span::styled(&line_content[last_idx..], normal_style));
+            }
+            lines.push(Line::from(spans));
+        }
     }
 
     let line_count = lines.len();

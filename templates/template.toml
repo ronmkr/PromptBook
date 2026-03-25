@@ -1,22 +1,29 @@
 description = "A concise, one-sentence description of the prompt's purpose."
 args_description = "A friendly label for the input (e.g. 'Source Code')"
 version = "1.0.0"
-last_updated = "2026-03-21"
+last_updated = "2026-03-25"
 tags = ["example-tag", "category"]
-prompt = """
-  # Expert Tool Name
-Provide a clear and descriptive high-level instruction here.
-  ## 1. Context & Inputs
+
+# OPTION 1: Multi-message prompt (Recommended for Chat APIs)
+system_prompt = """
+You are an expert in [Domain]. Your goal is to [Goal].
+Always adhere to these principles:
+- Principle 1
+- Principle 2
+"""
+
+user_prompt = """
 Analyze the following input:
 ```
 {{args}}
 ```
-  ## 2. Specific Instructions
-- Instruction 1: Focus on X.
-- Instruction 2: Ensure Y is followed.
-- Instruction 3: Handle edge cases for Z.
-  ## 3. Output Format
-Specify exactly how the AI should structure its response (e.g., Markdown headers, code blocks, lists).
-  ## 4. Examples (Optional)
-Provide a brief example of a good output if necessary.
+Provide a detailed report following this format: [Format]
+"""
+
+# OPTION 2: Legacy single-string prompt (Will be used if system/user prompts are missing)
+prompt = """
+# Expert Tool Name
+Provide a clear and descriptive high-level instruction here.
+## Input
+{{args}}
 """

@@ -93,22 +93,70 @@ def create_wizard():
         tags.append(category)
     tags = sorted(list(set(tags)))
 
-    # 5. Prompt Content
-    print(f"\n{Colors.BOLD}5. Prompt Instructions{Colors.RESET}")
-    print("   Enter your prompt below. Use {{args}} for primary input.")
-    print("   Press Ctrl+D (Mac/Linux) or Ctrl+Z+Enter (Win) when finished.")
-    print(f"{Colors.YELLOW}   " + "─" * 40 + f"{Colors.RESET}")
+    # 5. Prompt Mode
+    print(f"\n{Colors.BOLD}5. Prompt Mode{Colors.RESET}")
+    print("  1) Single Prompt (Standard)")
+    print("  2) Multi-Message Prompt (System + User)")
 
-    lines = []
-    while True:
+    prompt_mode = 0
+    while prompt_mode < 1 or prompt_mode > 2:
         try:
-            line = input()
-            lines.append(line)
-        except (EOFError, KeyboardInterrupt):
-            break
-    prompt_content = "\n".join(lines).strip()
+            choice = input("\nChoice (1-2): ")
+            prompt_mode = int(choice)
+        except ValueError:
+            continue
 
-    if not prompt_content:
+    prompt_content = ""
+    system_prompt = ""
+    user_prompt = ""
+
+    if prompt_mode == 1:
+        # 5.1 Single Prompt Content
+        print(f"\n{Colors.BOLD}5.1 Prompt Instructions{Colors.RESET}")
+        print("   Enter your prompt below. Use {{args}} for primary input.")
+        print("   Press Ctrl+D (Mac/Linux) or Ctrl+Z+Enter (Win) when finished.")
+        print(f"{Colors.YELLOW}   " + "─" * 40 + f"{Colors.RESET}")
+
+        lines = []
+        while True:
+            try:
+                line = input()
+                lines.append(line)
+            except (EOFError, KeyboardInterrupt):
+                break
+        prompt_content = "\n".join(lines).strip()
+    else:
+        # 5.1 System Prompt Content
+        print(f"\n{Colors.BOLD}5.1 System Prompt{Colors.RESET}")
+        print("   Define the persona and global rules.")
+        print("   Press Ctrl+D (Mac/Linux) or Ctrl+Z+Enter (Win) when finished.")
+        print(f"{Colors.YELLOW}   " + "─" * 40 + f"{Colors.RESET}")
+
+        lines = []
+        while True:
+            try:
+                line = input()
+                lines.append(line)
+            except (EOFError, KeyboardInterrupt):
+                break
+        system_prompt = "\n".join(lines).strip()
+
+        # 5.2 User Prompt Content
+        print(f"\n{Colors.BOLD}5.2 User Prompt{Colors.RESET}")
+        print("   Define the specific instruction. Use {{args}} for primary input.")
+        print("   Press Ctrl+D (Mac/Linux) or Ctrl+Z+Enter (Win) when finished.")
+        print(f"{Colors.YELLOW}   " + "─" * 40 + f"{Colors.RESET}")
+
+        lines = []
+        while True:
+            try:
+                line = input()
+                lines.append(line)
+            except (EOFError, KeyboardInterrupt):
+                break
+        user_prompt = "\n".join(lines).strip()
+
+    if not prompt_content and not (system_prompt or user_prompt):
         print(
             f"\n{Colors.RED}Error: Prompt content cannot be empty. Aborting.{Colors.RESET}"
         )
@@ -135,10 +183,22 @@ args_description = "{args_desc}"
 version          = "1.0.0"
 last_updated     = "{timestamp}"
 tags             = {json.dumps(tags)}
-
+"""
+    if prompt_mode == 1:
+        toml_content += f"""
 prompt           = \"\"\"
 # {name.replace("-", " ").title()}
 {prompt_content}
+\"\"\"
+"""
+    else:
+        toml_content += f"""
+system_prompt    = \"\"\"
+{system_prompt}
+\"\"\"
+
+user_prompt      = \"\"\"
+{user_prompt}
 \"\"\"
 """
 
@@ -403,6 +463,8 @@ def _process_prompt_file(path, name, version_id, groups):
                     "sensitive": data.get("sensitive", False),
                     "args_description": data.get("args_description", "Input Data"),
                     "prompt": data.get("prompt", ""),
+                    "system_prompt": data.get("system_prompt", ""),
+                    "user_prompt": data.get("user_prompt", ""),
                     "path": path,
                 }
             )
@@ -796,6 +858,7 @@ def use_prompt(
     no_copy=False,
     auto_confirm=False,
     mask=False,
+    json_output=False,
 ):
     if provided_vars is None:
         provided_vars = {}
@@ -835,10 +898,12 @@ def use_prompt(
 
     with open(selected["path"], "rb") as f:
         data = tomllib.load(f)
-        prompt_content = data.get("prompt", "")
+        legacy_prompt = data.get("prompt", "")
+        system_prompt = data.get("system_prompt", "")
+        user_prompt = data.get("user_prompt", "")
         is_sensitive = selected.get("sensitive", False)
 
-        if not prompt_content:
+        if not legacy_prompt and not system_prompt and not user_prompt:
             print(f"Error: Prompt '{name}' has no content.", file=sys.stderr)
             sys.exit(1)
 
@@ -850,6 +915,8 @@ def use_prompt(
         variables_set = set()
 
         def discover_vars(text):
+            if not text:
+                return
             # Find innermost blocks first (no {{ or }} inside)
             innermost = re.findall(r"\{\{\s*([^{}]+?)\s*\}\}", text)
             for v in innermost:
@@ -872,11 +939,13 @@ def use_prompt(
 
                     discover_vars(remaining_text)
 
-        discover_vars(prompt_content)
+        discover_vars(legacy_prompt)
+        discover_vars(system_prompt)
+        discover_vars(user_prompt)
         variables = sorted(list(variables_set))
 
         if return_only:
-            return prompt_content, variables
+            return (legacy_prompt or user_prompt), variables
 
         final_vars = _collect_variables(display_name, variables, data, provided_vars)
 
@@ -898,17 +967,65 @@ def use_prompt(
         if is_sensitive:
             AuditLogger.log(name, selected.get("version_id"), final_vars)
 
-        prompt_content = hydrate_prompt(prompt_content, final_vars)
+        hydrated_legacy = hydrate_prompt(legacy_prompt, final_vars)
+        hydrated_system = hydrate_prompt(system_prompt, final_vars)
+        hydrated_user = hydrate_prompt(user_prompt, final_vars)
+
+        output_content = ""
+        copy_content = ""
+
+        if json_output:
+            result_json = {}
+            messages = []
+            if hydrated_system:
+                messages.append({"role": "system", "content": hydrated_system})
+            if hydrated_user:
+                messages.append({"role": "user", "content": hydrated_user})
+
+            if messages:
+                result_json["messages"] = messages
+
+            if hydrated_legacy:
+                if not messages:
+                    result_json["prompt"] = hydrated_legacy
+                else:
+                    result_json["legacy_prompt"] = hydrated_legacy
+
+            output_content = json.dumps(result_json, indent=2)
+            copy_content = output_content
+        else:
+            if hydrated_system or hydrated_user:
+                parts = []
+                if hydrated_system:
+                    parts.append(
+                        f"{Colors.BOLD}{Colors.MAGENTA}--- SYSTEM ---{Colors.RESET}\n{hydrated_system}"
+                    )
+                if hydrated_user:
+                    parts.append(
+                        f"{Colors.BOLD}{Colors.CYAN}--- USER ---{Colors.RESET}\n{hydrated_user}"
+                    )
+
+                output_content = "\n\n".join(parts)
+                # For copy, strip colors
+                copy_parts = []
+                if hydrated_system:
+                    copy_parts.append(f"--- SYSTEM ---\n{hydrated_system}")
+                if hydrated_user:
+                    copy_parts.append(f"--- USER ---\n{hydrated_user}")
+                copy_content = "\n\n".join(copy_parts)
+            else:
+                output_content = hydrated_legacy
+                copy_content = hydrated_legacy
 
         do_copy = not no_copy
         if do_copy and is_sensitive and not auto_confirm:
             do_copy = _confirm_sensitive_copy(name)
 
         if do_copy:
-            if copy_to_clipboard(prompt_content):
+            if copy_to_clipboard(copy_content):
                 print(
                     f" {Colors.GREEN}[Done] Prompt copied to clipboard!{Colors.RESET}",
                     file=sys.stderr,
                 )
 
-        print(prompt_content)
+        print(output_content)
