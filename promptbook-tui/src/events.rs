@@ -152,7 +152,23 @@ pub fn handle_modal_input(app: &mut AppState, event: KeyEvent) {
                         if let Some(prompt) = app.all_prompts.iter().find(|p| {
                             p.name == modal.prompt_name && p.version_id == modal.version_id
                         }) {
-                            let hydrated = hydrate::hydrate_prompt(&prompt.prompt, &modal.values);
+                            let hydrated_legacy = hydrate::hydrate_prompt(&prompt.prompt, &modal.values);
+                            let hydrated_system = hydrate::hydrate_prompt(&prompt.system_prompt, &modal.values);
+                            let hydrated_user = hydrate::hydrate_prompt(&prompt.user_prompt, &modal.values);
+
+                            let final_hydrated = if !hydrated_system.is_empty() || !hydrated_user.is_empty() {
+                                let mut parts = Vec::new();
+                                if !hydrated_system.is_empty() {
+                                    parts.push(format!("--- SYSTEM ---\n{}", hydrated_system));
+                                }
+                                if !hydrated_user.is_empty() {
+                                    parts.push(format!("--- USER ---\n{}", hydrated_user));
+                                }
+                                parts.join("\n\n")
+                            } else {
+                                hydrated_legacy
+                            };
+
                             if prompt.sensitive {
                                 app.confirmation_modal = Some(ConfirmationModal {
                                     title: " Security Confirmation ".to_string(),
@@ -160,11 +176,11 @@ pub fn handle_modal_input(app: &mut AppState, event: KeyEvent) {
                                         "⚠️  SECURITY WARNING: '{}' is sensitive. Copy?",
                                         prompt.name
                                     ),
-                                    action: Action::CopyPrompt(hydrated),
+                                    action: Action::CopyPrompt(final_hydrated),
                                 });
                                 app.focus = Focus::ConfirmationModal;
                             } else {
-                                let _ = clipboard::copy_to_clipboard(&hydrated);
+                                let _ = clipboard::copy_to_clipboard(&final_hydrated);
                                 app.set_status(format!("Success: '{}' copied!", prompt.name), 4);
                                 app.focus = Focus::Prompts;
                             }
@@ -210,9 +226,26 @@ pub fn handle_confirmation_modal(app: &mut AppState, code: KeyCode) {
 }
 
 fn start_hydration(app: &mut AppState, prompt: Prompt) {
-    let vars = hydrate::get_variables(&prompt.prompt);
+    let mut vars = hydrate::get_variables(&prompt.prompt);
+    vars.extend(hydrate::get_variables(&prompt.system_prompt));
+    vars.extend(hydrate::get_variables(&prompt.user_prompt));
+    vars.sort();
+    vars.dedup();
+
     if vars.is_empty() {
-        let content = prompt.prompt.clone();
+        let content = if !prompt.system_prompt.is_empty() || !prompt.user_prompt.is_empty() {
+            let mut parts = Vec::new();
+            if !prompt.system_prompt.is_empty() {
+                parts.push(format!("--- SYSTEM ---\n{}", prompt.system_prompt));
+            }
+            if !prompt.user_prompt.is_empty() {
+                parts.push(format!("--- USER ---\n{}", prompt.user_prompt));
+            }
+            parts.join("\n\n")
+        } else {
+            prompt.prompt.clone()
+        };
+
         if prompt.sensitive {
             app.confirmation_modal = Some(ConfirmationModal {
                 title: " Security Confirmation ".to_string(),

@@ -5,6 +5,7 @@ A complete reference of all available expert prompt templates, organized by doma
 | Category | Prompt | Description |
 |---|---|---|
 | **Academic** | `academic-researcher` | Multidisciplinary academic expert in anthropology, geography, history, narratology, and psychology for holistic world-building and analysis. |
+| **Academic** | `mock-multi-3` | Mock multi-message description. |
 | **Ai Agents** | `agentic-identity-trust` | Architectural specialist for agentic identity, cryptographic trust verification, and verifiable audit trails in multi-agent environments. |
 | **Ai Agents** | `agentic-principles` | Unified model for Agentic and AI-First Engineering. Focuses on eval-driven execution, task decomposition, and AI-assisted architecture. |
 | **Ai Agents** | `ai-engineer-agent` | Expert AI/ML engineer for model development, deployment, and production integration. Focuses on scalable features and intelligent data pipelines. |
@@ -150,6 +151,7 @@ A complete reference of all available expert prompt templates, organized by doma
 | **Swift** | `swift-advanced-patterns` | Advanced Swift patterns: actor-based persistence, Swift 6.2 concurrency, and protocol-based dependency injection for testing. |
 | **Swift** | `swift-specialist` | Comprehensive guide for Swift development: coding style, patterns, security, testing, and automation hooks. |
 | **Swift** | `swiftui-patterns` | SwiftUI architecture patterns: state management with @Observable, view composition, navigation, and performance optimization. |
+| **Test** | `test-vars` | Variable discovery test. |
 | **Testing** | `common-testing` | Testing requirements: 80% coverage, TDD workflow, test types. |
 | **Testing** | `e2e-runner` | End-to-end testing specialist using Vercel Agent Browser and Playwright for creating and maintaining reliable browser-based test suites. |
 | **Testing** | `e2e-testing` | Playwright E2E testing patterns, Page Object Model, configuration, CI/CD integration, artifact management, and flaky test strategies. |

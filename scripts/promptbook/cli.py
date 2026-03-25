@@ -167,6 +167,11 @@ def main():
         action="store_true",
         help="Mask PII (emails, phones, etc.) in input variables",
     )
+    use_p.add_argument(
+        "--json",
+        action="store_true",
+        help="Output hydrated prompt as JSON (useful for multi-message prompts)",
+    )
 
     keys_p = subparsers.add_parser("keys", help="Manage secure API keys in the vault")
     keys_sub = keys_p.add_subparsers(dest="keys_command")
@@ -212,6 +217,7 @@ def main():
             no_copy=args.no_copy,
             auto_confirm=args.yes,
             mask=args.mask,
+            json_output=args.json,
         )
     else:
         args = parser.parse_args()

@@ -21,7 +21,7 @@ class EvaluationResult(BaseModel):
     missing_criteria: List[str]
 
 
-def load_prompt(prompt_name: str) -> str:
+def load_prompt(prompt_name: str) -> dict:
     # Handle both flat and nested directory structures
     filepath = os.path.join("commands", "prompts", f"{prompt_name}.toml")
     if not os.path.exists(filepath):
@@ -36,8 +36,7 @@ def load_prompt(prompt_name: str) -> str:
             raise FileNotFoundError(f"Prompt template {prompt_name}.toml not found.")
 
     with open(filepath, "rb") as f:
-        data = tomllib.load(f)
-        return data.get("prompt", "")
+        return tomllib.load(f)
 
 
 def get_client_and_model():
@@ -93,7 +92,7 @@ def run_evaluation():
         print(f"📦 Evaluating Prompt: {prompt_name}")
 
         try:
-            raw_prompt_template = load_prompt(prompt_name)
+            prompt_data = load_prompt(prompt_name)
         except FileNotFoundError as e:
             print(f"  ❌ Error: {e}")
             continue
@@ -106,14 +105,30 @@ def run_evaluation():
 
             print(f"  🧪 Test Case: {test_name}...", end="", flush=True)
 
-            # 1. Hydrate the prompt (simple replacement for eval)
-            hydrated_prompt = raw_prompt_template.replace("{{args}}", input_data)
+            # 1. Prepare messages based on prompt template
+            messages = []
+            
+            system_template = prompt_data.get("system_prompt", "")
+            user_template = prompt_data.get("user_prompt", "")
+            legacy_template = prompt_data.get("prompt", "")
+            
+            if system_template:
+                messages.append({"role": "system", "content": system_template.replace("{{args}}", input_data)})
+            
+            if user_template:
+                messages.append({"role": "user", "content": user_template.replace("{{args}}", input_data)})
+            elif legacy_template:
+                messages.append({"role": "user", "content": legacy_template.replace("{{args}}", input_data)})
+
+            if not messages:
+                print(" ❌ Error: No prompt content found.")
+                continue
 
             try:
                 # 2. Generate the output from the prompt template
                 response = client.chat.completions.create(
                     model=model_id,
-                    messages=[{"role": "user", "content": hydrated_prompt}],
+                    messages=messages,
                 )
                 generated_output = response.choices[0].message.content
 
