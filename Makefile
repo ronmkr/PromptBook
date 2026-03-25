@@ -11,8 +11,8 @@ help:
 	@echo "make lint         - Run linting checks (Python & Rust)"
 	@echo "make fmt          - Format code (Python & Rust)"
 	@echo "make docs         - Generate terminal overview and docs/CATALOG.md"
-	@echo "make evaluate     - Run Golden Tests using LLM-as-a-judge"
-	@echo "make sync-version - Sync all prompt versions (use VERSION=x.x.x)"
+	@echo "make evaluate     - Run Golden Tests (usage: make evaluate [prompt-name])"
+	@echo "make sync-version - Sync all prompt versions (usage: make sync-version [version])"
 	@echo "make all          - Run validation, tests, linting, and sync catalog"
 	@echo "make tui          - Build and run the Rust-based TUI browser"
 	@echo "make clean        - Remove temporary files and __pycache__"
@@ -75,16 +75,27 @@ check-sync: docs
 	@echo "✅ Template catalog is in sync."
 
 evaluate:
-	@echo "Running Golden Test evaluation..."
-	@python3 scripts/evaluate_prompts.py
+	@PROMPT=$$(echo "$(PROMPT)" | grep -v "^$$" || echo "$(filter-out $@,$(MAKECMDGOALS))"); \
+	if [ -n "$$PROMPT" ]; then \
+		echo "Running Golden Test evaluation for: $$PROMPT..."; \
+		python3 scripts/evaluate_prompts.py $$PROMPT; \
+	else \
+		echo "Running all Golden Test evaluations..."; \
+		python3 scripts/evaluate_prompts.py; \
+	fi
 
 sync-version:
-	@if [ -z "$(VERSION)" ]; then \
-		echo "Error: VERSION is not set. Usage: make sync-version VERSION=0.0.x"; \
+	@VERSION=$$(echo "$(VERSION)" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' || echo "$(filter-out $@,$(MAKECMDGOALS))"); \
+	if [ -z "$$VERSION" ]; then \
+		echo "Error: VERSION is not set. Usage: make sync-version [version]"; \
 		exit 1; \
-	fi
-	@echo "Syncing all versions to $(VERSION)..."
-	@python3 scripts/sync_all_versions.py $(VERSION)
+	fi; \
+	echo "Syncing all versions to $$VERSION..."; \
+	python3 scripts/sync_all_versions.py $$VERSION
+
+# Catch-all rule to prevent errors when passing arguments to targets
+%:
+	@:
 
 all: validate test lint docs check-sync
 	@echo "✅ All checks passed and overview generated."
