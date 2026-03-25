@@ -9,25 +9,19 @@ venv/
 .venv/
 ENV/
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
+.eggs/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
 # Rust
 target/
 promptbook-tui/target/
 Cargo.lock.bak
 **/*.rs.bk
+
 # IDEs / Editors
 .vscode/
 .idea/
@@ -35,30 +29,20 @@ Cargo.lock.bak
 *.swo
 *~
 .DS_Store
-.project
-.pydevproject
-.settings/
-# OS files
-Thumbs.db
-desktop.ini
-.DS_Store?
-.Spotlight-V100
-.Trashes
+
 # Logs
 *.log
 logs/
+
 # Temporary files
 tmp/
 temp/
 *.tmp
 scripts/tmp_*
 .test_venv/
-.pytest_cache/
-.ruff_cache/
-.mypy_cache/
+
 # Project Specific
-# (Add any specific ignore patterns here)
 .gemini/
-gha-creds-*.json
-TO-DO
 .env
+.promptbook/
+gha-creds-*.json
