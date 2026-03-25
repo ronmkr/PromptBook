@@ -101,7 +101,7 @@ def create_wizard():
     prompt_mode = 0
     while prompt_mode < 1 or prompt_mode > 2:
         try:
-            choice = input(f"\nChoice (1-2): ")
+            choice = input("\nChoice (1-2): ")
             prompt_mode = int(choice)
         except ValueError:
             continue
@@ -984,23 +984,27 @@ def use_prompt(
 
             if messages:
                 result_json["messages"] = messages
-            
+
             if hydrated_legacy:
                 if not messages:
                     result_json["prompt"] = hydrated_legacy
                 else:
                     result_json["legacy_prompt"] = hydrated_legacy
-            
+
             output_content = json.dumps(result_json, indent=2)
             copy_content = output_content
         else:
             if hydrated_system or hydrated_user:
                 parts = []
                 if hydrated_system:
-                    parts.append(f"{Colors.BOLD}{Colors.MAGENTA}--- SYSTEM ---{Colors.RESET}\n{hydrated_system}")
+                    parts.append(
+                        f"{Colors.BOLD}{Colors.MAGENTA}--- SYSTEM ---{Colors.RESET}\n{hydrated_system}"
+                    )
                 if hydrated_user:
-                    parts.append(f"{Colors.BOLD}{Colors.CYAN}--- USER ---{Colors.RESET}\n{hydrated_user}")
-                
+                    parts.append(
+                        f"{Colors.BOLD}{Colors.CYAN}--- USER ---{Colors.RESET}\n{hydrated_user}"
+                    )
+
                 output_content = "\n\n".join(parts)
                 # For copy, strip colors
                 copy_parts = []

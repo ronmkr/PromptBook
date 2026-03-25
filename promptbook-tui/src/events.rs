@@ -152,22 +152,26 @@ pub fn handle_modal_input(app: &mut AppState, event: KeyEvent) {
                         if let Some(prompt) = app.all_prompts.iter().find(|p| {
                             p.name == modal.prompt_name && p.version_id == modal.version_id
                         }) {
-                            let hydrated_legacy = hydrate::hydrate_prompt(&prompt.prompt, &modal.values);
-                            let hydrated_system = hydrate::hydrate_prompt(&prompt.system_prompt, &modal.values);
-                            let hydrated_user = hydrate::hydrate_prompt(&prompt.user_prompt, &modal.values);
+                            let hydrated_legacy =
+                                hydrate::hydrate_prompt(&prompt.prompt, &modal.values);
+                            let hydrated_system =
+                                hydrate::hydrate_prompt(&prompt.system_prompt, &modal.values);
+                            let hydrated_user =
+                                hydrate::hydrate_prompt(&prompt.user_prompt, &modal.values);
 
-                            let final_hydrated = if !hydrated_system.is_empty() || !hydrated_user.is_empty() {
-                                let mut parts = Vec::new();
-                                if !hydrated_system.is_empty() {
-                                    parts.push(format!("--- SYSTEM ---\n{}", hydrated_system));
-                                }
-                                if !hydrated_user.is_empty() {
-                                    parts.push(format!("--- USER ---\n{}", hydrated_user));
-                                }
-                                parts.join("\n\n")
-                            } else {
-                                hydrated_legacy
-                            };
+                            let final_hydrated =
+                                if !hydrated_system.is_empty() || !hydrated_user.is_empty() {
+                                    let mut parts = Vec::new();
+                                    if !hydrated_system.is_empty() {
+                                        parts.push(format!("--- SYSTEM ---\n{}", hydrated_system));
+                                    }
+                                    if !hydrated_user.is_empty() {
+                                        parts.push(format!("--- USER ---\n{}", hydrated_user));
+                                    }
+                                    parts.join("\n\n")
+                                } else {
+                                    hydrated_legacy
+                                };
 
                             if prompt.sensitive {
                                 app.confirmation_modal = Some(ConfirmationModal {
@@ -292,6 +296,8 @@ mod tests {
             tags: vec!["tag".to_string()],
             sensitive: false,
             prompt: "hello {{args}}".to_string(),
+            system_prompt: "".to_string(),
+            user_prompt: "".to_string(),
             metadata: HashMap::new(),
         };
         AppState::new(vec![p])

@@ -107,18 +107,33 @@ def run_evaluation():
 
             # 1. Prepare messages based on prompt template
             messages = []
-            
+
             system_template = prompt_data.get("system_prompt", "")
             user_template = prompt_data.get("user_prompt", "")
             legacy_template = prompt_data.get("prompt", "")
-            
+
             if system_template:
-                messages.append({"role": "system", "content": system_template.replace("{{args}}", input_data)})
-            
+                messages.append(
+                    {
+                        "role": "system",
+                        "content": system_template.replace("{{args}}", input_data),
+                    }
+                )
+
             if user_template:
-                messages.append({"role": "user", "content": user_template.replace("{{args}}", input_data)})
+                messages.append(
+                    {
+                        "role": "user",
+                        "content": user_template.replace("{{args}}", input_data),
+                    }
+                )
             elif legacy_template:
-                messages.append({"role": "user", "content": legacy_template.replace("{{args}}", input_data)})
+                messages.append(
+                    {
+                        "role": "user",
+                        "content": legacy_template.replace("{{args}}", input_data),
+                    }
+                )
 
             if not messages:
                 print(" ❌ Error: No prompt content found.")
