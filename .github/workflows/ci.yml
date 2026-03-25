@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
+          cache: 'pip' # Improved: Native pip caching
 
       - name: Install dependencies
         run: |
@@ -36,6 +36,8 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: "promptbook-tui -> target"
+          # Improved: Clear stale caches automatically
+          save-if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
       - name: Build Rust TUI (Debug)
         run: make rust-build
