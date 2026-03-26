@@ -4,21 +4,23 @@ import json
 import os
 import sys
 
+# Add current directory to path so we can import our package
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 try:
     import tomllib
 except ImportError:
     import tomli as tomllib
 
-from pydantic import BaseModel
-
-from promptbook.utils import LLMClient
+from promptbook import LLMClient
 
 
 # Define structured output for the LLM-as-a-judge
-class EvaluationResult(BaseModel):
-    passed: bool
-    reasoning: str
-    missing_criteria: list[str]
+class EvaluationResult:
+    def __init__(self, passed: bool, reasoning: str, missing_criteria: list[str]):
+        self.passed = passed
+        self.reasoning = reasoning
+        self.missing_criteria = missing_criteria
 
 
 def load_prompt(prompt_name: str) -> dict:
@@ -146,9 +148,13 @@ Analyze the output carefully. If ALL criteria are met, passed is true. If ANY cr
                     response_format={"type": "json_object"},
                 )
 
-                # Parse JSON and validate with Pydantic
+                # Parse JSON and create result object
                 raw_result = json.loads(eval_response.choices[0].message.content)
-                result = EvaluationResult(**raw_result)
+                result = EvaluationResult(
+                    passed=raw_result.get("passed", False),
+                    reasoning=raw_result.get("reasoning", ""),
+                    missing_criteria=raw_result.get("missing_criteria", []),
+                )
 
                 if result.passed:
                     print(" ✅ PASS")

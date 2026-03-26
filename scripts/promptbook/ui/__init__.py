@@ -1,6 +1,6 @@
 import sys
 
-from .utils import Colors
+from ..utils import Colors
 
 
 def print_help():

@@ -3,8 +3,7 @@ import sys
 
 # Add current directory to path so we can import our package
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from promptbook import core  # noqa: E402
-from promptbook.utils import Colors
+from promptbook import Colors, core  # noqa: E402
 
 CATALOG_FILE = "docs/CATALOG.md"
 
