@@ -1,14 +1,14 @@
-import unittest
+import io
 import os
+import shutil
 import sys
 import tempfile
-import shutil
-import io
+import unittest
 from unittest.mock import patch
 
 # Import the core logic directly
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from promptbook import core, utils, cli  # noqa: E402
+from promptbook import cli, core, utils  # noqa: E402
 
 
 class Testpromptbook(unittest.TestCase):
@@ -29,9 +29,7 @@ class Testpromptbook(unittest.TestCase):
             ["tag2", "common"],
             "# Title Two\n{{args}} and {{code}}",
         )
-        self.create_prompt(
-            "gamma-helper", "Other desc.", ["tag3"], "# Title Three\nNo vars."
-        )
+        self.create_prompt("gamma-helper", "Other desc.", ["tag3"], "# Title Three\nNo vars.")
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)
@@ -90,9 +88,7 @@ class Testpromptbook(unittest.TestCase):
 
     def test_use_prompt_with_flags(self):
         with patch("sys.stdout", new=io.StringIO()) as fake_out:
-            core.use_prompt(
-                "alpha-prompt", {"args": "hello world"}, prompts_dir=self.test_dir
-            )
+            core.use_prompt("alpha-prompt", {"args": "hello world"}, prompts_dir=self.test_dir)
             output = fake_out.getvalue().strip()
             self.assertEqual(output, "# Title One\nhello world")
 
@@ -140,9 +136,7 @@ class Testpromptbook(unittest.TestCase):
         # Pass 'args' via flag, but let 'code' be interactive
         with patch("sys.stderr", new=io.StringIO()):
             with patch("sys.stdout", new=io.StringIO()) as fake_out:
-                core.use_prompt(
-                    "beta-tool", {"args": "flag_val"}, prompts_dir=self.test_dir
-                )
+                core.use_prompt("beta-tool", {"args": "flag_val"}, prompts_dir=self.test_dir)
                 output = fake_out.getvalue().strip()
                 self.assertEqual(output, "# Title Two\nflag_val and interactive_val")
 
@@ -165,9 +159,7 @@ class Testpromptbook(unittest.TestCase):
 
     def test_search_prompts_with_tag_no_matches(self):
         with patch("sys.stdout", new=io.StringIO()) as fake_out:
-            core.search_prompts(
-                "alpha", tag_filter="non-existent-tag", prompts_dir=self.test_dir
-            )
+            core.search_prompts("alpha", tag_filter="non-existent-tag", prompts_dir=self.test_dir)
             output = fake_out.getvalue()
             self.assertIn("No prompts found", output)
             self.assertIn("with tag 'non-existent-tag'", output)
@@ -260,9 +252,7 @@ class Testpromptbook(unittest.TestCase):
     def test_search_prompts_with_tag_filter(self):
         with patch("sys.stdout", new=io.StringIO()) as fake_out:
             # Search for "Description" but filter by tag "tag1"
-            core.search_prompts(
-                "Description", tag_filter="tag1", prompts_dir=self.test_dir
-            )
+            core.search_prompts("Description", tag_filter="tag1", prompts_dir=self.test_dir)
             output = fake_out.getvalue()
             self.assertIn("alpha-prompt", output)
             self.assertNotIn("beta-tool", output)  # has tag2
@@ -347,9 +337,7 @@ class Testpromptbook(unittest.TestCase):
     def test_use_prompt_invalid_version(self):
         with patch("sys.stderr", new=io.StringIO()) as fake_err:
             with self.assertRaises(SystemExit):
-                core.use_prompt(
-                    "alpha-prompt", version_hint="v999", prompts_dir=self.test_dir
-                )
+                core.use_prompt("alpha-prompt", version_hint="v999", prompts_dir=self.test_dir)
             self.assertIn(
                 "Version 'v999' for prompt 'alpha-prompt' not found",
                 fake_err.getvalue(),

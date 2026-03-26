@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
+import glob
+import json
 import os
 import sys
-import json
-import glob
 
 try:
     import tomllib
 except ImportError:
     import tomli as tomllib
-from typing import List
+
 from pydantic import BaseModel
-from openai import OpenAI
-from promptbook.utils import Vault
+
+from promptbook.utils import LLMClient
 
 
 # Define structured output for the LLM-as-a-judge
 class EvaluationResult(BaseModel):
     passed: bool
     reasoning: str
-    missing_criteria: List[str]
+    missing_criteria: list[str]
 
 
 def load_prompt(prompt_name: str) -> dict:
@@ -39,40 +39,14 @@ def load_prompt(prompt_name: str) -> dict:
         return tomllib.load(f)
 
 
-def get_client_and_model():
-    """Returns an OpenAI-compatible client and the target model ID."""
-    api_key = os.getenv("OPENAI_API_KEY")
-    # Check vault if env var not set
-    if not api_key:
-        api_key = Vault.get_key("openai")
-
-    base_url = os.getenv("OPENAI_BASE_URL")
-    model_id = os.getenv("OPENAI_MODEL_NAME", "gpt-4o")
-
-    # Fallback to Gemini if requested or if no OpenAI key is present
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
-    if not gemini_api_key:
-        gemini_api_key = Vault.get_key("gemini")
-
-    if not api_key and gemini_api_key:
-        # Use Google's OpenAI-compatible endpoint
-        api_key = gemini_api_key
-        base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
-        model_id = os.getenv("OPENAI_MODEL_NAME", "gemini-2.0-flash")
-
-    if not api_key:
+def run_evaluation():
+    client, model_id = LLMClient.get_client_and_model()
+    if not client:
         print(
             "❌ Error: Neither OPENAI_API_KEY nor GEMINI_API_KEY is set (checked env and vault).",
             file=sys.stderr,
         )
         sys.exit(1)
-
-    client = OpenAI(api_key=api_key, base_url=base_url)
-    return client, model_id
-
-
-def run_evaluation():
-    client, model_id = get_client_and_model()
 
     dataset_files = glob.glob("tests/golden_datasets/*.json")
     if not dataset_files:
@@ -85,7 +59,7 @@ def run_evaluation():
     print(f"🚀 Starting promptbook Golden Tests using {model_id}...\n")
 
     for dataset_file in dataset_files:
-        with open(dataset_file, "r", encoding="utf-8") as f:
+        with open(dataset_file, encoding="utf-8") as f:
             dataset = json.load(f)
 
         prompt_name = dataset.get("prompt_name")
@@ -183,9 +157,7 @@ Analyze the output carefully. If ALL criteria are met, passed is true. If ANY cr
                     print(" ❌ FAIL")
                     print(f"     Reasoning: {result.reasoning}")
                     if result.missing_criteria:
-                        print(
-                            f"     Missing Criteria: {', '.join(result.missing_criteria)}"
-                        )
+                        print(f"     Missing Criteria: {', '.join(result.missing_criteria)}")
 
             except Exception as e:
                 print(f" ❌ ERROR: API Call Failed - {e}")

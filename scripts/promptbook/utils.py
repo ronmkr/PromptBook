@@ -1,11 +1,11 @@
-import os
-import sys
-import platform
-import subprocess
-import glob
 import datetime
 import getpass
+import glob
 import json
+import os
+import platform
+import subprocess
+import sys
 
 
 # ANSI Colors for better UX
@@ -107,7 +107,7 @@ class Vault:
 
         vault_data = {}
         if os.path.exists(Vault.VAULT_FILE):
-            with open(Vault.VAULT_FILE, "r") as f_vault:
+            with open(Vault.VAULT_FILE) as f_vault:
                 try:
                     vault_data = json.load(f_vault)
                 except json.JSONDecodeError:
@@ -126,7 +126,7 @@ class Vault:
         if not os.path.exists(Vault.VAULT_FILE):
             return None
 
-        with open(Vault.VAULT_FILE, "r") as f_vault:
+        with open(Vault.VAULT_FILE) as f_vault:
             try:
                 vault_data = json.load(f_vault)
             except json.JSONDecodeError:
@@ -148,7 +148,7 @@ class Vault:
         """Lists providers that have keys stored in the vault."""
         if not os.path.exists(Vault.VAULT_FILE):
             return []
-        with open(Vault.VAULT_FILE, "r") as f_vault:
+        with open(Vault.VAULT_FILE) as f_vault:
             try:
                 vault_data = json.load(f_vault)
                 return list(vault_data.keys())
@@ -161,7 +161,7 @@ class Vault:
         if not os.path.exists(Vault.VAULT_FILE):
             return False
 
-        with open(Vault.VAULT_FILE, "r") as f_vault:
+        with open(Vault.VAULT_FILE) as f_vault:
             try:
                 vault_data = json.load(f_vault)
             except json.JSONDecodeError:
@@ -171,6 +171,108 @@ class Vault:
             del vault_data[provider]
             with open(Vault.VAULT_FILE, "w") as f_vault:
                 json.dump(vault_data, f_vault)
+            return True
+        return False
+
+
+class LLMClient:
+    """Reusable LLM client for evaluation and prompt chaining."""
+
+    @staticmethod
+    def get_client_and_model():
+        """Returns an OpenAI-compatible client and the target model ID."""
+        try:
+            from openai import OpenAI
+        except ImportError:
+            return None, None
+
+        api_key = os.getenv("OPENAI_API_KEY")
+        # Check vault if env var not set
+        if not api_key:
+            api_key = Vault.get_key("openai")
+
+        base_url = os.getenv("OPENAI_BASE_URL")
+        model_id = os.getenv("OPENAI_MODEL_NAME", "gpt-4o")
+
+        # Fallback to Gemini if requested or if no OpenAI key is present
+        gemini_api_key = os.getenv("GEMINI_API_KEY")
+        if not gemini_api_key:
+            gemini_api_key = Vault.get_key("gemini")
+
+        if not api_key and gemini_api_key:
+            # Use Google's OpenAI-compatible endpoint
+            api_key = gemini_api_key
+            base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
+            model_id = os.getenv("OPENAI_MODEL_NAME", "gemini-2.0-flash")
+
+        if not api_key:
+            return None, None
+
+        client = OpenAI(api_key=api_key, base_url=base_url)
+        return client, model_id
+
+
+class ProfileManager:
+    """Manages named context profiles (pre-filled variables)."""
+
+    PROFILES_FILE = os.path.join(USER_CONFIG_DIR, "profiles.json")
+
+    @staticmethod
+    def save_profile(name, variables):
+        """Saves a named profile of variables."""
+        os.makedirs(USER_CONFIG_DIR, exist_ok=True)
+        profiles = {}
+        if os.path.exists(ProfileManager.PROFILES_FILE):
+            with open(ProfileManager.PROFILES_FILE) as f:
+                try:
+                    profiles = json.load(f)
+                except json.JSONDecodeError:
+                    pass
+
+        profiles[name] = variables
+        with open(ProfileManager.PROFILES_FILE, "w") as f:
+            json.dump(profiles, f, indent=2)
+        return True
+
+    @staticmethod
+    def load_profile(name):
+        """Loads a named profile of variables."""
+        if not os.path.exists(ProfileManager.PROFILES_FILE):
+            return None
+        with open(ProfileManager.PROFILES_FILE) as f:
+            try:
+                profiles = json.load(f)
+                return profiles.get(name)
+            except json.JSONDecodeError:
+                return None
+
+    @staticmethod
+    def list_profiles():
+        """Lists available context profiles."""
+        if not os.path.exists(ProfileManager.PROFILES_FILE):
+            return []
+        with open(ProfileManager.PROFILES_FILE) as f:
+            try:
+                profiles = json.load(f)
+                return list(profiles.keys())
+            except json.JSONDecodeError:
+                return []
+
+    @staticmethod
+    def delete_profile(name):
+        """Deletes a named profile."""
+        if not os.path.exists(ProfileManager.PROFILES_FILE):
+            return False
+        with open(ProfileManager.PROFILES_FILE) as f:
+            try:
+                profiles = json.load(f)
+            except json.JSONDecodeError:
+                return False
+
+        if name in profiles:
+            del profiles[name]
+            with open(ProfileManager.PROFILES_FILE, "w") as f:
+                json.dump(profiles, f, indent=2)
             return True
         return False
 
@@ -263,19 +365,15 @@ def resolve_file_injection(val):
                 )
                 break
 
-            with open(f_path, "r", encoding="utf-8") as f:
+            with open(f_path, encoding="utf-8") as f:
                 content = f.read().strip()
-                file_text = (
-                    f"--- File: {f_path} ---\n{content}" if len(files) > 1 else content
-                )
+                file_text = f"--- File: {f_path} ---\n{content}" if len(files) > 1 else content
 
                 if total_chars + len(file_text) > InjectionConfig.MAX_CHARS:
                     # Truncate this file to fit the limit
                     remaining = InjectionConfig.MAX_CHARS - total_chars
                     if remaining > 50:
-                        file_text = (
-                            file_text[:remaining] + InjectionConfig.TRUNCATION_MARKER
-                        )
+                        file_text = file_text[:remaining] + InjectionConfig.TRUNCATION_MARKER
                         contents.append(file_text)
                     print(
                         f"{Colors.YELLOW}⚠️  Warning: Maximum character limit reached. Truncated {f_path}.{Colors.RESET}",

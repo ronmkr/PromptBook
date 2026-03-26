@@ -1,22 +1,29 @@
-import os
-import sys
-import re
 import datetime
-import json
 import difflib
+import json
+import os
+import re
+import sys
 
 try:
     import tomllib
 except ImportError:
     import tomli as tomllib
-import subprocess
-import shlex
-from .utils import PROMPTS_DIR, Colors, copy_to_clipboard, AuditLogger, BASE_DIR
-from .ui import format_prompt_list, format_tag_list, print_interactive_header
-
-
-import shutil
 import platform
+import shlex
+import shutil
+import subprocess
+
+from .ui import format_prompt_list, format_tag_list, print_interactive_header
+from .utils import (
+    BASE_DIR,
+    PROMPTS_DIR,
+    AuditLogger,
+    Colors,
+    LLMClient,
+    ProfileManager,
+    copy_to_clipboard,
+)
 
 if platform.system() != "Windows":
     import termios
@@ -45,11 +52,7 @@ def create_wizard():
     # 2. Category
     prompts_dir = PROMPTS_DIR
     categories = sorted(
-        [
-            d
-            for d in os.listdir(prompts_dir)
-            if os.path.isdir(os.path.join(prompts_dir, d))
-        ]
+        [d for d in os.listdir(prompts_dir) if os.path.isdir(os.path.join(prompts_dir, d))]
     )
 
     print(f"\n{Colors.BOLD}2. Select Category:{Colors.RESET}")
@@ -84,9 +87,7 @@ def create_wizard():
     )
 
     # 4. Tags
-    print(
-        f"\n{Colors.BOLD}4. Tags{Colors.RESET} (comma-separated, e.g., engineering, security):"
-    )
+    print(f"\n{Colors.BOLD}4. Tags{Colors.RESET} (comma-separated, e.g., engineering, security):")
     tags_input = input("   Tags: ").strip()
     tags = [t.strip().lower() for t in tags_input.split(",") if t.strip()]
     if category not in tags:
@@ -157,9 +158,7 @@ def create_wizard():
         user_prompt = "\n".join(lines).strip()
 
     if not prompt_content and not (system_prompt or user_prompt):
-        print(
-            f"\n{Colors.RED}Error: Prompt content cannot be empty. Aborting.{Colors.RESET}"
-        )
+        print(f"\n{Colors.RED}Error: Prompt content cannot be empty. Aborting.{Colors.RESET}")
         return
 
     # 6. Generate File
@@ -236,9 +235,7 @@ def init_wizard():
     # Python Check
     py_ver = sys.version_info
     if py_ver.major >= 3 and py_ver.minor >= 8:
-        print(
-            f"  {Colors.GREEN}✓{Colors.RESET} Python {py_ver.major}.{py_ver.minor} detected."
-        )
+        print(f"  {Colors.GREEN}✓{Colors.RESET} Python {py_ver.major}.{py_ver.minor} detected.")
     else:
         print(
             f"  {Colors.YELLOW}⚠{Colors.RESET} Warning: Python 3.8+ recommended (you have {py_ver.major}.{py_ver.minor})."
@@ -262,9 +259,7 @@ def init_wizard():
                 f"  {Colors.YELLOW}⚠{Colors.RESET} Warning: No clipboard utility (xclip/xsel) found. Copying might fail."
             )
     else:
-        print(
-            f"  {Colors.GREEN}✓{Colors.RESET} {os_name} native clipboard support verified."
-        )
+        print(f"  {Colors.GREEN}✓{Colors.RESET} {os_name} native clipboard support verified.")
 
     # 2. Rust/TUI Check
     print(f"\n{Colors.BOLD}[2/4] Rust TUI Explorer...{Colors.RESET}")
@@ -275,9 +270,7 @@ def init_wizard():
             "  Would you like to build the Rust TUI now for faster browsing? (y/N): "
         ).lower()
         if confirm == "y":
-            print(
-                f"  {Colors.CYAN}Building TUI (this may take a minute)...{Colors.RESET}"
-            )
+            print(f"  {Colors.CYAN}Building TUI (this may take a minute)...{Colors.RESET}")
             try:
                 tui_dir = os.path.join(BASE_DIR, "promptbook-tui")
                 subprocess.run(["cargo", "build", "--release"], cwd=tui_dir, check=True)
@@ -319,16 +312,14 @@ def init_wizard():
                     config_path = os.path.expanduser("~/.zshrc")
                     marker = "# promptbook completions"
                     if os.path.exists(config_path):
-                        with open(config_path, "r") as config_file:
+                        with open(config_path) as config_file:
                             if marker in config_file.read():
                                 print(
                                     f"  {Colors.YELLOW}⚠{Colors.RESET} Completions already in .zshrc."
                                 )
                             else:
                                 with open(config_path, "a") as config_file:
-                                    config_file.write(
-                                        f"\n{marker}\nsource <(pop completion zsh)\n"
-                                    )
+                                    config_file.write(f"\n{marker}\nsource <(pop completion zsh)\n")
                                 print(
                                     f"  {Colors.GREEN}✓{Colors.RESET} Added completion source to .zshrc."
                                 )
@@ -336,12 +327,8 @@ def init_wizard():
                     config_path = os.path.expanduser("~/.bashrc")
                     marker = "# promptbook completions"
                     with open(config_path, "a") as config_file:
-                        config_file.write(
-                            f"\n{marker}\nsource <(pop completion bash)\n"
-                        )
-                    print(
-                        f"  {Colors.GREEN}✓{Colors.RESET} Added completion source to .bashrc."
-                    )
+                        config_file.write(f"\n{marker}\nsource <(pop completion bash)\n")
+                    print(f"  {Colors.GREEN}✓{Colors.RESET} Added completion source to .bashrc.")
                 elif shell == "fish":
                     config_dir = os.path.expanduser("~/.config/fish/completions")
                     os.makedirs(config_dir, exist_ok=True)
@@ -351,9 +338,7 @@ def init_wizard():
                         f"  {Colors.GREEN}✓{Colors.RESET} Created completion file in {config_dir}."
                     )
             except Exception as e:
-                print(
-                    f"  {Colors.YELLOW}✗{Colors.RESET} Failed to install completions: {e}"
-                )
+                print(f"  {Colors.YELLOW}✗{Colors.RESET} Failed to install completions: {e}")
     else:
         print("  - Could not detect current shell. Skip completions.")
 
@@ -383,7 +368,7 @@ def get_prompts(prompts_dir=None):
         return []
 
     # Walk through the directory structure recursively
-    for root, dirs, files in os.walk(prompts_dir):
+    for root, _dirs, files in os.walk(prompts_dir):
         # Calculate relative path from prompts_dir to root to identify categories
         rel_path = os.path.relpath(root, prompts_dir)
         category = None if rel_path == "." else rel_path
@@ -435,9 +420,7 @@ def get_prompts(prompts_dir=None):
     all_versions = []
     for name in sorted(groups.keys()):
         versions = groups[name]
-        versions.sort(
-            key=lambda x: (x["version_id"] is not None, x["version_id"] or "")
-        )
+        versions.sort(key=lambda x: (x["version_id"] is not None, x["version_id"] or ""))
         all_versions.extend(versions)
 
     return sorted(all_versions, key=lambda x: x["display_name"])
@@ -534,10 +517,7 @@ def search_prompts(term, tag_filter=None, prompts_dir=None):
         elif term in desc:
             score = 1.5 + (len(term) / len(desc))
         else:
-            scores = [
-                difflib.SequenceMatcher(None, term, part).ratio()
-                for part in name.split("-")
-            ]
+            scores = [difflib.SequenceMatcher(None, term, part).ratio() for part in name.split("-")]
             scores.append(difflib.SequenceMatcher(None, term, name).ratio())
             score = max(scores) if scores else 0
 
@@ -638,9 +618,7 @@ def hydrate_prompt(template, variables_map):
             return f"{{{{{content}}}}}"
 
         if content.startswith("env."):
-            return os.environ.get(
-                content[4:].strip(), f"[Env var {content[4:].strip()} not found]"
-            )
+            return os.environ.get(content[4:].strip(), f"[Env var {content[4:].strip()} not found]")
 
         return variables_map.get(content, m.group(0))
 
@@ -806,11 +784,7 @@ def _collect_variables(display_name, variables, data, provided_vars):
                 i += 1
 
                 print(
-                    "\n"
-                    + f"{Colors.BOLD}{Colors.YELLOW}"
-                    + "─" * 70
-                    + f"{Colors.RESET}"
-                    + "\n",
+                    "\n" + f"{Colors.BOLD}{Colors.YELLOW}" + "─" * 70 + f"{Colors.RESET}" + "\n",
                     file=sys.stderr,
                 )
     except KeyboardInterrupt:
@@ -859,9 +833,25 @@ def use_prompt(
     auto_confirm=False,
     mask=False,
     json_output=False,
+    profile_name=None,
+    return_hydrated=False,
 ):
     if provided_vars is None:
         provided_vars = {}
+
+    # Load from profile if specified
+    if profile_name:
+        profile = ProfileManager.load_profile(profile_name)
+        if profile:
+            # Provided vars (CLI flags) take precedence over profile
+            merged_vars = profile.copy()
+            merged_vars.update(provided_vars)
+            provided_vars = merged_vars
+        else:
+            print(
+                f"{Colors.YELLOW}Warning: Profile '{profile_name}' not found. Skipping profile load.{Colors.RESET}",
+                file=sys.stderr,
+            )
     all_prompts = get_prompts(prompts_dir)
     versions = [p for p in all_prompts if p["name"] == name]
 
@@ -907,9 +897,7 @@ def use_prompt(
             print(f"Error: Prompt '{name}' has no content.", file=sys.stderr)
             sys.exit(1)
 
-        display_name = (
-            f"{name}:{selected['version_id']}" if selected["version_id"] else name
-        )
+        display_name = f"{name}:{selected['version_id']}" if selected["version_id"] else name
 
         # Recursive variable discovery
         variables_set = set()
@@ -971,6 +959,14 @@ def use_prompt(
         hydrated_system = hydrate_prompt(system_prompt, final_vars)
         hydrated_user = hydrate_prompt(user_prompt, final_vars)
 
+        if return_hydrated:
+            return {
+                "legacy": hydrated_legacy,
+                "system": hydrated_system,
+                "user": hydrated_user,
+                "vars": final_vars,
+            }
+
         output_content = ""
         copy_content = ""
 
@@ -1029,3 +1025,91 @@ def use_prompt(
                 )
 
         print(output_content)
+
+
+def execute_prompt(hydrated_prompt, system_prompt=None):
+    """Executes a hydrated prompt using the LLM client."""
+    client, model_id = LLMClient.get_client_and_model()
+    if not client:
+        print(
+            f"{Colors.RED}Error: LLM client could not be initialized. Check API keys.{Colors.RESET}",
+            file=sys.stderr,
+        )
+        return None
+
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": hydrated_prompt})
+
+    try:
+        response = client.chat.completions.create(
+            model=model_id,
+            messages=messages,
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"{Colors.RED}Error calling LLM: {e}{Colors.RESET}", file=sys.stderr)
+        return None
+
+
+def chain_prompts(prompt_names, initial_args=None, profile_name=None):
+    """Sequentially executes a list of prompts, passing output to input."""
+    current_input = initial_args
+    session_vars = {}
+
+    # Load profile vars if any
+    if profile_name:
+        profile = ProfileManager.load_profile(profile_name)
+        if profile:
+            session_vars.update(profile)
+
+    print(
+        f"\n{Colors.BOLD}{Colors.CYAN}⛓️ Starting Prompt Chain ({len(prompt_names)} steps){Colors.RESET}"
+    )
+    print("-" * 70)
+
+    for i, name in enumerate(prompt_names):
+        print(
+            f"\n{Colors.BOLD}Step {i + 1}: {Colors.GREEN}{name}{Colors.RESET}{Colors.BOLD} (Executing...){Colors.RESET}"
+        )
+
+        # Prepare variables for this step
+        step_vars = session_vars.copy()
+        if current_input:
+            step_vars["args"] = current_input
+
+        # Hydrate the prompt
+        result = use_prompt(
+            name,
+            provided_vars=step_vars,
+            return_hydrated=True,
+            auto_confirm=True,  # No confirm inside chain
+        )
+
+        if not result:
+            print(f"{Colors.RED}Error: Failed to hydrate prompt '{name}'.{Colors.RESET}")
+            break
+
+        # Execute
+        prompt_to_run = result["legacy"] or result["user"]
+        system_to_run = result["system"]
+
+        print(f" {Colors.YELLOW}Wait for LLM response...{Colors.RESET}")
+        response = execute_prompt(prompt_to_run, system_to_run)
+
+        if response is None:
+            print(f"{Colors.RED}Error: Chain broken at step {i + 1} ({name}).{Colors.RESET}")
+            break
+
+        print(f" {Colors.GREEN}[Done] Step {i + 1} completed.{Colors.RESET}")
+        print(f"{Colors.BOLD}--- Response Excerpt ---{Colors.RESET}")
+        excerpt = (response[:200] + "..." if len(response) > 200 else response).replace("\n", " ")
+        print(f" {excerpt}")
+
+        current_input = response
+
+    print(f"\n{Colors.BOLD}{Colors.CYAN}✅ Chain complete!{Colors.RESET}")
+    print(f"{Colors.BOLD}Final output copied to clipboard.{Colors.RESET}")
+    copy_to_clipboard(current_input)
+    print("\n" + current_input)

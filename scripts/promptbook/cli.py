@@ -1,16 +1,18 @@
-import sys
 import argparse
+import sys
+
 from .core import (
+    chain_prompts,
+    create_wizard,
+    get_prompts,
+    init_wizard,
     list_prompts,
     list_tags,
     search_prompts,
     use_prompt,
-    get_prompts,
-    init_wizard,
-    create_wizard,
 )
 from .ui import print_help
-from .utils import resolve_file_injection, Vault, Colors
+from .utils import Colors, ProfileManager, Vault, resolve_file_injection
 
 
 def list_names(prompts_dir=None):
@@ -122,9 +124,7 @@ def main():
         print_help()
         sys.argv.append("-h")
 
-    parser = argparse.ArgumentParser(
-        description="promptbook CLI Helper", add_help=False
-    )
+    parser = argparse.ArgumentParser(description="promptbook CLI Helper", add_help=False)
     parser.add_argument("-h", "--help", action="store_true")
 
     if len(sys.argv) > 1 and (sys.argv[1] in ("-h", "--help")):
@@ -135,22 +135,14 @@ def main():
         "--tag", help="Filter by tag"
     )
     subparsers.add_parser("tags", help="List all unique tags in the library")
-    subparsers.add_parser(
-        "init", help="Unified setup wizard (check deps, build TUI, completions)"
-    )
-    subparsers.add_parser(
-        "create", help="Interactive wizard to author a new prompt template"
-    )
+    subparsers.add_parser("init", help="Unified setup wizard (check deps, build TUI, completions)")
+    subparsers.add_parser("create", help="Interactive wizard to author a new prompt template")
 
-    search_p = subparsers.add_parser(
-        "search", help="Search for prompts by name or description"
-    )
+    search_p = subparsers.add_parser("search", help="Search for prompts by name or description")
     search_p.add_argument("term", help="Search term")
     search_p.add_argument("--tag", help="Filter search results by tag")
 
-    use_p = subparsers.add_parser(
-        "use", help="Output prompt content for use in other tools"
-    )
+    use_p = subparsers.add_parser("use", help="Output prompt content for use in other tools")
     use_p.add_argument("name", help="Name of the prompt to use")
     use_p.add_argument("--language", help="Specify the programming language context")
     use_p.add_argument(
@@ -173,6 +165,30 @@ def main():
         help="Output hydrated prompt as JSON (useful for multi-message prompts)",
     )
 
+    use_p.add_argument(
+        "--profile",
+        help="Named context profile to use for pre-filling variables",
+    )
+
+    chain_p = subparsers.add_parser("chain", help="Sequentially execute multiple prompts")
+    chain_p.add_argument("prompts", nargs="+", help="List of prompt names to chain")
+    chain_p.add_argument("--args", help="Initial input for the first prompt (assigned to {{args}})")
+    chain_p.add_argument("--profile", help="Context profile for the entire chain")
+
+    profile_p = subparsers.add_parser("profile", help="Manage named context profiles")
+    profile_sub = profile_p.add_subparsers(dest="profile_command")
+
+    profile_set = profile_sub.add_parser("set", help="Create or update a profile")
+    profile_set.add_argument("name", help="Profile name")
+    profile_set.add_argument(
+        "vars", nargs="+", help="Variable assignments (e.g., project=PB lang=py)"
+    )
+
+    profile_sub.add_parser("list", help="List available profiles")
+
+    profile_del = profile_sub.add_parser("delete", help="Delete a profile")
+    profile_del.add_argument("name", help="Profile name to delete")
+
     keys_p = subparsers.add_parser("keys", help="Manage secure API keys in the vault")
     keys_sub = keys_p.add_subparsers(dest="keys_command")
 
@@ -185,9 +201,7 @@ def main():
     keys_del = keys_sub.add_parser("delete", help="Delete a key from the vault")
     keys_del.add_argument("provider", help="Provider name to delete")
 
-    comp_p = subparsers.add_parser(
-        "completion", help="Generate shell completion script"
-    )
+    comp_p = subparsers.add_parser("completion", help="Generate shell completion script")
     comp_p.add_argument("shell", choices=["zsh", "bash", "fish"], help="Target shell")
 
     subparsers.add_parser("_list_names", add_help=False)
@@ -211,13 +225,14 @@ def main():
                 provided_vars[var_name] = resolve_file_injection(unknown[i + 1])
 
         use_prompt(
-            target_name,
+            args.name,
             provided_vars=provided_vars,
-            version_hint=version_hint,
+            version_hint=args.version,
             no_copy=args.no_copy,
             auto_confirm=args.yes,
             mask=args.mask,
             json_output=args.json,
+            profile_name=args.profile,
         )
     else:
         args = parser.parse_args()
@@ -233,6 +248,36 @@ def main():
             search_prompts(args.term, args.tag)
         elif args.command == "completion":
             generate_completion(args.shell)
+        elif args.command == "chain":
+            chain_prompts(args.prompts, initial_args=args.args, profile_name=args.profile)
+        elif args.command == "profile":
+            if args.profile_command == "set":
+                profile_vars = {}
+                for v in args.vars:
+                    if "=" in v:
+                        k, val = v.split("=", 1)
+                        profile_vars[k.strip()] = val.strip()
+                ProfileManager.save_profile(args.name, profile_vars)
+                print(
+                    f" {Colors.GREEN}[Done] Profile '{args.name}' saved with {len(profile_vars)} variables.{Colors.RESET}"
+                )
+            elif args.profile_command == "list":
+                profiles = ProfileManager.list_profiles()
+                if not profiles:
+                    print("No profiles found.")
+                else:
+                    print(f"{Colors.BOLD}Context Profiles:{Colors.RESET}")
+                    for p in profiles:
+                        print(f"  - {p}")
+            elif args.profile_command == "delete":
+                if ProfileManager.delete_profile(args.name):
+                    print(f" {Colors.GREEN}[Done] Profile '{args.name}' deleted.{Colors.RESET}")
+                else:
+                    print(
+                        f" {Colors.YELLOW}Warning: Profile '{args.name}' not found.{Colors.RESET}"
+                    )
+            else:
+                profile_p.print_help()
         elif args.command == "keys":
             if args.keys_command == "set":
                 Vault.set_key(args.provider, args.key)
@@ -249,9 +294,7 @@ def main():
                         print(f"  - {p}")
             elif args.keys_command == "delete":
                 if Vault.delete_key(args.provider):
-                    print(
-                        f" {Colors.GREEN}[Done] Key for '{args.provider}' removed.{Colors.RESET}"
-                    )
+                    print(f" {Colors.GREEN}[Done] Key for '{args.provider}' removed.{Colors.RESET}")
                 else:
                     print(
                         f" {Colors.Colors.YELLOW}Warning: Key for '{args.provider}' not found in vault.{Colors.RESET}"

@@ -1,8 +1,8 @@
-import unittest
 import os
+import shutil
 import sys
 import tempfile
-import shutil
+import unittest
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))

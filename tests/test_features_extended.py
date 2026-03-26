@@ -1,10 +1,10 @@
-import unittest
-import os
-import sys
-import tempfile
-import shutil
 import io
 import json
+import os
+import shutil
+import sys
+import tempfile
+import unittest
 from unittest.mock import patch
 
 # Add scripts to path so we can import our package
@@ -18,9 +18,7 @@ class TestFeaturesExtended(unittest.TestCase):
         self.test_dir = tempfile.mkdtemp()
         self.user_config_dir = tempfile.mkdtemp()
         # Mock USER_CONFIG_DIR in utils
-        self.patcher_config = patch(
-            "promptbook.utils.USER_CONFIG_DIR", self.user_config_dir
-        )
+        self.patcher_config = patch("promptbook.utils.USER_CONFIG_DIR", self.user_config_dir)
         self.patcher_config.start()
         # Mock AuditLogger log file path
         utils.AuditLogger.LOG_FILE = os.path.join(self.user_config_dir, "audit.log")
@@ -86,9 +84,7 @@ class TestFeaturesExtended(unittest.TestCase):
         # We need to mock sys.stdin.isatty to True for interactive mode
         with patch("sys.stdin.isatty", return_value=True):
             with patch("sys.stderr", new=io.StringIO()):
-                final_vars = core._collect_variables(
-                    display_name, variables, data, provided_vars
-                )
+                final_vars = core._collect_variables(display_name, variables, data, provided_vars)
 
         self.assertEqual(final_vars["var1"], "new1")
         self.assertEqual(final_vars["var2"], "val2")
@@ -141,9 +137,7 @@ class TestFeaturesExtended(unittest.TestCase):
         # Create a test prompt file
         prompt_path = os.path.join(self.test_dir, "pii-test.toml")
         with open(prompt_path, "w") as f:
-            f.write(
-                'description = "PII Test"\ntags = ["test"]\nprompt = "Email: {{args}}"'
-            )
+            f.write('description = "PII Test"\ntags = ["test"]\nprompt = "Email: {{args}}"')
 
         with patch("sys.stdout", new=io.StringIO()) as fake_out:
             with patch("sys.stderr", new=io.StringIO()):
@@ -189,7 +183,7 @@ class TestFeaturesExtended(unittest.TestCase):
 
         # Verify log entry
         self.assertTrue(os.path.exists(utils.AuditLogger.LOG_FILE))
-        with open(utils.AuditLogger.LOG_FILE, "r") as f:
+        with open(utils.AuditLogger.LOG_FILE) as f:
             log_line = f.readline()
             log_entry = json.loads(log_line)
             self.assertEqual(log_entry["prompt"], "sensitive-test")
