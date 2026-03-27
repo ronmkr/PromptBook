@@ -96,6 +96,7 @@ pub fn sync_docs() -> Result<()> {
 
     println!("Syncing documentation for {} prompts...", prompts.len());
 
+    // 1. Generate Markdown Catalog
     let mut md = String::from(
         "# Template Catalog\n\n| Category | Prompt | Description |\n|---|---|---|\n",
     );
@@ -107,7 +108,7 @@ pub fn sync_docs() -> Result<()> {
         cat_a.cmp(cat_b).then(a.name.cmp(&b.name))
     });
 
-    for p in sorted_prompts {
+    for p in sorted_prompts.iter() {
         let cat = p.category.as_deref().unwrap_or("General");
         md.push_str(&format!(
             "| **{}** | `{}` | {} |\n",
@@ -118,6 +119,15 @@ pub fn sync_docs() -> Result<()> {
     fs::write("docs/CATALOG.md", md)?;
     println!(
         "{}✅ Catalog updated: docs/CATALOG.md{}",
+        colors::GREEN,
+        colors::RESET
+    );
+
+    // 2. Generate JSON Catalog for Web
+    let json_catalog = serde_json::to_string_pretty(&sorted_prompts)?;
+    fs::write("docs/catalog.json", json_catalog)?;
+    println!(
+        "{}✅ JSON Catalog updated: docs/catalog.json{}",
         colors::GREEN,
         colors::RESET
     );
