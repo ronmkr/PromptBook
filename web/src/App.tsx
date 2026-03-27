@@ -21,8 +21,14 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedPrompt, setSelectedPrompt] = useState<PromptMetadata | null>(null)
+  const [promptArgs, setPromptArgs] = useState('')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Clear args when selected prompt changes
+    setPromptArgs('')
+  }, [selectedPrompt])
 
   useEffect(() => {
     fetch('./catalog.json')
@@ -176,10 +182,24 @@ function App() {
               </section>
 
               <section>
+                <h4>{selectedPrompt.args_description || 'Arguments'}</h4>
+                <textarea 
+                  className="args-input"
+                  placeholder={`Enter ${selectedPrompt.args_description.toLowerCase()}...`}
+                  value={promptArgs}
+                  onChange={(e) => setPromptArgs(e.target.value)}
+                  rows={3}
+                />
+              </section>
+
+              <section>
                 <h4>Usage</h4>
                 <div className="code-block">
-                  <code>pop use {selectedPrompt.name}</code>
-                  <button onClick={() => handleCopy(`pop use ${selectedPrompt.name}`)}>
+                  <code>
+                    pop use {selectedPrompt.name}
+                    {promptArgs && ` --args "${promptArgs.replace(/"/g, '\\"')}"`}
+                  </code>
+                  <button onClick={() => handleCopy(`pop use ${selectedPrompt.name}${promptArgs ? ` --args "${promptArgs.replace(/"/g, '\\"')}"` : ''}`)}>
                     {copied ? <Check size={16} /> : <Copy size={16} />}
                   </button>
                 </div>
