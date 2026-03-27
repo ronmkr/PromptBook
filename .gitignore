@@ -52,3 +52,9 @@ scripts/tmp_*
 .env
 .promptbook/
 gha-creds-*.json
+
+# Web / Docs
+docs/catalog.json
+web/node_modules/
+web/dist/
+web/package-lock.json

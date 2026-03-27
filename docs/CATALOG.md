@@ -164,8 +164,7 @@
 | **testing** | `testing-specialist` | Comprehensive testing specialist covering AI regression patterns, accessibility, API validation, performance benchmarking, and QA workflows. |
 | **typescript** | `typescript-reviewer` | Expert TypeScript code reviewer ensuring type safety, async correctness, security, and idiomatic patterns in TS/JS codebases. |
 | **typescript** | `typescript-specialist` | Expert TypeScript specialist providing guidance on coding style, hooks, patterns, security, and testing for high-quality TS/JS development. |
-| **workflow** | `dev-workflow-specialist` | Orchestrator for the full development lifecycle, from discovery and strategy to build, hardening, and operation. Manages the NEXUS pipeline. |
 | **workflow** | `handoff-templates` | NEXUS Handoff Templates for standardized agent-to-agent work transfers, QA feedback, escalations, and phase gates. |
+| **workflow** | `nexus-orchestrator` | Master orchestrator for the full development lifecycle, from planning and strategy to handoffs and operations. Manages the NEXUS pipeline. |
 | **workflow** | `rapid-prototyper` | Senior rapid prototyping engineer specializing in high-fidelity prototypes, interaction design, and iterative front-end development. |
 | **workflow** | `verification-loop` | A comprehensive verification system for the AI agent sessions. |
-| **workflow** | `workflow-master` | Master workflow specialist for planning, handoffs, scenario runbooks, and cross-functional use cases. |
