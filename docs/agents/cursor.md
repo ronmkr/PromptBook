@@ -1,91 +1,39 @@
 # Using promptbook with Cursor
 
-Cursor supports custom rules and prompt templates.
+Cursor can be significantly enhanced by using Promptbook templates for system rules or direct composer instructions.
 
-## Custom Rules (.cursorrules)
-You can copy the content of any promptbook template into your project's `.cursorrules` file.
-Find relevant rules in: `commands/prompts/rules/`
+## 🌐 Web Explorer (Recommended)
+The fastest way to use Promptbook with Cursor is via the [Web Explorer](https://ronmkr.github.io/PromptBook/):
+1. Open the [Explorer](https://ronmkr.github.io/PromptBook/).
+2. Select a prompt (e.g., `refactor-agent`).
+3. Paste your code into the arguments field.
+4. Click **Copy** and paste the hydrated prompt into Cursor's Composer or Chat.
 
-## Template Injection
-Use the `pop` CLI to quickly copy a prompt to your clipboard:
+## 💻 Custom Rules (.cursorrules)
+You can bake Promptbook logic directly into your project:
+1. Find a relevant rule template in `commands/prompts/`.
+2. Copy its content into your `.cursorrules` file to provide persistent context to Cursor.
+
+## 💻 Terminal Injection (Power Users)
+Use the `pop` CLI to quickly hydrate and copy a prompt:
 ```bash
-pop use python-testing --no-copy
+pop use code-reviewer-agent --args @file.py | pbcopy
 ```
-Then paste it into Cursor's composer or chat.
-
-## Native Catalog
-Browse all prompts in the [Full Catalog](../catalog/FULL_CATALOG.md).
 
 ---
 
 ## Using Promptbook as Skills
+PromptBook templates can be exported as reusable skills for Cursor.
 
-PromptBook templates work as reusable skills for Cursor. Here's how to use them:
+### Setup Skills Directory
+1. Create a directory: `mkdir -p .cursor/skills`
+2. Export templates: `pop use tdd-workflow --no-copy > .cursor/skills/tdd-workflow.md`
+3. Reference them in Cursor using `@tdd-workflow`.
 
-### Quick Skill Injection
-```bash
-# Hydrate a template and copy to clipboard
-pop use code-reviewer-agent --args @file.py | pbcopy
-
-# Use with language context for surgical extraction
-pop use security-scan --language python --args @main.py | pbcopy
-
-# Preview without copying
-pop use refactor-agent --no-copy
-```
-
-### Creating Custom Skills
-```bash
-# Launch the interactive wizard
-pop create
-
-# This creates a .toml template you can customize
-# Then use it: pop use my-custom-skill
-```
-
-### Export as Standalone Skill
-```bash
-# Export a template as a Cursor-compatible skill
-pop use project-guidelines --no-copy > .cursorrules
-```
-
-### Setting Up in Cursor
-
-1. **Create a skills directory**:
-   ```bash
-   mkdir -p .cursor/skills
-   ```
-
-2. **Export skills**:
-   ```bash
-   pop use tdd-workflow --no-copy > .cursor/skills/tdd-workflow.md
-   pop use security-scan --no-copy > .cursor/skills/security-scan.md
-   ```
-
-3. **Reference in .cursorrules**:
-   ```markdown
-   # .cursorrules
-   @tdd-workflow
-   @security-scan
-   ```
-
-### Available Skill Categories
-
+### Available Categories
 | Category | Use Case |
 |----------|----------|
 | `engineering/` | Code review, refactoring, debugging |
 | `security/` | Security audits, threat modeling |
 | `testing/` | TDD, E2E, test generation |
 | `architecture/` | System design, ADRs |
-| `<language>-specialist/` | Language-specific patterns |
-
-### Example Workflow
-```bash
-# 1. Find a skill
-pop search "code review"
-
-# 2. Use it with your code
-pop use code-reviewer-agent --language python --args @src/main.py
-
-# 3. Paste the hydrated prompt into Cursor's composer
-```
