@@ -13,8 +13,14 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'helium',
+      use: { 
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        launchOptions: {
+          executablePath: '/Applications/Helium.app/Contents/MacOS/Helium'
+        }
+      },
     },
   ],
   webServer: {
