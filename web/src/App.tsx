@@ -135,7 +135,7 @@ function App() {
 
       <main className="container">
         <section className="hero">
-          <h2>Expert Prompt Templates</h2>
+          <h2>Prompt Templates</h2>
           <p>Organized, versioned, and ready to use for developers, architects, and data engineers.</p>
           
           <div className="search-container">
