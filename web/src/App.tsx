@@ -18,6 +18,7 @@ const PromptMetadataSchema = z.object({
   category: z.string().nullable().transform(val => val ?? 'general'),
   path: z.string(),
   prompt: z.string().optional().default(''),
+  concepts: z.array(z.string()).optional().default([]),
 })
 
 type PromptMetadata = z.infer<typeof PromptMetadataSchema>
@@ -32,7 +33,12 @@ interface ApiResponse<T> {
 
 function usePromptSearch(prompts: PromptMetadata[], searchQuery: string, selectedCategory: string | null) {
   const fuse = useMemo(() => new Fuse(prompts, {
-    keys: ['name', 'description', 'tags', 'category'],
+    keys: [
+      { name: 'name', weight: 0.5 },
+      { name: 'description', weight: 0.2 },
+      { name: 'tags', weight: 0.1 },
+      { name: 'concepts', weight: 0.2 }
+    ],
     threshold: 0.3
   }), [prompts])
 
@@ -56,23 +62,40 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedPrompt, setSelectedPrompt] = useState<PromptMetadata | null>(null)
   const [promptArgs, setPromptArgs] = useState('')
+  const [debouncedArgs, setDebouncedArgs] = useState('')
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   const filteredPrompts = usePromptSearch(prompts, searchQuery, selectedCategory)
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedArgs(promptArgs)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [promptArgs])
+
   const hydratePrompt = (template: string, args: string): string => {
     if (!template) return ''
-    let hydrated = template.replace(/\{\{\s*args\s*\}\}/g, args)
-    hydrated = hydrated.replace(/\{\{\s*code\s*\}\}/g, args)
-    hydrated = hydrated.replace(/\{\{\s*file\s*\}\}/g, args)
+    // Use function as second argument to prevent replacement of $ characters in user input
+    const replacer = () => args
+    let hydrated = template.replace(/\{\{\s*args\s*\}\}/g, replacer)
+    hydrated = hydrated.replace(/\{\{\s*code\s*\}\}/g, replacer)
+    hydrated = hydrated.replace(/\{\{\s*file\s*\}\}/g, replacer)
+    
+    // Clean up other placeholders if they aren't provided
     hydrated = hydrated.replace(/\{\{\s*language\s*\}\}/g, 'auto-detected')
     hydrated = hydrated.replace(/\{\{\s*context\s*\}\}/g, '')
+    
     return hydrated.trim()
   }
 
   const handleCopy = (text: string): void => {
+    if (!navigator.clipboard) {
+      setError('Clipboard API not available. Please use a secure context (HTTPS).')
+      return
+    }
     void navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -84,7 +107,8 @@ function App() {
 
   useEffect(() => {
     const loadCatalog = async () => {
-      const fetchPath = import.meta.env.DEV ? '/catalog.json' : `${import.meta.env.BASE_URL}catalog.json`
+      // Use relative path to work in both dev and prod regardless of base URL
+      const fetchPath = 'catalog.json'
       
       try {
         const res = await fetch(fetchPath)
@@ -257,7 +281,7 @@ function App() {
                 <h4>Prompt Preview</h4>
                 <div className="code-block prompt-preview">
                   <pre>
-                    {hydratePrompt(selectedPrompt.prompt, promptArgs)}
+                    {hydratePrompt(selectedPrompt.prompt, debouncedArgs)}
                   </pre>
                   <button 
                     className="copy-full-btn"
