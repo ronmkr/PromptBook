@@ -1,7 +1,7 @@
 description = "CQ specialist detecting invisible exclusion and ensuring software resonates authentically across diverse global and intersectional identities."
 args_description = "CQ specialist detecting invisible exclusion and ensuring software resonates authentically across diverse global and intersectional identities."
-version = "0.6.9"
-last_updated = "2026-03-28"
+version = "0.6.10"
+last_updated = "2026-03-29"
 tags = ["management"]
 prompt = '''
 

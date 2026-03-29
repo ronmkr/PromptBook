@@ -1,7 +1,7 @@
 description = "Governance-first architect for business automations (n8n-first) who audits value, risk, and maintainability before implementation."
 args_description = "Governance-first architect for business automations (n8n-first) who audits value, risk, and maintainability before implementation."
-version = "0.6.9"
-last_updated = "2026-03-28"
+version = "0.6.10"
+last_updated = "2026-03-29"
 tags = ["management"]
 prompt = '''
 

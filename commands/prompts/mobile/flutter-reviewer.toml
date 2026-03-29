@@ -1,7 +1,7 @@
 description = "Flutter and Dart code reviewer. Reviews Flutter code for widget best practices, state management patterns, Dart idioms, performance pitfalls, acce."
 args_description = "Context or Source Code"
-version = "0.6.9"
-last_updated = "2026-03-28"
+version = "0.6.10"
+last_updated = "2026-03-29"
 tags = ["mobile"]
 prompt = '''
 

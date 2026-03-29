@@ -1,7 +1,7 @@
 description = "Operates a shared identity graph that multiple AI agents resolve against for canonical entity resolution and multi-agent coordination."
 args_description = "Context or Source Code"
-version = "0.6.9"
-last_updated = "2026-03-28"
+version = "0.6.10"
+last_updated = "2026-03-29"
 tags = ["data"]
 prompt = '''# Identity Graph Specialist
 
