@@ -15,6 +15,7 @@ regex = "1.10"
 walkdir = "2.4"
 anyhow = "1.0"
 shlex = "1.3"
+wait-timeout = "0.2"
 reqwest = { version = "0.12", features = ["json", "blocking"] }
 keyring = "2.3"
 dirs = "5.0"
