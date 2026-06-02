@@ -9,7 +9,6 @@ For more information, check out:
 - [What are skills?](https://support.gemini.com/en/articles/12512176-what-are-skills)
 - [Using skills in Gemini](https://support.gemini.com/en/articles/12512180-using-skills-in-gemini)
 - [How to create custom skills](https://support.gemini.com/en/articles/12512198-creating-custom-skills)
-- [Equipping agents for the real world with Agent Skills](https://platform.local/engineering/equipping-agents-for-the-real-world-with-agent-skills)
 
 # About This Repository
 
@@ -17,18 +16,18 @@ This repository contains skills that demonstrate what's possible with Gemini's s
 
 Each skill is self-contained in its own folder with a `SKILL.md` file containing the instructions and metadata that Gemini uses. Browse through these skills to get inspiration for your own skills or to understand different patterns and approaches.
 
-Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills that power [Gemini's document capabilities](https://www.platform.local/news/create-files) under the hood in the [`skills/documents/docx`](./skills/documents/docx), [`skills/documents/pdf`](./skills/documents/pdf), [`skills/documents/pptx`](./skills/documents/pptx), and [`skills/documents/xlsx`](./skills/documents/xlsx) subfolders. These are source-available, not open source, but we wanted to share these with developers as a reference for more complex skills that are actively used in a production AI application.
+Many skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills that power advanced document capabilities under the hood in the [`skills/foundational/docx`](./foundational/docx), [`skills/foundational/pdf`](./foundational/pdf), [`skills/foundational/pptx`](./foundational/pptx), and [`skills/foundational/xlsx`](./foundational/xlsx) subfolders. These are source-available as a reference for more complex skills that are actively used in production AI applications.
 
 ## Disclaimer
 
-**These skills are provided for demonstration and educational purposes only.** While some of these capabilities may be available in Gemini, the implementations and behaviors you receive from Gemini may differ from what is shown in these skills. These skills are meant to illustrate patterns and possibilities. Always test skills thoroughly in your own environment before relying on them for critical tasks.
+**These skills are provided for demonstration and educational purposes only.** While some of these capabilities may be available in various platforms, the implementations and behaviors you receive may differ from what is shown in these skills. These skills are meant to illustrate patterns and possibilities. Always test skills thoroughly in your own environment before relying on them for critical tasks.
 
 # Skill Sets
-- [Foundational](./foundational): docx, pdf, pptx, xlsx, doc-coauthoring
-- [Enterprise](./enterprise): internal-comms, brand-guidelines
-- [Creative Lab](./creative-lab): generative-canvas-art, ui-theme-generator, canvas-design
-- [Technical](./technical): webapp-testing, frontend-design, mcp-builder, web-artifacts-builder
-- [Meta](./meta): agnostic-model-connector, slack-gif-creator, behavior-instruction-factory-engine
+- [**Foundational**](./foundational): docx, pdf, pptx, xlsx
+- [**Enterprise**](./enterprise): internal-comms, brand-guidelines
+- [**Creative Lab**](./creative-lab): generative-canvas-art, spatial-canvas-layout
+- [**Technical**](./technical): mcp-builder, automated-web-qa, frontend-design, security-scan, and 25+ others
+- [**Meta**](./meta): behavior-instruction-factory, agnostic-model-connector, strategic-compact, team-builder, and others
 
 # Try in Antigravity, Gemini.ai, and the API
 
@@ -54,9 +53,7 @@ After installing the plugin, you can use the skill by just mentioning it. For in
 
 ## Gemini.ai
 
-These example skills are all already available to paid plans in Gemini.ai. 
-
-To use any skill from this repository or upload custom skills, follow the instructions in [Using skills in Gemini](https://support.gemini.com/en/articles/12512180-using-skills-in-gemini#h_a4222fa77b).
+To use any skill from this repository or upload custom skills, refer to your platform's specific documentation for skill management.
 
 ## Gemini API
 
@@ -96,3 +93,4 @@ The markdown content below contains the instructions, examples, and guidelines t
 Skills are a great way to teach Gemini how to get better at using specific pieces of software. As we see awesome example skills from partners, we may highlight some of them here:
 
 - **Notion** - [Notion Skills for Gemini](https://www.notion.so/notiondevs/Notion-Skills-for-Gemini-28da4445d27180c7af1df7d8615723d0)
+lls for Gemini](https://www.notion.so/notiondevs/Notion-Skills-for-Gemini-28da4445d27180c7af1df7d8615723d0)

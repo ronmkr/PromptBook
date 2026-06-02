@@ -24,4 +24,4 @@ When migrating to a new system, use this mapping to translate generic terms to p
 ## 🚀 How to Migrate
 1.  **Rename Registry**: Change the root `.antigravity-plugin/` directory to match your target system's manifest folder.
 2.  **Environment Variables**: The ecosystem uses `PLATFORM_API_KEY`. Map your specific provider key (e.g., `OPENAI_API_KEY`) to this variable.
-3.  **Capabilities Audit**: Review `docs/architecture/CAPABILITIES.md` to see which generic features (e.g., "Filesystem Access") your target system supports.
+3.  **Capabilities Audit**: Review `docs/architecture/STRUCTURE.md` to see which generic features (e.g., "Filesystem Access") your target system supports.
