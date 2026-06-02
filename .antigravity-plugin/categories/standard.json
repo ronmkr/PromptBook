@@ -1,0 +1,32 @@
+[
+  {
+    "id": "development",
+    "name": "Development Tools",
+    "description": "LSPs, debuggers, and environment setup utilities",
+    "color": "#4285F4"
+  },
+  {
+    "id": "productivity",
+    "name": "Workflow & Productivity",
+    "description": "Tools to speed up your daily coding and management tasks",
+    "color": "#34A853"
+  },
+  {
+    "id": "security",
+    "name": "Security & Compliance",
+    "description": "Vulnerability scanners, auth integrations, and best practices",
+    "color": "#EA4335"
+  },
+  {
+    "id": "database",
+    "name": "Databases & Data",
+    "description": "Connect and query your data infrastructure",
+    "color": "#FBBC05"
+  },
+  {
+    "id": "creative",
+    "name": "Creative & Design",
+    "description": "UI/UX, generative art, and branding assets",
+    "color": "#AB47BC"
+  }
+]

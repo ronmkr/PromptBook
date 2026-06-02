@@ -1,0 +1,10 @@
+{
+  "name": "security-guidance",
+  "version": "2.0.2",
+  "description": "Security review for Gemini-generated code. Pattern-based warnings on edits, LLM-powered diff review on Stop, and an agentic commit reviewer that catches injection, XSS, SSRF, hardcoded secrets, and 25+ other vulnerability classes.",
+  "author": {
+    "name": "David Dworken",
+    "email": "dworken@antigravity.google"
+  },
+  "homepage": "https://github.com/gemini-cli-extensions/antigravity-plugins-official/tree/main/plugins/security-guidance"
+}

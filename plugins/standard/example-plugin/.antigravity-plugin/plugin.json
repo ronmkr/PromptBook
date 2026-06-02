@@ -1,0 +1,8 @@
+{
+  "name": "example-plugin",
+  "description": "A comprehensive example plugin demonstrating all Antigravity extension options including commands, agents, skills, hooks, and MCP servers",
+  "author": {
+    "name": "Google",
+    "email": "support@antigravity.google"
+  }
+}
