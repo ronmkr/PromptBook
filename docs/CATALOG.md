@@ -1,720 +1,287 @@
-./
-├── core/
-│   ├── agent-sdk/
-│   │   ├── agents/
-│   │   │   ├── agent-sdk-verifier-py.md
-│   │   │   └── agent-sdk-verifier-ts.md
-│   │   ├── commands/
-│   │   │   └── new-sdk-app.md
-│   │   ├── LICENSE
-│   │   └── README.md
-│   ├── bootstrap/
-│   │   ├── skills/
-│   │   │   └── antigravity-automation-recommender/
-│   │   ├── LICENSE
-│   │   └── README.md
-│   ├── memory/
-│   │   ├── commands/
-│   │   │   └── revise-claude-md.md
-│   │   ├── skills/
-│   │   │   └── memory-instruction-refinement/
-│   │   ├── LICENSE
-│   │   └── README.md
-│   └── plugin-dev-toolkit/
-│       ├── agents/
-│       │   ├── agent-creator.md
-│       │   ├── plugin-validator.md
-│       │   └── skill-reviewer.md
-│       ├── commands/
-│       │   └── create-plugin.md
-│       ├── skills/
-│       │   ├── agent-development/
-│       │   ├── command-development/
-│       │   ├── hook-development/
-│       │   ├── mcp-integration/
-│       │   ├── plugin-settings/
-│       │   ├── plugin-structure/
-│       │   └── skill-development/
-│       ├── LICENSE
-│       └── README.md
-├── docs/
-│   ├── architecture/
-│   │   └── STRUCTURE.md
-│   ├── guides/
-│   │   └── PORTABILITY.md
-│   └── CATALOG.md
-├── plugins/
-│   ├── ecosystem/
-│   │   ├── cloud/
-│   │   │   └── README.md
-│   │   ├── database/
-│   │   │   └── firebase/
-│   │   ├── dev-tools/
-│   │   │   ├── clangd-lsp/
-│   │   │   ├── csharp-lsp/
-│   │   │   ├── github/
-│   │   │   ├── gitlab/
-│   │   │   ├── gopls-lsp/
-│   │   │   ├── jdtls-lsp/
-│   │   │   ├── kotlin-lsp/
-│   │   │   ├── lua-lsp/
-│   │   │   ├── mcp-server-dev/
-│   │   │   ├── mcp-tunnels/
-│   │   │   ├── php-lsp/
-│   │   │   ├── playwright/
-│   │   │   ├── pyright-lsp/
-│   │   │   ├── ruby-lsp/
-│   │   │   ├── rust-analyzer-lsp/
-│   │   │   ├── swift-lsp/
-│   │   │   ├── terraform/
-│   │   │   └── typescript-lsp/
-│   │   ├── monitoring/
-│   │   │   └── README.md
-│   │   ├── productivity/
-│   │   │   └── linear/
-│   │   └── security/
-│   │       └── security-guidance/
-│   └── standard/
-│       ├── code-modernization/
-│       │   ├── agents/
-│       │   ├── commands/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── code-review/
-│       │   ├── commands/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── code-simplifier/
-│       │   ├── agents/
-│       │   └── LICENSE
-│       ├── commit-commands/
-│       │   ├── commands/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── context7/
-│       ├── cwc-makers/
-│       │   ├── commands/
-│       │   ├── skills/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── discord/
-│       │   ├── skills/
-│       │   ├── ACCESS.md
-│       │   ├── bun.lock
-│       │   ├── LICENSE
-│       │   ├── package.json
-│       │   ├── README.md
-│       │   └── server.ts
-│       ├── example-plugin/
-│       │   ├── commands/
-│       │   ├── skills/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── explanatory-output-style/
-│       │   ├── hooks/
-│       │   ├── hooks-handlers/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── fakechat/
-│       │   ├── bun.lock
-│       │   ├── LICENSE
-│       │   ├── package.json
-│       │   ├── README.md
-│       │   └── server.ts
-│       ├── feature-dev/
-│       │   ├── agents/
-│       │   ├── commands/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── greptile/
-│       │   └── README.md
-│       ├── hookify/
-│       │   ├── agents/
-│       │   ├── commands/
-│       │   ├── core/
-│       │   ├── examples/
-│       │   ├── hooks/
-│       │   ├── matchers/
-│       │   ├── skills/
-│       │   ├── utils/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── imessage/
-│       │   ├── skills/
-│       │   ├── ACCESS.md
-│       │   ├── bun.lock
-│       │   ├── LICENSE
-│       │   ├── package.json
-│       │   ├── README.md
-│       │   └── server.ts
-│       ├── laravel-boost/
-│       ├── learning-output-style/
-│       │   ├── hooks/
-│       │   ├── hooks-handlers/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── math-olympiad/
-│       │   ├── skills/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── playground/
-│       │   ├── skills/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── pr-review-toolkit/
-│       │   ├── agents/
-│       │   ├── commands/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── ralph-loop/
-│       │   ├── commands/
-│       │   ├── hooks/
-│       │   ├── scripts/
-│       │   ├── LICENSE
-│       │   └── README.md
-│       ├── serena/
-│       ├── session-report/
-│       │   ├── skills/
-│       │   └── LICENSE
-│       └── telegram/
-│           ├── skills/
-│           ├── ACCESS.md
-│           ├── bun.lock
-│           ├── LICENSE
-│           ├── package.json
-│           ├── README.md
-│           └── server.ts
-├── prompts/
-│   ├── academic/
-│   │   └── academic-researcher.toml
-│   ├── ai-agents/
-│   │   ├── agentic-identity-trust.toml
-│   │   ├── agentic-principles.toml
-│   │   ├── ai-engineer-agent.toml
-│   │   ├── autonomous-loop.toml
-│   │   ├── claude-devfleet-specialist.toml
-│   │   ├── common-agents.toml
-│   │   ├── content-engine-specialist.toml
-│   │   ├── context-budget-specialist.toml
-│   │   ├── data-consolidation-agent.toml
-│   │   ├── llm-pipeline-specialist.toml
-│   │   ├── multi-agent-pipeline.toml
-│   │   ├── observer.toml
-│   │   └── specialized-model-qa.toml
-│   ├── ai-infra/
-│   │   ├── agent-harness-architect.toml
-│   │   └── mcp-master.toml
-│   ├── architecture/
-│   │   ├── architect.toml
-│   │   ├── autonomous-optimization-architect.toml
-│   │   └── design-patterns.toml
-│   ├── backend/
-│   │   ├── backend-architect-agent.toml
-│   │   └── backend-specialist.toml
-│   ├── blockchain/
-│   │   ├── blockchain-security-auditor.toml
-│   │   └── zk-steward.toml
-│   ├── common/
-│   │   └── security.toml
-│   ├── cpp/
-│   │   ├── cpp-build-resolver.toml
-│   │   ├── cpp-reviewer.toml
-│   │   └── cpp-specialist.toml
-│   ├── csharp/
-│   │   └── csharp-specialist.toml
-│   ├── data/
-│   │   ├── data-engineer-specialist.toml
-│   │   ├── data-scraper-specialist.toml
-│   │   └── identity-graph-specialist.toml
-│   ├── database/
-│   │   └── database-architect-agent.toml
-│   ├── design/
-│   │   ├── image-prompt-engineer.toml
-│   │   ├── ui-ux-specialist.toml
-│   │   ├── visual-design-specialist.toml
-│   │   └── xr-specialist.toml
-│   ├── devops/
-│   │   ├── cloud-infrastructure-specialist.toml
-│   │   ├── container-orchestration-specialist.toml
-│   │   ├── devops-specialist.toml
-│   │   ├── enterprise-agent-ops-specialist.toml
-│   │   └── incident-response-specialist.toml
-│   ├── docs/
-│   │   ├── doc-updater.toml
-│   │   ├── docs-lookup.toml
-│   │   ├── eli5.toml
-│   │   ├── learning-path.toml
-│   │   ├── narrative-designer.toml
-│   │   ├── simplify-jargon.toml
-│   │   └── technical-writing-specialist.toml
-│   ├── engineering/
-│   │   ├── code-reviewer-agent.toml
-│   │   ├── compare-technologies.toml
-│   │   ├── continuous-learning-specialist.toml
-│   │   ├── documentation-lookup.toml
-│   │   ├── engineering-standards-specialist.toml
-│   │   ├── error-resolution-agent.toml
-│   │   ├── lsp-specialist.toml
-│   │   ├── performance-profile.toml
-│   │   ├── prompt-specialist.toml
-│   │   ├── refactor-agent.toml
-│   │   ├── regex-builder.toml
-│   │   └── regex-vs-llm-structured-text.toml
-│   ├── frontend/
-│   │   └── frontend-specialist.toml
-│   ├── git/
-│   │   ├── engineering-git-workflow-master.toml
-│   │   └── pr-template.toml
-│   ├── go/
-│   │   ├── go-build-resolver.toml
-│   │   ├── go-reviewer.toml
-│   │   └── go-specialist.toml
-│   ├── integrations/
-│   │   ├── engineering-feishu-integration-developer.toml
-│   │   ├── specialized-salesforce-architect.toml
-│   │   └── x-api.toml
-│   ├── java/
-│   │   ├── java-build-resolver.toml
-│   │   ├── java-reviewer.toml
-│   │   ├── java-specialist.toml
-│   │   ├── jpa-patterns.toml
-│   │   └── springboot-specialist.toml
-│   ├── kotlin/
-│   │   ├── android-clean-architecture.toml
-│   │   ├── kotlin-build-resolver.toml
-│   │   ├── kotlin-ktor-patterns.toml
-│   │   ├── kotlin-reviewer.toml
-│   │   └── kotlin-specialist.toml
-│   ├── management/
-│   │   ├── automation-governance-architect.toml
-│   │   ├── chief-of-staff.toml
-│   │   ├── compliance-auditor.toml
-│   │   ├── executive-brief.toml
-│   │   ├── product-behavioral-nudge-engine.toml
-│   │   ├── product-feedback-synthesizer.toml
-│   │   ├── product-manager.toml
-│   │   ├── product-trend-researcher.toml
-│   │   ├── project-guidelines.toml
-│   │   ├── project-management-master.toml
-│   │   ├── project-manager-senior.toml
-│   │   ├── rules-distill.toml
-│   │   ├── specialized-cultural-intelligence-strategist.toml
-│   │   ├── specialized-developer-advocate.toml
-│   │   ├── strategic-compact.toml
-│   │   └── unified-workflow-strategy.toml
-│   ├── mobile/
-│   │   ├── engineering-embedded-firmware-engineer.toml
-│   │   ├── flutter-reviewer.toml
-│   │   ├── macos-spatial-metal-engineer.toml
-│   │   ├── mobile-specialist.toml
-│   │   └── visionos-spatial-engineer.toml
-│   ├── perl/
-│   │   └── perl-specialist.toml
-│   ├── php/
-│   │   └── php-specialist.toml
-│   ├── python/
-│   │   ├── django-specialist.toml
-│   │   ├── python-reviewer.toml
-│   │   ├── python-specialist.toml
-│   │   └── pytorch-specialist.toml
-│   ├── rust/
-│   │   ├── rust-build-resolver.toml
-│   │   ├── rust-reviewer.toml
-│   │   └── rust-specialist.toml
-│   ├── search/
-│   │   └── search-specialist.toml
-│   ├── security/
-│   │   ├── engineering-threat-detection-engineer.toml
-│   │   ├── security-architect.toml
-│   │   ├── security-policy.toml
-│   │   ├── security-reviewer.toml
-│   │   └── threat-modeling.toml
-│   ├── shell/
-│   │   ├── bash-script-generator.toml
-│   │   ├── cli-command-explainer.toml
-│   │   └── terminal-integration-specialist.toml
-│   ├── support/
-│   │   ├── support-analytics-reporter.toml
-│   │   ├── support-executive-summary-generator.toml
-│   │   ├── support-finance-tracker.toml
-│   │   ├── support-infrastructure-maintainer.toml
-│   │   ├── support-legal-compliance-checker.toml
-│   │   └── support-support-responder.toml
-│   ├── swift/
-│   │   ├── swift-advanced-patterns.toml
-│   │   ├── swift-specialist.toml
-│   │   └── swiftui-patterns.toml
-│   ├── testing/
-│   │   ├── common-testing.toml
-│   │   ├── e2e-runner.toml
-│   │   ├── generate-e2e-tests.toml
-│   │   ├── generate-unit-tests.toml
-│   │   ├── mock-data-gen.toml
-│   │   ├── research.toml
-│   │   ├── review-test-coverage.toml
-│   │   ├── review.toml
-│   │   ├── tdd-guide.toml
-│   │   ├── test-edge-cases.toml
-│   │   ├── testing-specialist.toml
-│   │   └── testing.toml
-│   ├── typescript/
-│   │   ├── typescript-reviewer.toml
-│   │   └── typescript-specialist.toml
-│   ├── workflow/
-│   │   ├── handoff-templates.toml
-│   │   ├── nexus-orchestrator.toml
-│   │   └── rapid-prototyper.toml
-│   ├── README.md
-│   └── redirects.json
-├── skills/
-│   ├── content-design/
-│   │   ├── article-writing/
-│   │   │   └── SKILL.md
-│   │   ├── collaborative-document-writing/
-│   │   │   └── SKILL.md
-│   │   ├── content-refinement-expert/
-│   │   │   └── SKILL.md
-│   │   ├── crosspost/
-│   │   │   └── SKILL.md
-│   │   ├── ideation-fragment-collector/
-│   │   │   └── SKILL.md
-│   │   ├── narrative-flow-builder/
-│   │   │   └── SKILL.md
-│   │   └── publication-structure-designer/
-│   │       └── SKILL.md
-│   ├── creative-lab/
-│   │   ├── generative-canvas-art/
-│   │   │   ├── templates/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   └── spatial-canvas-layout/
-│   │       ├── canvas-fonts/
-│   │       ├── LICENSE.txt
-│   │       └── SKILL.md
-│   ├── engineering/
-│   │   ├── agent-architecture-audit/
-│   │   │   └── SKILL.md
-│   │   ├── agentic-engineering/
-│   │   │   └── SKILL.md
-│   │   ├── ai-first-engineering/
-│   │   │   └── SKILL.md
-│   │   ├── architectural-zoom-out/
-│   │   │   └── SKILL.md
-│   │   ├── architecture-decision-records/
-│   │   │   └── SKILL.md
-│   │   ├── codebase-onboarding/
-│   │   │   └── SKILL.md
-│   │   ├── context-integrity-check/
-│   │   │   ├── ADR-FORMAT.md
-│   │   │   ├── CONTEXT-FORMAT.md
-│   │   │   └── SKILL.md
-│   │   ├── continuous-learning-v2/
-│   │   │   ├── agents/
-│   │   │   ├── hooks/
-│   │   │   ├── scripts/
-│   │   │   ├── config.json
-│   │   │   └── SKILL.md
-│   │   ├── diagnose/
-│   │   │   ├── scripts/
-│   │   │   └── SKILL.md
-│   │   ├── documentation-lookup/
-│   │   │   └── SKILL.md
-│   │   ├── domain-glossary-extractor/
-│   │   │   └── SKILL.md
-│   │   ├── dual-axis-code-review/
-│   │   │   └── SKILL.md
-│   │   ├── generate-issues/
-│   │   │   └── SKILL.md
-│   │   ├── generate-prd/
-│   │   │   └── SKILL.md
-│   │   ├── git-workflow/
-│   │   │   └── SKILL.md
-│   │   ├── hexagonal-architecture/
-│   │   │   └── SKILL.md
-│   │   ├── improve-codebase-architecture/
-│   │   │   ├── DEEPENING.md
-│   │   │   ├── HTML-REPORT.md
-│   │   │   ├── INTERFACE-DESIGN.md
-│   │   │   ├── LANGUAGE.md
-│   │   │   └── SKILL.md
-│   │   ├── interactive-bug-reporting/
-│   │   │   └── SKILL.md
-│   │   ├── latency-critical-systems/
-│   │   │   └── SKILL.md
-│   │   ├── mle-workflow/
-│   │   │   └── SKILL.md
-│   │   ├── multi-variant-interface-design/
-│   │   │   └── SKILL.md
-│   │   ├── prototype/
-│   │   │   ├── LOGIC.md
-│   │   │   ├── SKILL.md
-│   │   │   └── UI.md
-│   │   ├── refactoring-roadmap-generator/
-│   │   │   └── SKILL.md
-│   │   ├── tdd/
-│   │   │   ├── deep-modules.md
-│   │   │   ├── interface-design.md
-│   │   │   ├── mocking.md
-│   │   │   ├── refactoring.md
-│   │   │   ├── SKILL.md
-│   │   │   └── tests.md
-│   │   ├── tdd-workflow/
-│   │   │   └── SKILL.md
-│   │   ├── triage/
-│   │   │   ├── AGENT-BRIEF.md
-│   │   │   ├── OUT-OF-SCOPE.md
-│   │   │   └── SKILL.md
-│   │   └── verification-loop/
-│   │       └── SKILL.md
-│   ├── enterprise/
-│   │   ├── brand-guidelines/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   └── internal-comms/
-│   │       ├── examples/
-│   │       ├── LICENSE.txt
-│   │       └── SKILL.md
-│   ├── foundational/
-│   │   ├── docx/
-│   │   │   ├── scripts/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   ├── pdf/
-│   │   │   ├── scripts/
-│   │   │   ├── forms.md
-│   │   │   ├── LICENSE.txt
-│   │   │   ├── reference.md
-│   │   │   └── SKILL.md
-│   │   ├── pptx/
-│   │   │   ├── scripts/
-│   │   │   ├── editing.md
-│   │   │   ├── LICENSE.txt
-│   │   │   ├── pptxgenjs.md
-│   │   │   └── SKILL.md
-│   │   └── xlsx/
-│   │       ├── scripts/
-│   │       ├── LICENSE.txt
-│   │       └── SKILL.md
-│   ├── meta/
-│   │   ├── agnostic-model-connector/
-│   │   │   ├── csharp/
-│   │   │   ├── curl/
-│   │   │   ├── go/
-│   │   │   ├── java/
-│   │   │   ├── php/
-│   │   │   ├── python/
-│   │   │   ├── ruby/
-│   │   │   ├── shared/
-│   │   │   ├── typescript/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   ├── behavior-instruction-factory/
-│   │   │   ├── agents/
-│   │   │   ├── assets/
-│   │   │   ├── eval-viewer/
-│   │   │   ├── references/
-│   │   │   ├── scripts/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   ├── dynamic-gif-generator/
-│   │   │   ├── core/
-│   │   │   ├── LICENSE.txt
-│   │   │   ├── requirements.txt
-│   │   │   └── SKILL.md
-│   │   ├── interactive-learning-environment/
-│   │   │   ├── GLOSSARY-FORMAT.md
-│   │   │   ├── LEARNING-RECORD-FORMAT.md
-│   │   │   ├── MISSION-FORMAT.md
-│   │   │   ├── RESOURCES-FORMAT.md
-│   │   │   └── SKILL.md
-│   │   ├── rules-distill/
-│   │   │   ├── scripts/
-│   │   │   └── SKILL.md
-│   │   ├── strategic-compact/
-│   │   │   └── SKILL.md
-│   │   └── team-builder/
-│   │       └── SKILL.md
-│   ├── patterns/
-│   │   ├── backend-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── cisco-ios-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── clickhouse-io/
-│   │   │   └── SKILL.md
-│   │   ├── compose-multiplatform-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── content-hash-cache-pattern/
-│   │   │   └── SKILL.md
-│   │   ├── dart-flutter-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── deployment-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── django-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── docker-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── dotnet-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── fastapi-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── frontend-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── golang-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── healthcare-cdss-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── healthcare-emr-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── jpa-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── kotlin-exposed-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── kotlin-ktor-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── kotlin-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── laravel-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── laravel-plugin-discovery/
-│   │   │   └── SKILL.md
-│   │   ├── laravel-security/
-│   │   │   └── SKILL.md
-│   │   ├── laravel-tdd/
-│   │   │   └── SKILL.md
-│   │   ├── laravel-verification/
-│   │   │   └── SKILL.md
-│   │   ├── motion-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── mysql-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── nestjs-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── nuxt4-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── perl-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── postgres-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── prisma-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── python-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── pytorch-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── quarkus-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── react-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── redis-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── rust-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── springboot-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── swiftui-patterns/
-│   │   │   └── SKILL.md
-│   │   ├── tinystruct-patterns/
-│   │   │   ├── references/
-│   │   │   └── SKILL.md
-│   │   └── vite-patterns/
-│   │       └── SKILL.md
-│   ├── personal/
-│   │   └── obsidian-vault/
-│   │       └── SKILL.md
-│   ├── productivity/
-│   │   ├── concise-communication/
-│   │   │   └── SKILL.md
-│   │   ├── handoff/
-│   │   │   └── SKILL.md
-│   │   └── interactive-interview/
-│   │       └── SKILL.md
-│   ├── spec/
-│   │   └── agent-skills-spec.md
-│   ├── technical/
-│   │   ├── ai-regression-testing/
-│   │   │   └── SKILL.md
-│   │   ├── automated-web-qa/
-│   │   │   ├── examples/
-│   │   │   ├── scripts/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   ├── bun-runtime/
-│   │   │   └── SKILL.md
-│   │   ├── cpp-testing/
-│   │   │   └── SKILL.md
-│   │   ├── csharp-testing/
-│   │   │   └── SKILL.md
-│   │   ├── defi-amm-security/
-│   │   │   └── SKILL.md
-│   │   ├── django-security/
-│   │   │   └── SKILL.md
-│   │   ├── e2e-testing/
-│   │   │   └── SKILL.md
-│   │   ├── eval-harness/
-│   │   │   └── SKILL.md
-│   │   ├── flutter-dart-code-review/
-│   │   │   └── SKILL.md
-│   │   ├── frontend-design/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   ├── fsharp-testing/
-│   │   │   └── SKILL.md
-│   │   ├── git-safety-hooks/
-│   │   │   ├── scripts/
-│   │   │   └── SKILL.md
-│   │   ├── golang-testing/
-│   │   │   └── SKILL.md
-│   │   ├── kotlin-testing/
-│   │   │   └── SKILL.md
-│   │   ├── laravel-security/
-│   │   │   └── SKILL.md
-│   │   ├── llm-trading-agent-security/
-│   │   │   └── SKILL.md
-│   │   ├── mcp-builder/
-│   │   │   ├── reference/
-│   │   │   ├── scripts/
-│   │   │   ├── LICENSE.txt
-│   │   │   └── SKILL.md
-│   │   ├── perl-security/
-│   │   │   └── SKILL.md
-│   │   ├── perl-testing/
-│   │   │   └── SKILL.md
-│   │   ├── python-testing/
-│   │   │   └── SKILL.md
-│   │   ├── quarkus-security/
-│   │   │   └── SKILL.md
-│   │   ├── react-testing/
-│   │   │   └── SKILL.md
-│   │   ├── refactor-type-assertions/
-│   │   │   └── SKILL.md
-│   │   ├── regex-vs-llm-structured-text/
-│   │   │   └── SKILL.md
-│   │   ├── rust-testing/
-│   │   │   └── SKILL.md
-│   │   ├── scaffold-exercises/
-│   │   │   └── SKILL.md
-│   │   ├── security-scan/
-│   │   │   └── SKILL.md
-│   │   ├── setup-pre-commit/
-│   │   │   └── SKILL.md
-│   │   ├── springboot-security/
-│   │   │   └── SKILL.md
-│   │   ├── swift-protocol-di-testing/
-│   │   │   └── SKILL.md
-│   │   ├── ui-theme-generator/
-│   │   │   ├── themes/
-│   │   │   ├── LICENSE.txt
-│   │   │   ├── SKILL.md
-│   │   │   └── theme-showcase.pdf
-│   │   └── web-artifacts-builder/
-│   │       ├── scripts/
-│   │       ├── LICENSE.txt
-│   │       └── SKILL.md
-│   ├── template/
-│   │   └── SKILL.md
-│   ├── README.md
-│   └── THIRD_PARTY_NOTICES.md
-├── LICENSE
-└── README.md
+# PromptBook Repository Catalog
 
-324 directories, 394 files
+A comprehensive directory of all expert skills and prompt templates.
+
+## 🛠 Skills
+
+| Category | Name | Description |
+| :--- | :--- | :--- |
+| Content-design | [article-writing](/skills/content-design/article-writing/SKILL.md) | Write articles, guides, blog posts, tutorials, newsletter issues, and other long-form content in a distinctive voice derived from supplied examples or brand guidance. Use when the user wants polished written content longer than a paragraph, especially when voice consistency, structure, and credibility matter. |
+| Content-design | [collaborative-document-writing](/skills/content-design/collaborative-document-writing/SKILL.md) | Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content. This workflow helps users efficiently transfer context, refine content through iteration, and verify the doc works for readers. Trigger when user mentions writing docs, creating proposals, drafting specs, or similar documentation tasks. |
+| Content-design | [content-refinement-expert](/skills/content-design/content-refinement-expert/SKILL.md) | Edit and improve articles by restructuring sections, improving clarity, and tightening prose. Use when user wants to edit, revise, or improve an article draft. |
+| Content-design | [crosspost](/skills/content-design/crosspost/SKILL.md) | Multi-platform content distribution across X, LinkedIn, Threads, and Bluesky. Adapts content per platform using content-engine patterns. Never posts identical content cross-platform. Use when the user wants to distribute content across social platforms. |
+| Content-design | [ideation-fragment-collector](/skills/content-design/ideation-fragment-collector/SKILL.md) | Grilling session that mines the user for fragments — heterogeneous nuggets of writing (claims, vignettes, sharp sentences, half-thoughts) — and appends them to a single document as raw material for a future article. Use when the user wants to develop ideas before imposing structure, or mentions fragments, ideate, or raw material for writing. |
+| Content-design | [narrative-flow-builder](/skills/content-design/narrative-flow-builder/SKILL.md) | Shape an article as a journey of beats, choose-your-own-adventure style. The user picks a starting beat from the raw material, you write only that beat, then offer options for where to pivot next, beat by beat, until the article reaches a natural end. Use when the user has raw material and wants to assemble it as a narrative rather than an argument. |
+| Content-design | [publication-structure-designer](/skills/content-design/publication-structure-designer/SKILL.md) | Take a markdown file of raw material and shape it into an article through a conversational session — drafting candidate openings, growing the piece paragraph by paragraph, arguing about format (lists, tables, callouts, quotes) at each step. Use when the user has a pile of notes, fragments, or a rough draft and wants help turning it into something publishable. |
+| Creative-lab | [generative-canvas-art](/skills/creative-lab/generative-canvas-art/SKILL.md) | Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use this when users request creating art using code, generative art, algorithmic art, flow fields, or particle systems. Create original algorithmic art rather than copying existing artists' work to avoid copyright violations. |
+| Creative-lab | [spatial-canvas-layout](/skills/creative-lab/spatial-canvas-layout/SKILL.md) | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or other static piece. Create original visual designs, never copying existing artists' work to avoid copyright violations. |
+| Engineering | [agent-architecture-audit](/skills/engineering/agent-architecture-audit/SKILL.md) | Full-stack diagnostic for agent and LLM applications. Audits the 12-layer agent stack for wrapper regression, memory pollution, tool discipline failures, hidden repair loops, and rendering corruption. Produces severity-ranked findings with code-first fixes. Essential for developers building agent applications, autonomous loops, or any LLM-powered feature. |
+| Engineering | [agentic-engineering](/skills/engineering/agentic-engineering/SKILL.md) | Operate as an agentic engineer using eval-first execution, decomposition, and cost-aware model routing. |
+| Engineering | [ai-first-engineering](/skills/engineering/ai-first-engineering/SKILL.md) | Engineering operating model for teams where AI agents generate a large share of implementation output. |
+| Engineering | [architectural-zoom-out](/skills/engineering/architectural-zoom-out/SKILL.md) | Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture. |
+| Engineering | [architecture-decision-records](/skills/engineering/architecture-decision-records/SKILL.md) | Capture architectural decisions made during The Agent Code sessions as structured ADRs. Auto-detects decision moments, records context, alternatives considered, and rationale. Maintains an ADR log so future developers understand why the codebase is shaped the way it is. |
+| Engineering | [codebase-onboarding](/skills/engineering/codebase-onboarding/SKILL.md) | Analyze an unfamiliar codebase and generate a structured onboarding guide with architecture map, key entry points, conventions, and a starter CLAUDE.md. Use when joining a new project or setting up The Agent Code for the first time in a repo. |
+| Engineering | [context-integrity-check](/skills/engineering/context-integrity-check/SKILL.md) | Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions. |
+| Engineering | [continuous-learning-v2](/skills/engineering/continuous-learning-v2/SKILL.md) | Instinct-based learning system that observes sessions via hooks, creates atomic instincts with confidence scoring, and evolves them into skills/commands/agents. v2.1 adds project-scoped instincts to prevent cross-project contamination. |
+| Engineering | [diagnose](/skills/engineering/diagnose/SKILL.md) | Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says diagnose this / debug this, reports a bug, says something is broken/throwing/failing, or describes a performance regression. |
+| Engineering | [documentation-lookup](/skills/engineering/documentation-lookup/SKILL.md) | Use up-to-date library and framework docs via Context7 MCP instead of training data. Activates for setup questions, API references, code examples, or when the user names a framework (e.g. React, Next.js, Prisma). |
+| Engineering | [domain-glossary-extractor](/skills/engineering/domain-glossary-extractor/SKILL.md) | Extract a DDD-style ubiquitous language glossary from the current conversation, flagging ambiguities and proposing canonical terms. Saves to UBIQUITOUS_LANGUAGE.md. Use when user wants to define domain terms, build a glossary, harden terminology, create a ubiquitous language, or mentions domain model or DDD. |
+| Engineering | [dual-axis-code-review](/skills/engineering/dual-axis-code-review/SKILL.md) | Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to review since X. |
+| Engineering | [generate-issues](/skills/engineering/generate-issues/SKILL.md) | Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues. |
+| Engineering | [generate-prd](/skills/engineering/generate-prd/SKILL.md) | Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context. |
+| Engineering | [git-workflow](/skills/engineering/git-workflow/SKILL.md) | Git workflow patterns including branching strategies, commit conventions, merge vs rebase, conflict resolution, and collaborative development best practices for teams of all sizes. |
+| Engineering | [hexagonal-architecture](/skills/engineering/hexagonal-architecture/SKILL.md) | Design, implement, and refactor Ports & Adapters systems with clear domain boundaries, dependency inversion, and testable use-case orchestration across TypeScript, Java, Kotlin, and Go services. |
+| Engineering | [improve-codebase-architecture](/skills/engineering/improve-codebase-architecture/SKILL.md) | Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable. |
+| Engineering | [interactive-bug-reporting](/skills/engineering/interactive-bug-reporting/SKILL.md) | Interactive QA session where user reports bugs or issues conversationally, and the agent files GitHub issues. Explores the codebase in the background for context and domain language. Use when user wants to report bugs, do QA, file issues conversationally, or mentions QA session. |
+| Engineering | [latency-critical-systems](/skills/engineering/latency-critical-systems/SKILL.md) | Use for latency-sensitive systems such as realtime dashboards, market data, streaming agents, execution gateways, queues, caches, or HFT-like infrastructure where freshness and p95 latency matter. |
+| Engineering | [mle-workflow](/skills/engineering/mle-workflow/SKILL.md) | Production machine-learning engineering workflow for data contracts, reproducible training, model evaluation, deployment, monitoring, and rollback. Use when building, reviewing, or hardening ML systems beyond one-off notebooks. |
+| Engineering | [multi-variant-interface-design](/skills/engineering/multi-variant-interface-design/SKILL.md) | Generate multiple radically different interface designs for a module using parallel sub-agents. Use when user wants to design an API, explore interface options, compare module shapes, or mentions design it twice. |
+| Engineering | [prototype](/skills/engineering/prototype/SKILL.md) | Build a throwaway prototype to flesh out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says prototype this, let me play with it, try a few designs. |
+| Engineering | [refactoring-roadmap-generator](/skills/engineering/refactoring-roadmap-generator/SKILL.md) | Create a detailed refactor plan with tiny commits via user interview, then file it as a GitHub issue. Use when user wants to plan a refactor, create a refactoring RFC, or break a refactor into safe incremental steps. |
+| Engineering | [tdd](/skills/engineering/tdd/SKILL.md) | Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions red-green-refactor, wants integration tests, or asks for test-first development. |
+| Engineering | [tdd-workflow](/skills/engineering/tdd-workflow/SKILL.md) | Use this skill when writing new features, fixing bugs, or refactoring code. Enforces test-driven development with 80%+ coverage including unit, integration, and E2E tests. |
+| Engineering | [triage](/skills/engineering/triage/SKILL.md) | Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow. |
+| Engineering | [verification-loop](/skills/engineering/verification-loop/SKILL.md) | A comprehensive verification system for The Agent Code sessions. |
+| Enterprise | [brand-guidelines](/skills/enterprise/brand-guidelines/SKILL.md) | Applies Google's official brand colors and typography to any sort of artifact that may benefit from having Google's look-and-feel. Use it when brand colors or style guidelines, visual formatting, or company design standards apply. |
+| Enterprise | [internal-comms](/skills/enterprise/internal-comms/SKILL.md) | A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. The Agent should use this skill whenever asked to write some sort of internal communications (status reports, leadership updates, 3P updates, company newsletters, FAQs, incident reports, project updates, etc.). |
+| Foundational | [docx](/skills/foundational/docx/SKILL.md) | Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation. |
+| Foundational | [pdf](/skills/foundational/pdf/SKILL.md) | Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, rotating pages, adding watermarks, creating new PDFs, filling PDF forms, encrypting/decrypting PDFs, extracting images, and OCR on scanned PDFs to make them searchable. If the user mentions a .pdf file or asks to produce one, use this skill. |
+| Foundational | [pptx](/skills/foundational/pptx/SKILL.md) | Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates, layouts, speaker notes, or comments. Trigger whenever the user mentions \deck,\ \slides,\ \presentation,\ or references a .pptx filename, regardless of what they plan to do with the content afterward. If a .pptx file needs to be opened, created, or touched, use this skill. |
+| Foundational | [xlsx](/skills/foundational/xlsx/SKILL.md) | Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path — even casually (like \the xlsx in my downloads\) — and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved. |
+| Meta | [agnostic-model-connector](/skills/meta/agnostic-model-connector/SKILL.md) | Build, debug, and optimize The Agent API / Universal SDK apps. Apps built with this skill should include prompt caching. Also handles migrating existing The Agent API code between The Agent model versions. TRIGGER when: code imports `google-generativeai`/`@google/generative-ai`; user asks for the The Agent API, Universal SDK, or Managed Agents; user adds/modifies/tunes a The Agent feature (caching, thinking, compaction, tool use, batch, files, citations, memory) or model (Pro/Flash/Haiku) in a file; questions about prompt caching / cache hit rate in an Universal SDK project. SKIP: file imports `openai`/other-provider SDK, filename like `*-openai.py`/`*-generic.py`, provider-neutral code, general programming/ML. |
+| Meta | [behavior-instruction-factory](/skills/meta/behavior-instruction-factory/SKILL.md) | Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy. |
+| Meta | [dynamic-gif-generator](/skills/meta/dynamic-gif-generator/SKILL.md) | Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GIFs for Slack like make me a GIF of X doing Y for Slack. |
+| Meta | [interactive-learning-environment](/skills/meta/interactive-learning-environment/SKILL.md) | Teach the user a new skill or concept, within this workspace. |
+| Meta | [rules-distill](/skills/meta/rules-distill/SKILL.md) | Scan skills to extract cross-cutting principles and distill them into rules — append, revise, or create new rule files |
+| Meta | [strategic-compact](/skills/meta/strategic-compact/SKILL.md) | Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction. |
+| Meta | [team-builder](/skills/meta/team-builder/SKILL.md) | Interactive agent picker for composing and dispatching parallel teams |
+| Patterns | [backend-patterns](/skills/patterns/backend-patterns/SKILL.md) | Backend architecture patterns, API design, database optimization, and server-side best practices for Node.js, Express, and Next.js API routes. |
+| Patterns | [cisco-ios-patterns](/skills/patterns/cisco-ios-patterns/SKILL.md) | Cisco IOS and IOS-XE review patterns for show commands, config hierarchy, wildcard masks, ACL placement, interface hygiene, and safe change-window verification. |
+| Patterns | [clickhouse-io](/skills/patterns/clickhouse-io/SKILL.md) | ClickHouse database patterns, query optimization, analytics, and data engineering best practices for high-performance analytical workloads. |
+| Patterns | [compose-multiplatform-patterns](/skills/patterns/compose-multiplatform-patterns/SKILL.md) | Compose Multiplatform and Jetpack Compose patterns for KMP projects — state management, navigation, theming, performance, and platform-specific UI. |
+| Patterns | [content-hash-cache-pattern](/skills/patterns/content-hash-cache-pattern/SKILL.md) | Cache expensive file processing results using SHA-256 content hashes — path-independent, auto-invalidating, with service layer separation. |
+| Patterns | [dart-flutter-patterns](/skills/patterns/dart-flutter-patterns/SKILL.md) | Production-ready Dart and Flutter patterns covering null safety, immutable state, async composition, widget architecture, popular state management frameworks (BLoC, Riverpod, Provider), GoRouter navigation, Dio networking, Freezed code generation, and clean architecture. |
+| Patterns | [deployment-patterns](/skills/patterns/deployment-patterns/SKILL.md) | Deployment workflows, CI/CD pipeline patterns, Docker containerization, health checks, rollback strategies, and production readiness checklists for web applications. |
+| Patterns | [django-patterns](/skills/patterns/django-patterns/SKILL.md) | Django architecture patterns, REST API design with DRF, ORM best practices, caching, signals, middleware, and production-grade Django apps. |
+| Patterns | [docker-patterns](/skills/patterns/docker-patterns/SKILL.md) | Docker and Docker Compose patterns for local development, container security, networking, volume strategies, and multi-service orchestration. |
+| Patterns | [dotnet-patterns](/skills/patterns/dotnet-patterns/SKILL.md) | Idiomatic C# and .NET patterns, conventions, dependency injection, async/await, and best practices for building robust, maintainable .NET applications. |
+| Patterns | [fastapi-patterns](/skills/patterns/fastapi-patterns/SKILL.md) | FastAPI patterns for async APIs, dependency injection, Pydantic request and response models, OpenAPI docs, tests, security, and production readiness. |
+| Patterns | [frontend-patterns](/skills/patterns/frontend-patterns/SKILL.md) | Frontend development patterns for React, Next.js, state management, performance optimization, and UI best practices. |
+| Patterns | [golang-patterns](/skills/patterns/golang-patterns/SKILL.md) | Idiomatic Go patterns, best practices, and conventions for building robust, efficient, and maintainable Go applications. |
+| Patterns | [healthcare-cdss-patterns](/skills/patterns/healthcare-cdss-patterns/SKILL.md) | Clinical Decision Support System (CDSS) development patterns. Drug interaction checking, dose validation, clinical scoring (NEWS2, qSOFA), alert severity classification, and integration into EMR workflows. |
+| Patterns | [healthcare-emr-patterns](/skills/patterns/healthcare-emr-patterns/SKILL.md) | EMR/EHR development patterns for healthcare applications. Clinical safety, encounter workflows, prescription generation, clinical decision support integration, and accessibility-first UI for medical data entry. |
+| Patterns | [jpa-patterns](/skills/patterns/jpa-patterns/SKILL.md) | JPA/Hibernate patterns for entity design, relationships, query optimization, transactions, auditing, indexing, pagination, and pooling in Spring Boot. |
+| Patterns | [kotlin-exposed-patterns](/skills/patterns/kotlin-exposed-patterns/SKILL.md) | JetBrains Exposed ORM patterns including DSL queries, DAO pattern, transactions, HikariCP connection pooling, Flyway migrations, and repository pattern. |
+| Patterns | [kotlin-ktor-patterns](/skills/patterns/kotlin-ktor-patterns/SKILL.md) | Ktor server patterns including routing DSL, plugins, authentication, Koin DI, kotlinx.serialization, WebSockets, and testApplication testing. |
+| Patterns | [kotlin-patterns](/skills/patterns/kotlin-patterns/SKILL.md) | Idiomatic Kotlin patterns, best practices, and conventions for building robust, efficient, and maintainable Kotlin applications with coroutines, null safety, and DSL builders. |
+| Patterns | [laravel-patterns](/skills/patterns/laravel-patterns/SKILL.md) | Laravel architecture patterns, routing/controllers, Eloquent ORM, service layers, queues, events, caching, and API resources for production apps. |
+| Patterns | [laravel-plugin-discovery](/skills/patterns/laravel-plugin-discovery/SKILL.md) | Discover and evaluate Laravel packages via LaraPlugins.io MCP. Use when the user wants to find plugins, check package health, or assess Laravel/PHP compatibility. |
+| Patterns | [laravel-security](/skills/patterns/laravel-security/SKILL.md) | Laravel security best practices for authn/authz, validation, CSRF, mass assignment, file uploads, secrets, rate limiting, and secure deployment. |
+| Patterns | [laravel-tdd](/skills/patterns/laravel-tdd/SKILL.md) | Test-driven development for Laravel with PHPUnit and Pest, factories, database testing, fakes, and coverage targets. |
+| Patterns | [laravel-verification](/skills/patterns/laravel-verification/SKILL.md) | Verification loop for Laravel projects: env checks, linting, static analysis, tests with coverage, security scans, and deployment readiness. |
+| Patterns | [motion-patterns](/skills/patterns/motion-patterns/SKILL.md) | Production-ready animation patterns for React / Next.js — button, modal, toast, stagger, page transitions, exit animations, scroll, and layout — built on motion-foundations tokens and springs. |
+| Patterns | [mysql-patterns](/skills/patterns/mysql-patterns/SKILL.md) | MySQL and MariaDB schema, query, indexing, transaction, replication, and connection-pool patterns for production backends. |
+| Patterns | [nestjs-patterns](/skills/patterns/nestjs-patterns/SKILL.md) | NestJS architecture patterns for modules, controllers, providers, DTO validation, guards, interceptors, config, and production-grade TypeScript backends. |
+| Patterns | [nuxt4-patterns](/skills/patterns/nuxt4-patterns/SKILL.md) | Nuxt 4 app patterns for hydration safety, performance, route rules, lazy loading, and SSR-safe data fetching with useFetch and useAsyncData. |
+| Patterns | [perl-patterns](/skills/patterns/perl-patterns/SKILL.md) | Modern Perl 5.36+ idioms, best practices, and conventions for building robust, maintainable Perl applications. |
+| Patterns | [postgres-patterns](/skills/patterns/postgres-patterns/SKILL.md) | PostgreSQL database patterns for query optimization, schema design, indexing, and security. Based on Supabase best practices. |
+| Patterns | [prisma-patterns](/skills/patterns/prisma-patterns/SKILL.md) | Prisma ORM patterns for TypeScript backends — schema design, query optimization, transactions, pagination, and critical traps like updateMany returning count not records, $transaction timeouts, migrate dev resetting the DB, @updatedAt skipped on bulk writes, and serverless connection exhaustion. |
+| Patterns | [python-patterns](/skills/patterns/python-patterns/SKILL.md) | Pythonic idioms, PEP 8 standards, type hints, and best practices for building robust, efficient, and maintainable Python applications. |
+| Patterns | [pytorch-patterns](/skills/patterns/pytorch-patterns/SKILL.md) | PyTorch deep learning patterns and best practices for building robust, efficient, and reproducible training pipelines, model architectures, and data loading. |
+| Patterns | [quarkus-patterns](/skills/patterns/quarkus-patterns/SKILL.md) | Quarkus 3.x LTS architecture patterns with Camel for messaging, RESTful API design, CDI services, data access with Panache, and async processing. Use for Java Quarkus backend work with event-driven architectures. |
+| Patterns | [react-patterns](/skills/patterns/react-patterns/SKILL.md) | React 18/19 patterns including hooks discipline, server/client component boundaries, Suspense + error boundaries, form actions, data fetching, state management decision trees, and accessibility-first composition. Use when writing or reviewing React components. |
+| Patterns | [redis-patterns](/skills/patterns/redis-patterns/SKILL.md) | Redis data structure patterns, caching strategies, distributed locks, rate limiting, pub/sub, and connection management for production applications. |
+| Patterns | [rust-patterns](/skills/patterns/rust-patterns/SKILL.md) | Idiomatic Rust patterns, ownership, error handling, traits, concurrency, and best practices for building safe, performant applications. |
+| Patterns | [springboot-patterns](/skills/patterns/springboot-patterns/SKILL.md) | Spring Boot architecture patterns, REST API design, layered services, data access, caching, async processing, and logging. Use for Java Spring Boot backend work. |
+| Patterns | [swiftui-patterns](/skills/patterns/swiftui-patterns/SKILL.md) | SwiftUI architecture patterns, state management with @Observable, view composition, navigation, performance optimization, and modern iOS/macOS UI best practices. |
+| Patterns | [tinystruct-patterns](/skills/patterns/tinystruct-patterns/SKILL.md) | Expert guidance for developing with the tinystruct Java framework. Use when working on the tinystruct codebase or any project built on tinystruct — including creating Application classes, @Action-mapped routes, unit tests, ActionRegistry, HTTP/CLI dual-mode handling, the built-in HTTP server, the event system, JSON with Builder/Builders, database persistence with AbstractData, POJO generation, Server-Sent Events (SSE), file uploads, and outbound HTTP networking. |
+| Patterns | [vite-patterns](/skills/patterns/vite-patterns/SKILL.md) | Vite build tool patterns including config, plugins, HMR, env variables, proxy setup, SSR, library mode, dependency pre-bundling, and build optimization. Activate when working with vite.config.ts, Vite plugins, or Vite-based projects. |
+| Personal | [obsidian-vault](/skills/personal/obsidian-vault/SKILL.md) | Search, create, and manage notes in the Obsidian vault with wikilinks and index notes. Use when user wants to find, create, or organize notes in Obsidian. |
+| Productivity | [concise-communication](/skills/productivity/concise-communication/SKILL.md) | > |
+| Productivity | [handoff](/skills/productivity/handoff/SKILL.md) | Compact the current conversation into a handoff document for another agent to pick up. |
+| Productivity | [interactive-interview](/skills/productivity/interactive-interview/SKILL.md) | Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions grill me. |
+| Technical | [ai-regression-testing](/skills/technical/ai-regression-testing/SKILL.md) | Regression testing strategies for AI-assisted development. Sandbox-mode API testing without database dependencies, automated bug-check workflows, and patterns to catch AI blind spots where the same model writes and reviews code. |
+| Technical | [automated-web-qa](/skills/technical/automated-web-qa/SKILL.md) | Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs. |
+| Technical | [bun-runtime](/skills/technical/bun-runtime/SKILL.md) | Bun as runtime, package manager, bundler, and test runner. When to choose Bun vs Node, migration notes, and Vercel support. |
+| Technical | [cpp-testing](/skills/technical/cpp-testing/SKILL.md) | Use only when writing/updating/fixing C++ tests, configuring GoogleTest/CTest, diagnosing failing or flaky tests, or adding coverage/sanitizers. |
+| Technical | [csharp-testing](/skills/technical/csharp-testing/SKILL.md) | C# and .NET testing patterns with xUnit, FluentAssertions, mocking, integration tests, and test organization best practices. |
+| Technical | [defi-amm-security](/skills/technical/defi-amm-security/SKILL.md) | Security checklist for Solidity AMM contracts, liquidity pools, and swap flows. Covers reentrancy, CEI ordering, donation or inflation attacks, oracle manipulation, slippage, admin controls, and integer math. |
+| Technical | [django-security](/skills/technical/django-security/SKILL.md) | Django security best practices, authentication, authorization, CSRF protection, SQL injection prevention, XSS prevention, and secure deployment configurations. |
+| Technical | [e2e-testing](/skills/technical/e2e-testing/SKILL.md) | Playwright E2E testing patterns, Page Object Model, configuration, CI/CD integration, artifact management, and flaky test strategies. |
+| Technical | [eval-harness](/skills/technical/eval-harness/SKILL.md) | Formal evaluation framework for The Agent Code sessions implementing eval-driven development (EDD) principles |
+| Technical | [flutter-dart-code-review](/skills/technical/flutter-dart-code-review/SKILL.md) | Library-agnostic Flutter/Dart code review checklist covering widget best practices, state management patterns (BLoC, Riverpod, Provider, GetX, MobX, Signals), Dart idioms, performance, accessibility, security, and clean architecture. |
+| Technical | [frontend-design](/skills/technical/frontend-design/SKILL.md) | Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics. |
+| Technical | [fsharp-testing](/skills/technical/fsharp-testing/SKILL.md) | F# testing patterns with xUnit, FsUnit, Unquote, FsCheck property-based testing, integration tests, and test organization best practices. |
+| Technical | [git-safety-hooks](/skills/technical/git-safety-hooks/SKILL.md) | Set up The Agent Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent destructive git operations, add git safety hooks, or block git push/reset in The Agent Code. |
+| Technical | [golang-testing](/skills/technical/golang-testing/SKILL.md) | Go testing patterns including table-driven tests, subtests, benchmarks, fuzzing, and test coverage. Follows TDD methodology with idiomatic Go practices. |
+| Technical | [kotlin-testing](/skills/technical/kotlin-testing/SKILL.md) | Kotlin testing patterns with Kotest, MockK, coroutine testing, property-based testing, and Kover coverage. Follows TDD methodology with idiomatic Kotlin practices. |
+| Technical | [laravel-security](/skills/technical/laravel-security/SKILL.md) | Laravel security best practices for authn/authz, validation, CSRF, mass assignment, file uploads, secrets, rate limiting, and secure deployment. |
+| Technical | [llm-trading-agent-security](/skills/technical/llm-trading-agent-security/SKILL.md) | Security patterns for autonomous trading agents with wallet or transaction authority. Covers prompt injection, spend limits, pre-send simulation, circuit breakers, MEV protection, and key handling. |
+| Technical | [mcp-builder](/skills/technical/mcp-builder/SKILL.md) | Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK). |
+| Technical | [perl-security](/skills/technical/perl-security/SKILL.md) | Comprehensive Perl security covering taint mode, input validation, safe process execution, DBI parameterized queries, web security (XSS/SQLi/CSRF), and perlcritic security policies. |
+| Technical | [perl-testing](/skills/technical/perl-testing/SKILL.md) | Perl testing patterns using Test2::V0, Test::More, prove runner, mocking, coverage with Devel::Cover, and TDD methodology. |
+| Technical | [python-testing](/skills/technical/python-testing/SKILL.md) | Python testing strategies using pytest, TDD methodology, fixtures, mocking, parametrization, and coverage requirements. |
+| Technical | [quarkus-security](/skills/technical/quarkus-security/SKILL.md) | Quarkus Security best practices for authentication, authorization, JWT/OIDC, RBAC, input validation, CSRF, secrets management, and dependency security. |
+| Technical | [react-testing](/skills/technical/react-testing/SKILL.md) | React component testing with React Testing Library, Vitest/Jest, MSW for network mocking, accessibility assertions with axe, and the decision boundary between component tests and Playwright/Cypress end-to-end runs. Use when writing or fixing tests for React components, hooks, or pages. |
+| Technical | [refactor-type-assertions](/skills/technical/refactor-type-assertions/SKILL.md) | Migrate test files from `as` type assertions to @total-typescript/shoehorn. Use when user mentions shoehorn, wants to replace `as` in tests, or needs partial test data. |
+| Technical | [regex-vs-llm-structured-text](/skills/technical/regex-vs-llm-structured-text/SKILL.md) | Decision framework for choosing between regex and LLM when parsing structured text — start with regex, add LLM only for low-confidence edge cases. |
+| Technical | [rust-testing](/skills/technical/rust-testing/SKILL.md) | Rust testing patterns including unit tests, integration tests, async testing, property-based testing, mocking, and coverage. Follows TDD methodology. |
+| Technical | [scaffold-exercises](/skills/technical/scaffold-exercises/SKILL.md) | Create exercise directory structures with sections, problems, solutions, and explainers that pass linting. Use when user wants to scaffold exercises, create exercise stubs, or set up a new course section. |
+| Technical | [security-scan](/skills/technical/security-scan/SKILL.md) | Scan your The Agent Code configuration (.claude/ directory) for security vulnerabilities, misconfigurations, and injection risks using AgentShield. Checks CLAUDE.md, settings.json, MCP servers, hooks, and agent definitions. |
+| Technical | [setup-pre-commit](/skills/technical/setup-pre-commit/SKILL.md) | Set up Husky pre-commit hooks with lint-staged (Prettier), type checking, and tests in the current repo. Use when user wants to add pre-commit hooks, set up Husky, configure lint-staged, or add commit-time formatting/typechecking/testing. |
+| Technical | [springboot-security](/skills/technical/springboot-security/SKILL.md) | Spring Security best practices for authn/authz, validation, CSRF, secrets, headers, rate limiting, and dependency security in Java Spring Boot services. |
+| Technical | [swift-protocol-di-testing](/skills/technical/swift-protocol-di-testing/SKILL.md) | Protocol-based dependency injection for testable Swift code — mock file system, network, and external APIs using focused protocols and Swift Testing. |
+| Technical | [ui-theme-generator](/skills/technical/ui-theme-generator/SKILL.md) | Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that you can apply to any artifact that has been creating, or can generate a new theme on-the-fly. |
+| Technical | [web-artifacts-builder](/skills/technical/web-artifacts-builder/SKILL.md) | Suite of tools for creating elaborate, multi-component agent-platform.local HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts. |
+| Template | [SKILL.md](/skills/template/SKILL.md) | Replace with description of the skill and when The Agent should use it. |
+
+## 📝 Prompt Templates
+
+| Category | Name | Description |
+| :--- | :--- | :--- |
+| Academic | [academic-researcher](/prompts/academic/academic-researcher.toml) | Multidisciplinary academic expert in anthropology, geography, history, narratology, and psychology for holistic world-building and analysis. |
+| Ai-agents | [agentic-identity-trust](/prompts/ai-agents/agentic-identity-trust.toml) | Architectural specialist for agentic identity, cryptographic trust verification, and verifiable audit trails in multi-agent environments. |
+| Ai-agents | [agentic-principles](/prompts/ai-agents/agentic-principles.toml) | Unified model for Agentic and AI-First Engineering. Focuses on eval-driven execution, task decomposition, and AI-assisted architecture. |
+| Ai-agents | [ai-engineer-agent](/prompts/ai-agents/ai-engineer-agent.toml) | Expert AI/ML engineer for model development, deployment, and production integration. Focuses on scalable features and intelligent data pipelines. |
+| Ai-agents | [autonomous-loop](/prompts/ai-agents/autonomous-loop.toml) | Unified guide for autonomous AI agent loops. Covers sequential pipelines, REPLs, infinite generation, PR loops, and RFC-driven DAG orchestration. |
+| Ai-agents | [claude-devfleet-specialist](/prompts/ai-agents/claude-devfleet-specialist.toml) | Orchestrate multi-agent coding tasks via The Agent DevFleet, enabling project planning, parallel agent dispatch, and automated progress monitoring. |
+| Ai-agents | [common-agents](/prompts/ai-agents/common-agents.toml) | Agent orchestration: available agents, parallel execution, multi-perspective analysis. |
+| Ai-agents | [content-engine-specialist](/prompts/ai-agents/content-engine-specialist.toml) | Create platform-native content systems for social media, newsletters, and repurposed campaigns. Ensures consistency and high impact across channels. |
+| Ai-agents | [context-budget-specialist](/prompts/ai-agents/context-budget-specialist.toml) | Audits the AI agent context window consumption across agents, skills, MCP servers, and rules. Identifies bloat, redundant components, and produces. |
+| Ai-agents | [data-consolidation-agent](/prompts/ai-agents/data-consolidation-agent.toml) | AI specialist for consolidating sales metrics into real-time reporting dashboards with territory, representative, and pipeline summaries. |
+| Ai-agents | [llm-pipeline-specialist](/prompts/ai-agents/llm-pipeline-specialist.toml) | Unified specialist for LLM API integration and cost-aware pipelines. Covers The Agent API, SDK patterns, model routing, and budget optimization. |
+| Ai-agents | [multi-agent-pipeline](/prompts/ai-agents/multi-agent-pipeline.toml) | Unified Autonomous Pipeline Orchestration framework for high-velocity multi-agent development workflows. |
+| Ai-agents | [observer](/prompts/ai-agents/observer.toml) | Background agent that analyzes session observations to detect patterns and create instincts. Uses Haiku for cost-efficiency. v2.1 adds project-sco. |
+| Ai-agents | [specialized-model-qa](/prompts/ai-agents/specialized-model-qa.toml) | Independent model QA expert who audits ML and statistical models end-to-end - from documentation review and data reconstruction to replication, ca. |
+| Ai-infra | [agent-harness-architect](/prompts/ai-infra/agent-harness-architect.toml) | Expert-level design and optimization of AI agent action spaces, tool definitions, and observation formatting for high completion rates. |
+| Ai-infra | [mcp-master](/prompts/ai-infra/mcp-master.toml) | Unified MCP Master for designing, building, and deploying Model Context Protocol servers. Covers SDK patterns, tool design, and transport. |
+| Architecture | [architect](/prompts/architecture/architect.toml) | Senior software architect for system design, domain-driven design, scalability, and technical decision-making with ADR and C4 support. |
+| Architecture | [autonomous-optimization-architect](/prompts/architecture/autonomous-optimization-architect.toml) | System governor for autonomous API shadow-testing and optimization with financial and security guardrails. |
+| Architecture | [design-patterns](/prompts/architecture/design-patterns.toml) | Comprehensive guide for selecting and implementing software design patterns. Includes code examples, trade-offs, and testing considerations. |
+| Backend | [backend-architect-agent](/prompts/backend/backend-architect-agent.toml) | Senior backend architect specializing in scalable system design, database architecture, API development, and cloud infrastructure. |
+| Backend | [backend-specialist](/prompts/backend/backend-specialist.toml) | Expert backend architect for API design, database optimization, and scalable server-side patterns. |
+| Blockchain | [blockchain-security-auditor](/prompts/blockchain/blockchain-security-auditor.toml) | Expert smart contract security auditor specializing in vulnerability detection, formal verification, and exploit analysis. |
+| Blockchain | [zk-steward](/prompts/blockchain/zk-steward.toml) | Knowledge-base steward in the spirit of Niklas Luhmann's Zettelkasten. Default perspective: Luhmann; switches to domain experts (Feynman, Munger,. |
+| Common | [security](/prompts/common/security.toml) | Common Security Guidelines and Mandatory Checks. |
+| Cpp | [cpp-build-resolver](/prompts/cpp/cpp-build-resolver.toml) | Expert in resolving C++ build errors, CMake configuration issues, and linker warnings using surgical, minimal changes to restore project stability. |
+| Cpp | [cpp-reviewer](/prompts/cpp/cpp-reviewer.toml) | Senior C++ code reviewer focused on modern idioms, memory safety, concurrency, and performance to ensure high-quality and secure codebases. |
+| Cpp | [cpp-specialist](/prompts/cpp/cpp-specialist.toml) | Unified C++ specialist for coding standards, style, patterns, security, and testing. Covers Modern C++, RAII, GoogleTest, and memory safety. |
+| Csharp | [csharp-specialist](/prompts/csharp/csharp-specialist.toml) | Unified C# specialist for coding style, architectural patterns, security, and testing. Covers .NET conventions, async, xUnit, and security. |
+| Data | [data-engineer-specialist](/prompts/data/data-engineer-specialist.toml) | Expert in reliable data pipelines, lakehouse architectures, database performance optimization, and AI-driven data remediation and anomaly fixing. |
+| Data | [data-scraper-specialist](/prompts/data/data-scraper-specialist.toml) | Framework for building automated AI-powered data collection agents for public sources like job boards, prices, news, and GitHub repositories. |
+| Data | [identity-graph-specialist](/prompts/data/identity-graph-specialist.toml) | Operates a shared identity graph that multiple AI agents resolve against for canonical entity resolution and multi-agent coordination. |
+| Database | [database-architect-agent](/prompts/database/database-architect-agent.toml) | Expert database architect for schema design, migrations, query optimization, and performance tuning. Specialized in SQL and NoSQL systems. |
+| Design | [image-prompt-engineer](/prompts/design/image-prompt-engineer.toml) | Expert in AI image prompt engineering and media generation via fal.ai MCP for images, video, and audio. |
+| Design | [ui-ux-specialist](/prompts/design/ui-ux-specialist.toml) | Expert UI/UX specialist for design systems, user research, and Storybook component generation. |
+| Design | [visual-design-specialist](/prompts/design/visual-design-specialist.toml) | Comprehensive visual design expert covering brand identity, storytelling, inclusivity, Liquid Glass, and style presets. |
+| Design | [xr-specialist](/prompts/design/xr-specialist.toml) | Expert XR specialist for immersive AR/VR/XR experiences, spatial interaction design, and browser-based 3D applications. |
+| Devops | [cloud-infrastructure-specialist](/prompts/devops/cloud-infrastructure-specialist.toml) | Expert in cloud infrastructure (AWS/GCP/Azure) using Terraform and IAM. Focuses on security, least-privilege policies, and modular IaC. |
+| Devops | [container-orchestration-specialist](/prompts/devops/container-orchestration-specialist.toml) | Expert in containerization and orchestration using Docker and Kubernetes. Handles Dockerfiles, Compose, and Kubernetes manifests. |
+| Devops | [devops-specialist](/prompts/devops/devops-specialist.toml) | Expert DevOps/SRE specialist for CI/CD, IaC, SLOs, observability, and lifecycle management of long-lived agent workloads. |
+| Devops | [enterprise-agent-ops-specialist](/prompts/devops/enterprise-agent-ops-specialist.toml) | Operate long-lived agent workloads with observability, security boundaries, and lifecycle management. |
+| Devops | [incident-response-specialist](/prompts/devops/incident-response-specialist.toml) | Expert incident commander for production management. Coordinates response, severity frameworks, blameless post-mortems, and on-call culture. |
+| Docs | [doc-updater](/prompts/docs/doc-updater.toml) | Documentation and codemap specialist. Use PROACTIVELY for updating codemaps and documentation. Runs /update-codemaps and /update-docs, generates d. |
+| Docs | [docs-lookup](/prompts/docs/docs-lookup.toml) | When the user asks how to use a library, framework, or API or needs up-to-date code examples, use Context7 MCP to fetch current documentation and. |
+| Docs | [eli5](/prompts/docs/eli5.toml) | Explain like I'm 5 (simple explanations). |
+| Docs | [learning-path](/prompts/docs/learning-path.toml) | Create learning roadmaps. |
+| Docs | [narrative-designer](/prompts/docs/narrative-designer.toml) | Story systems and dialogue architect - Masters GDD-aligned narrative design, branching dialogue, lore architecture, and environmental storytelling. |
+| Docs | [simplify-jargon](/prompts/docs/simplify-jargon.toml) | Simplify technical jargon. |
+| Docs | [technical-writing-specialist](/prompts/docs/technical-writing-specialist.toml) | Expert technical writer for developer docs, API references, tutorials, and technical blogs. Bridges the gap between engineers and users. |
+| Engineering | [code-reviewer-agent](/prompts/engineering/code-reviewer-agent.toml) | Comprehensive code review specialist for quality, security, and performance. Provides actionable feedback and constructive refactoring suggestions. |
+| Engineering | [compare-technologies](/prompts/engineering/compare-technologies.toml) | Framework for comparing software technologies, frameworks, and libraries with a focus on trade-offs, syntax, and performance. |
+| Engineering | [continuous-learning-specialist](/prompts/engineering/continuous-learning-specialist.toml) | Master specialist for the Continuous Learning system. Manages session observation, atomic instinct extraction, and knowledge evolution. |
+| Engineering | [documentation-lookup](/prompts/engineering/documentation-lookup.toml) | Use up-to-date library and framework docs via Context7 MCP instead of training data. Activates for setup questions, API references, code examples,. |
+| Engineering | [engineering-standards-specialist](/prompts/engineering/engineering-standards-specialist.toml) | Unified engineering standards for coding style, design patterns, automation hooks, and performance optimization across the development lifecycle. |
+| Engineering | [error-resolution-agent](/prompts/engineering/error-resolution-agent.toml) | Master specialist for diagnosing and resolving build, type, and runtime errors. Expert in root cause analysis and minimal-diff error fixing. |
+| Engineering | [lsp-specialist](/prompts/engineering/lsp-specialist.toml) | Language Server Protocol specialist building unified code intelligence systems through LSP client orchestration and semantic indexing. |
+| Engineering | [performance-profile](/prompts/engineering/performance-profile.toml) | Expert guide for performance profiling, bottleneck identification, and optimization across frontend, backend, and database layers. |
+| Engineering | [prompt-specialist](/prompts/engineering/prompt-specialist.toml) | Master specialist for prompt engineering: optimize, create, improve, and manage the lifecycle of high-quality prompts and templates. |
+| Engineering | [refactor-agent](/prompts/engineering/refactor-agent.toml) | Expert refactoring specialist for code cleanup, dead code removal, duplicate elimination, and architectural improvements with a focus on safety. |
+| Engineering | [regex-builder](/prompts/engineering/regex-builder.toml) | Generate and explain complex Regular Expressions. |
+| Engineering | [regex-vs-llm-structured-text](/prompts/engineering/regex-vs-llm-structured-text.toml) | Decision framework for choosing between regex and LLM when parsing structured text — start with regex, add LLM only for low-confidence edge cases. |
+| Frontend | [frontend-specialist](/prompts/frontend/frontend-specialist.toml) | Comprehensive frontend specialist for modern web apps. Covers Accessibility, Tailwind, Next.js, Nuxt 4, React patterns, and performance. |
+| Git | [engineering-git-workflow-master](/prompts/git/engineering-git-workflow-master.toml) | Expert in Git workflows, branching strategies, and version control best practices including conventional commits, rebasing, worktrees, and CI-frie. |
+| Git | [pr-template](/prompts/git/pr-template.toml) | Generate a Pull Request template for a repository. |
+| Go | [go-build-resolver](/prompts/go/go-build-resolver.toml) | Go build and compilation error resolution specialist. Fixes build errors, vet issues, and linter warnings with minimal, surgical changes. |
+| Go | [go-reviewer](/prompts/go/go-reviewer.toml) | Expert Go code reviewer for idiomatic code, concurrency, error handling, and performance. Ensures high standards and best practices in Go. |
+| Go | [go-specialist](/prompts/go/go-specialist.toml) | Expert Go specialist for idiomatic coding, patterns, security, testing, and automation. Your go-to guide for robust Go development. |
+| Integrations | [engineering-feishu-integration-developer](/prompts/integrations/engineering-feishu-integration-developer.toml) | Full-stack integration expert specializing in the Feishu (Lark) Open Platform — proficient in Feishu bots, mini programs, approval workflows, Bita. |
+| Integrations | [specialized-salesforce-architect](/prompts/integrations/specialized-salesforce-architect.toml) | Solution architecture for Salesforce platform — multi-cloud design, integration patterns, governor limits, deployment strategy, and data model gov. |
+| Integrations | [x-api](/prompts/integrations/x-api.toml) | X/Twitter API integration for tweets, threads, timelines, search, and analytics. |
+| Java | [java-build-resolver](/prompts/java/java-build-resolver.toml) | Java/Maven/Gradle build, compilation, and dependency error resolution specialist. Fixes build errors, Java compiler errors, and Maven/Gradle issue. |
+| Java | [java-reviewer](/prompts/java/java-reviewer.toml) | Expert Java and Spring Boot code reviewer specializing in layered architecture, JPA patterns, security, and concurrency. Use for all Java code cha. |
+| Java | [java-specialist](/prompts/java/java-specialist.toml) | Unified Java specialist for coding style, patterns, security, and testing. Covers Java 17+, Records, Streams, JUnit 5, and security best practices. |
+| Java | [jpa-patterns](/prompts/java/jpa-patterns.toml) | JPA/Hibernate patterns for entity design, query optimization, transactions, auditing, indexing, and pagination in Spring Boot. |
+| Java | [springboot-specialist](/prompts/java/springboot-specialist.toml) | Unified Spring Boot specialist for architecture, security, TDD, and verification. Covers REST APIs, Spring Security, and production verification. |
+| Kotlin | [android-clean-architecture](/prompts/kotlin/android-clean-architecture.toml) | Clean Architecture patterns for Android and Kotlin Multiplatform projects — module structure, dependency rules, UseCases, Repositories, and data l. |
+| Kotlin | [android-clean-architecture](/prompts/kotlin/android-clean-architecture.toml) | description, |
+| Kotlin | [android-clean-architecture](/prompts/kotlin/android-clean-architecture.toml) | description, |
+| Kotlin | [kotlin-build-resolver](/prompts/kotlin/kotlin-build-resolver.toml) | Kotlin/Gradle build, compilation, and dependency error resolution specialist. Fixes build errors, Kotlin compiler errors, and Gradle issues with m. |
+| Kotlin | [kotlin-ktor-patterns](/prompts/kotlin/kotlin-ktor-patterns.toml) | Ktor server patterns including routing DSL, plugins, authentication, Koin DI, kotlinx.serialization, WebSockets, and testApplication testing. |
+| Kotlin | [kotlin-reviewer](/prompts/kotlin/kotlin-reviewer.toml) | Kotlin and Android/KMP code reviewer. Reviews Kotlin code for idiomatic patterns, coroutine safety, Compose best practices, clean architecture vio. |
+| Kotlin | [kotlin-specialist](/prompts/kotlin/kotlin-specialist.toml) | Unified Kotlin specialist for style, architecture, coroutines, security, and testing. Covers ktlint, MVVM, Flows, and Kotest. |
+| Management | [automation-governance-architect](/prompts/management/automation-governance-architect.toml) | Governance-first architect for business automations (n8n-first) who audits value, risk, and maintainability before implementation. |
+| Management | [chief-of-staff](/prompts/management/chief-of-staff.toml) | Personal communication chief of staff for triaging email, Slack, and messaging apps into a 4-tier system with automated draft replies. |
+| Management | [compliance-auditor](/prompts/management/compliance-auditor.toml) | Technical compliance auditor specializing in SOC 2, ISO 27001, HIPAA, and PCI-DSS readiness assessments and evidence collection. |
+| Management | [executive-brief](/prompts/management/executive-brief.toml) | High-level executive summary of the Autonomous Pipeline orchestration framework and its strategic impact. |
+| Management | [product-behavioral-nudge-engine](/prompts/management/product-behavioral-nudge-engine.toml) | Behavioral psychology specialist that adapts software interaction cadences and styles to maximize user motivation and success. |
+| Management | [product-feedback-synthesizer](/prompts/management/product-feedback-synthesizer.toml) | Expert in collecting, analyzing, and synthesizing user feedback from multiple channels to extract actionable product insights. |
+| Management | [product-manager](/prompts/management/product-manager.toml) | Holistic product leader managing the full lifecycle from discovery and strategy to roadmap, stakeholder alignment, and go-to-market. |
+| Management | [product-trend-researcher](/prompts/management/product-trend-researcher.toml) | Expert market intelligence analyst specializing in identifying emerging trends, competitive analysis, and opportunity assessment. |
+| Management | [project-guidelines](/prompts/management/project-guidelines.toml) | Example project-specific skill template based on a real production application. |
+| Management | [project-management-master](/prompts/management/project-management-master.toml) | Comprehensive project management lead specializing in agile, Jira/Git workflows, experimentation, operations, and portfolio strategy. |
+| Management | [project-manager-senior](/prompts/management/project-manager-senior.toml) | Converts specs to tasks and remembers previous projects. |
+| Management | [rules-distill](/prompts/management/rules-distill.toml) | Scan skills to extract cross-cutting principles and distill them into rules — append, revise, or create new rule files. |
+| Management | [specialized-cultural-intelligence-strategist](/prompts/management/specialized-cultural-intelligence-strategist.toml) | CQ specialist detecting invisible exclusion and ensuring software resonates authentically across diverse global and intersectional identities. |
+| Management | [specialized-developer-advocate](/prompts/management/specialized-developer-advocate.toml) | Expert developer advocate specializing in community building, technical content creation, and optimizing developer experience (DX). |
+| Management | [strategic-compact](/prompts/management/strategic-compact.toml) | Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction. |
+| Management | [unified-workflow-strategy](/prompts/management/unified-workflow-strategy.toml) | Complete operational playbook for multi-agent orchestration and autonomous pipeline deployment. |
+| Mobile | [engineering-embedded-firmware-engineer](/prompts/mobile/engineering-embedded-firmware-engineer.toml) | Specialist in bare-metal and RTOS firmware - ESP32/ESP-IDF, PlatformIO, Arduino, ARM Cortex-M, STM32 HAL/LL, Nordic nRF5/nRF Connect SDK, FreeRTOS. |
+| Mobile | [flutter-reviewer](/prompts/mobile/flutter-reviewer.toml) | Flutter and Dart code reviewer. Reviews Flutter code for widget best practices, state management patterns, Dart idioms, performance pitfalls, acce. |
+| Mobile | [macos-spatial-metal-engineer](/prompts/mobile/macos-spatial-metal-engineer.toml) | Native Swift and Metal specialist building high-performance 3D rendering systems and spatial computing experiences for macOS and Vision Pro. |
+| Mobile | [mobile-specialist](/prompts/mobile/mobile-specialist.toml) | Expert mobile developer for native (iOS/Android) and cross-platform apps, including on-device AI integration with Apple's FoundationModels. |
+| Mobile | [visionos-spatial-engineer](/prompts/mobile/visionos-spatial-engineer.toml) | Expert in native visionOS spatial computing, SwiftUI volumetric interfaces, and Liquid Glass design implementation. |
+| Perl | [perl-specialist](/prompts/perl/perl-specialist.toml) | Comprehensive Perl specialist for modern Perl 5.36+, including coding style, patterns, security, testing, and architecture. |
+| Php | [php-specialist](/prompts/php/php-specialist.toml) | Unified PHP specialist for coding style, architecture, security, and testing. Covers PSR-12, DTOs, PHPUnit/Pest, and security best practices. |
+| Python | [django-specialist](/prompts/python/django-specialist.toml) | Expert Django specialist for architecture patterns, REST APIs, TDD, security best practices, and comprehensive verification workflows. |
+| Python | [python-reviewer](/prompts/python/python-reviewer.toml) | Expert Python code reviewer specializing in PEP 8 compliance, Pythonic idioms, type hints, security, and performance for all Python code changes. |
+| Python | [python-specialist](/prompts/python/python-specialist.toml) | Comprehensive Python specialist for coding style, patterns, testing, security, and automation hooks following PEP 8 and modern best practices. |
+| Python | [pytorch-specialist](/prompts/python/pytorch-specialist.toml) | Unified PyTorch specialist for development patterns, best practices, and runtime/CUDA error resolution. |
+| Rust | [rust-build-resolver](/prompts/rust/rust-build-resolver.toml) | Specialist in resolving Rust build, compilation, and dependency errors. Fixes borrow checker, lifetime, and Cargo.toml issues with surgical chan... |
+| Rust | [rust-reviewer](/prompts/rust/rust-reviewer.toml) | Expert Rust reviewer specializing in safety, idiomatic patterns, and performance. Focuses on ownership, error handling, and unsafe usage. |
+| Rust | [rust-specialist](/prompts/rust/rust-specialist.toml) | Expert Rust developer proficient in ownership, error handling, traits, async, and performance optimization. Adheres to strict safety and idiomat... |
+| Search | [search-specialist](/prompts/search/search-specialist.toml) | Comprehensive search specialist combining deep multi-source research, neural web exploration with Exa, and search-first development workflows. |
+| Security | [engineering-threat-detection-engineer](/prompts/security/engineering-threat-detection-engineer.toml) | Expert detection engineer specializing in SIEM rule development, MITRE ATT&CK coverage mapping, threat hunting, alert tuning, and detection-as-cod. |
+| Security | [security-architect](/prompts/security/security-architect.toml) | Expert security architect specializing in threat modeling, secure code review, and defense-in-depth across the entire application stack. |
+| Security | [security-policy](/prompts/security/security-policy.toml) | Draft a SECURITY.md or vulnerability disclosure policy. |
+| Security | [security-reviewer](/prompts/security/security-reviewer.toml) | Internal security auditor specialized in project-wide vulnerability assessment and emergency response. |
+| Security | [threat-modeling](/prompts/security/threat-modeling.toml) | Generate a STRIDE threat model for a proposed architecture. |
+| Shell | [bash-script-generator](/prompts/shell/bash-script-generator.toml) | Write robust, POSIX-compliant bash scripts. |
+| Shell | [cli-command-explainer](/prompts/shell/cli-command-explainer.toml) | Deeply explain obscure terminal commands/flags. |
+| Shell | [terminal-integration-specialist](/prompts/shell/terminal-integration-specialist.toml) | Terminal emulation, text rendering optimization, and SwiftTerm integration for modern Swift applications. |
+| Support | [support-analytics-reporter](/prompts/support/support-analytics-reporter.toml) | Expert data analyst transforming raw data into actionable business insights. Creates dashboards, performs statistical analysis, tracks KPIs, and p. |
+| Support | [support-executive-summary-generator](/prompts/support/support-executive-summary-generator.toml) | Consultant-grade AI specialist trained to think and communicate like a senior strategy consultant. Transforms complex business inputs into concise. |
+| Support | [support-finance-tracker](/prompts/support/support-finance-tracker.toml) | Expert financial analyst and controller specializing in financial planning, budget management, and business performance analysis. Maintains financ. |
+| Support | [support-infrastructure-maintainer](/prompts/support/support-infrastructure-maintainer.toml) | Expert infrastructure specialist focused on system reliability, performance optimization, and technical operations management. Maintains robust, s. |
+| Support | [support-legal-compliance-checker](/prompts/support/support-legal-compliance-checker.toml) | Expert legal and compliance specialist ensuring business operations, data handling, and content creation comply with relevant laws, regulations, a. |
+| Support | [support-support-responder](/prompts/support/support-support-responder.toml) | Expert customer support specialist delivering exceptional customer service, issue resolution, and user experience optimization. Specializes in mul. |
+| Swift | [swift-advanced-patterns](/prompts/swift/swift-advanced-patterns.toml) | Advanced Swift patterns: actor-based persistence, Swift 6.2 concurrency, and protocol-based dependency injection for testing. |
+| Swift | [swift-specialist](/prompts/swift/swift-specialist.toml) | Comprehensive guide for Swift development: coding style, patterns, security, testing, and automation hooks. |
+| Swift | [swiftui-patterns](/prompts/swift/swiftui-patterns.toml) | SwiftUI architecture patterns: state management with @Observable, view composition, navigation, and performance optimization. |
+| Testing | [common-testing](/prompts/testing/common-testing.toml) | Testing requirements: 80% coverage, TDD workflow, test types. |
+| Testing | [e2e-runner](/prompts/testing/e2e-runner.toml) | End-to-end testing specialist using Vercel Agent Browser and Playwright for creating and maintaining reliable browser-based test suites. |
+| Testing | [generate-e2e-tests](/prompts/testing/generate-e2e-tests.toml) | Create end-to-end tests. |
+| Testing | [generate-unit-tests](/prompts/testing/generate-unit-tests.toml) | Create unit tests for code. |
+| Testing | [mock-data-gen](/prompts/testing/mock-data-gen.toml) | Create realistic JSON/CSV mock data schemas for testing. |
+| Testing | [research](/prompts/testing/research.toml) | Research Context. |
+| Testing | [review](/prompts/testing/review.toml) | Code Review Context. |
+| Testing | [review-test-coverage](/prompts/testing/review-test-coverage.toml) | Analyze test coverage gaps. |
+| Testing | [tdd-guide](/prompts/testing/tdd-guide.toml) | TDD specialist enforcing the write-tests-first methodology for new features, bug fixes, and refactoring with high coverage standards. |
+| Testing | [test-edge-cases](/prompts/testing/test-edge-cases.toml) | Identify and test edge cases. |
+| Testing | [testing](/prompts/testing/testing.toml) | Python Testing. |
+| Testing | [testing-specialist](/prompts/testing/testing-specialist.toml) | Comprehensive testing specialist covering AI regression patterns, accessibility, API validation, performance benchmarking, and QA workflows. |
+| Typescript | [typescript-reviewer](/prompts/typescript/typescript-reviewer.toml) | Expert TypeScript code reviewer ensuring type safety, async correctness, security, and idiomatic patterns in TS/JS codebases. |
+| Typescript | [typescript-specialist](/prompts/typescript/typescript-specialist.toml) | Expert TypeScript specialist providing guidance on coding style, hooks, patterns, security, and testing for high-quality TS/JS development. |
+| Workflow | [handoff-templates](/prompts/workflow/handoff-templates.toml) | NEXUS Handoff Templates for standardized agent-to-agent work transfers, QA feedback, escalations, and phase gates. |
+| Workflow | [nexus-orchestrator](/prompts/workflow/nexus-orchestrator.toml) | Master orchestrator for the full development lifecycle, from planning and strategy to handoffs and operations. Manages the NEXUS pipeline. |
+| Workflow | [rapid-prototyper](/prompts/workflow/rapid-prototyper.toml) | Senior rapid prototyping engineer specializing in high-fidelity prototypes, interaction design, and iterative front-end development. |
