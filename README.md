@@ -82,6 +82,7 @@ Please see the root [LICENSE](LICENSE) file or each linked plugin for their resp
 
 ## Documentation
 
+- **[📖 User Guide](docs/guides/USER_GUIDE.md)**: Comprehensive guide on accessing prompts, skills, and plugins.
 - **[Architecture Structure](docs/architecture/STRUCTURE.md)**: Detailed breakdown of the multi-tier taxonomy.
 - **[Portability Guide](docs/guides/PORTABILITY.md)**: Mapping generic assets to specific AI providers.
 - **[Full Repository Catalog](docs/CATALOG.md)**: A complete list of all plugins, skills, and prompts.

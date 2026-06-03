@@ -18,5 +18,8 @@ Templates use a universal hydration syntax:
 ## ⚖️ Portability
 Every template has been refactored to use neutral terminology ("The Agent", "The Platform") to ensure it works across Claude, Gemini, OpenAI, or any custom orchestrator.
 
+## 📖 Catalog
+For a full list of all available templates and their descriptions, see the **[📝 Prompt Templates Catalog](../docs/PROMPTS_CATALOG.md)**.
+
 ---
 *Integrated from the PromptBook expert library.*
